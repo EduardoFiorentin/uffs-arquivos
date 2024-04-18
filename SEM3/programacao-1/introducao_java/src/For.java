@@ -1,0 +1,33 @@
+import java.util.Scanner;
+
+public class For {
+    public static void main(String[] args) throws Exception {
+        
+        Scanner charSc = new Scanner(System.in);
+        Scanner intSc = new Scanner(System.in);
+        
+        int userSum = 0;
+        int cont = 0; 
+        char continuar = 'S'; 
+
+        System.out.println("Digite um número: ");
+        userSum += intSc.nextInt();
+        cont++; 
+
+        System.out.println("Deseja continuar digitando valores? [S/N] ");
+        continuar = charSc.nextLine().charAt(0);
+
+        for (; continuar == 'S'; continuar = charSc.nextLine().charAt(0)) {
+            System.out.println("Digite um número: ");
+            userSum += intSc.nextInt();
+            cont++; 
+
+            System.out.println("Deseja continuar digitando valores? [S/N] ");
+        }
+
+        System.out.printf("Foram digitados %d valores e sua soma é: %d\n", cont, userSum);
+
+        charSc.close();
+        intSc.close(); 
+    }
+}
