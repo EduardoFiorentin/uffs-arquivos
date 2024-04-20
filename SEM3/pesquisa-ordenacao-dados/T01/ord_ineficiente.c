@@ -14,7 +14,7 @@ void bubbleSort(Tlist *list, int listSize) {
         while(j <= i-1) {
             if (vector[j]>vector[j+1]) {
                 change = 1;
-                swap(vector, i, j); 
+                intSwap(vector, i, j); 
             }
             j++;
         }

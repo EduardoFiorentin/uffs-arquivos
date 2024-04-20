@@ -1,12 +1,17 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+
 //tipos 
 typedef struct tlist
 {
     int value; 
     struct tlist* next; 
 } Tlist;
+
+// declaração de funções
+
+void freeList(Tlist* list);
 
 
 // insere nodo novo no final da lista  
@@ -58,6 +63,37 @@ int* listToVector(Tlist* list, int listSize) {
     for(aux = list; aux != NULL; aux = aux->next, i++) vector[i] = aux->value;
 
     return vector; 
+}
+
+// -----------------------------------------------------------------------------
+
+Tlist* listToStructVector(Tlist* list, int listSize) {
+    Tlist *vector = (Tlist*) malloc(sizeof(Tlist) * listSize);
+    Tlist *aux = list; 
+
+    int i = 0; 
+    for(; aux != NULL; aux = aux->next, i++) {
+        vector[i] = *aux;
+    }
+
+    return vector;
+}
+
+Tlist* structVectorToList(Tlist* list, Tlist* vector, int listSize) {
+    freeList(list);
+    printf("\nPrimeiro do vector[0]: %d", vector[0].value);
+    list = &(vector[0]); 
+    Tlist* aux; 
+    aux = list; 
+    
+    for(int i = 1; i < listSize; i++) {
+        aux->next = &vector[i]; 
+        aux = aux->next;
+    }
+    // aux->next = NULL; 
+
+    return list; 
+
 }
 
 // imprime lista encadeada 
