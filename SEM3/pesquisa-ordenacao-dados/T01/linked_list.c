@@ -80,21 +80,44 @@ Tlist* listToStructVector(Tlist* list, int listSize) {
 }
 
 Tlist* structVectorToList(Tlist* list, Tlist* vector, int listSize) {
-    freeList(list);
-    printf("\nPrimeiro do vector[0]: %d", vector[0].value);
-    list = &(vector[0]); 
+    freeList(list->next);
+
+    // copiar primeiro elemento ordenado para o endereço original da lista encadeada 
+    *list = vector[0]; 
+    
     Tlist* aux; 
     aux = list; 
     
+    // atualizar os parametros next de cada struct para o próximo elemento do vetor
+        // mantém as structs no local de memória correspondente ao vetor, mas os trata como lista encadeada
     for(int i = 1; i < listSize; i++) {
         aux->next = &vector[i]; 
         aux = aux->next;
     }
-    // aux->next = NULL; 
+    
+    // setar next do último elemento como null
+    aux->next = NULL; 
 
     return list; 
 
 }
+
+// Tlist* structVectorToList(Tlist* list, Tlist* vector, int listSize) {
+//     freeList(list);
+//     printf("\nPrimeiro do vector[0]: %d", vector[0].value);
+//     list = &(vector[0]); 
+//     Tlist* aux; 
+//     aux = list; 
+    
+//     for(int i = 1; i < listSize; i++) {
+//         aux->next = &vector[i]; 
+//         aux = aux->next;
+//     }
+//     // aux->next = NULL; 
+
+//     return list; 
+
+// }
 
 // imprime lista encadeada 
 void printTList(Tlist* list) {

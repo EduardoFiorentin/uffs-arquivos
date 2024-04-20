@@ -4,16 +4,16 @@
 #include "util.c"
 
 
-void merge(int *A, int start, int mid, int end) {
+void merge(Tlist *A, int start, int mid, int end) {
     int size = end-start+1;
-    int* aux = (int*)malloc(sizeof(int) * size);
+    Tlist* aux = (Tlist*)malloc(sizeof(Tlist) * size);
     
     int i = start;
     int j = mid + 1;
     int k = 0; 
 
     while (i <= mid && j <= end) {
-        if (A[i] <= A[j]) {
+        if (A[i].value <= A[j].value) {
             aux[k] = A[i];
             i++;
         } 
@@ -37,14 +37,10 @@ void merge(int *A, int start, int mid, int end) {
     for (k = start; k <= end; k++) {
         A[k] = aux[k-start]; 
     }
-    // for (k = 0; k < size; k++) {
-    //     A[start + k] = aux[k]; 
-    // }
-    
     free(aux);
 }
 
-void mergeSortAux(int* A, int inicio, int fim) {
+void mergeSortAux(Tlist* A, int inicio, int fim) {
     if (inicio < fim) {
         int meio;
         meio = (int)(inicio + fim)/2;
@@ -56,14 +52,18 @@ void mergeSortAux(int* A, int inicio, int fim) {
 }
 
 void mergeSort(Tlist* list, int listSize) {
-    int* vector = listToVector(list, listSize);
+    // int* vector = listToVector(list, listSize);
+    Tlist* vector = listToStructVector(list, listSize);
+    printf("\nValores do vetor: "); 
+    for (int i = 0 ; i < listSize+1; i++) printf("%d ", vector[i].value);
+
     mergeSortAux(vector, 0, listSize);
 
-    printf("\nValores do vetor: "); 
-    for (int i = 0 ; i < listSize; i++) printf("%d ", vector[i]);
 
-    sortedVectorToList(list, vector, listSize); 
-    free(vector); 
+    // sortedVectorToList(list, vector, listSize); 
+    printf("\nTransformando vetor em lista...\n");
+    list = structVectorToList(list, vector, listSize); 
+    // free(vector); 
 }
 
 int main() {
@@ -73,7 +73,7 @@ int main() {
     printf("Inicio: ");
     printTList(linked_list); 
 
-    int vector[] = {29, 8, 41, 11, 20, 6, 4, 6, 47, 29, 15, 6, 50, 17, 16, 49, 26, 50, 31, 5, 39, 2, 28, 12, 17, 6, 5, 39, 50, 10, 4, 14, 31, 44, 6, 48, 35, 48, 27, 5, 5, 39, 23, 37, 49, 22, 25, 20, 17, 40}; 
+    int vector[] = {29, 8, 41, 11, 20 }; 
     int listSize = sizeof(vector)/sizeof(int);
     linked_list = vectorToNewList(linked_list, vector, listSize); 
 

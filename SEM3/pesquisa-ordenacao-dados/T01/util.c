@@ -1,9 +1,9 @@
 void swap (Tlist *vector, int i, int j) {
-    printf("antes: i: %d / j: %d", vector[i].value, vector[j].value);
+    // printf("antes: i: %d / j: %d", vector[i].value, vector[j].value);
     Tlist ref = vector[i];
     vector[i] = vector[j];
     vector[j] = ref;
-    printf("depois: i: %d / j: %d", vector[i].value, vector[j].value);
+    // printf("depois: i: %d / j: %d", vector[i].value, vector[j].value);
 }
 
 void intSwap (int *vector, int i, int j) {
