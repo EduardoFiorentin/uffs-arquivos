@@ -62,9 +62,6 @@ class Veiculo {
         setCapacidadeAceleracao(20);
         setConsumoPorHora(16);
     }
-
-
-
     
     // capacidade de acelerar e freiar (+- 20km/h por execução)
     void acelerar () {
@@ -87,7 +84,7 @@ class Veiculo {
         }
 
         setVelocidadeAtual( getVelocidadeAtual() + getCapacidadeAceleracao() );
-        mensagemSucesso("Acelerando... ["+getVelocidadeAtual()+"/"+getLimiteVelocidade()+"]");
+        mensagemSucesso("Acelerando... ["+getVelocidadeAtual()+"/"+getLimiteVelocidade()+"] km/h");
     }
     
     void desacelerar () {
@@ -97,7 +94,7 @@ class Veiculo {
         }
         
         setVelocidadeAtual( getVelocidadeAtual() - getCapacidadeAceleracao() );
-        mensagemSucesso("Desacelerando... ["+getVelocidadeAtual()+"/"+getLimiteVelocidade()+"]");
+        mensagemSucesso("Desacelerando... ["+getVelocidadeAtual()+"/"+getLimiteVelocidade()+"] km/h");
     }
 
     void abastecer () {
@@ -149,6 +146,10 @@ class Veiculo {
             mensagemErro("! Veículo já está desligado.");
             return; 
         }
+        if (getVelocidadeAtual() > 0) {
+            mensagemErro("! Desacelere o veículo para desligar.");
+            return; 
+        }
         
         setLigado(false);
         mensagemSucesso("Veículo desligado!\n");
@@ -168,7 +169,10 @@ class Veiculo {
 
     // mostra velocidade atual e qtd de combustível
     void mostrarStatus () {
-        System.err.println("Velocidade Atual: " + getVelocidadeAtual() + "\nQuantidade de combustível: " + getQuantidadeCombustivel() + "\n");
+        System.err.println(
+            "\nVelocidade Atual: [" + getVelocidadeAtual() + " / " + getLimiteVelocidade() + "] Km/h" +
+            "\nQuantidade de combustível: [" + getQuantidadeCombustivel() + " / " + getCapacidadeTanque() + "] L"
+        );
     }
 
 
@@ -195,7 +199,7 @@ public class VeiculoAutomotor {
 
         do {
 
-            System.err.println("OPÇÕES: \n\t[0] - Finalizar programa\n\t[1] - Ligar veículo\n\t[2] - Desligar veículo\n\t[3] - Acelerar\n\t[4] - Desacelerar\n\t[5] - Abastecer\n\t[6] - Rodar por 1 hora\n");
+            System.err.println("OPÇÕES: \n\t[0] - Finalizar programa\n\t[1] - Ligar veículo\n\t[2] - Desligar veículo\n\t[3] - Acelerar\n\t[4] - Desacelerar\n\t[5] - Abastecer\n\t[6] - Rodar por 1 hora\n\t[7] - Mostrar Informações\n");
             
             opcao = charSc.nextLine().charAt(0);
 
@@ -231,10 +235,16 @@ public class VeiculoAutomotor {
                     carro1.abastecer();
                     break;
                     
-                    case '6':
+                case '6':
                     System.out.println("- Opção de rodar por 1 hora.");
                     carro1.andar();
                     break;
+                    
+                case '7':
+                    System.out.println("- Opção de mostrar status do veículo.");
+                    carro1.mostrarStatus();
+                    break;
+                    
             
                 default:
                     System.err.println("\u001B[1;31m-------* Opção inválida! *-------\u001B[0m");
