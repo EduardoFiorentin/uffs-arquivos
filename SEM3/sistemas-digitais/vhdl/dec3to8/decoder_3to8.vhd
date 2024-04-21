@@ -66,3 +66,12 @@ end behav_decoder_3to8;
 
 -- ifs: precisam de um else no final 
 -- cases: precisam de um when others no final 
+
+
+-- 0 - hor sup
+-- 1 - vert sup dir
+-- 2 - vert inf dir
+-- 3 - hor inf 
+-- 4 - vert inf esq
+-- 5 - vert sup esq 
+-- 6 - central
