@@ -18,6 +18,11 @@ end entity decoder_decTo7Seg;
 architecture behav_decoder_decTo7Seg of decoder_decTo7Seg is 
 begin
 
+    constant nome_da_constante : type := valor; 
+    signal nome_do_sinal : tipo := valor_inicial; 
+    variable nome_da_variavel : tipo := valor_inicial; 
+    file nome_do_file : tipo; 
+
     process(I)
     begin 
 

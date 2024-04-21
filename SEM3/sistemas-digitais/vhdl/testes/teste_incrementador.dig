@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>ExternalFile</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>incrementador</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>data_in:32</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>data_out:32</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>8</int>
+        </entry>
+        <entry>
+          <string>CodeFile</string>
+          <file>D:\github\uffs-arquivos\SEM3\sistemas-digitais\vhdl\testes\incrementador.vhd</file>
+        </entry>
+      </elementAttributes>
+      <pos x="440" y="420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+      </elementAttributes>
+      <pos x="360" y="420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>32</int>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>dec</intFormat>
+        </entry>
+      </elementAttributes>
+      <pos x="680" y="420"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="360" y="420"/>
+      <p2 x="440" y="420"/>
+    </wire>
+    <wire>
+      <p1 x="600" y="420"/>
+      <p2 x="680" y="420"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
