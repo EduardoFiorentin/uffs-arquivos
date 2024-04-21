@@ -54,14 +54,14 @@ void mergeSortAux(Tlist* A, int inicio, int fim) {
 void mergeSort(Tlist* list, int listSize) {
     // int* vector = listToVector(list, listSize);
     Tlist* vector = listToStructVector(list, listSize);
-    printf("\nValores do vetor: "); 
-    for (int i = 0 ; i < listSize+1; i++) printf("%d ", vector[i].value);
+    // printf("\nValores do vetor: "); 
+    // for (int i = 0 ; i < listSize; i++) printf("%d ", vector[i].value);
 
-    mergeSortAux(vector, 0, listSize);
+    mergeSortAux(vector, 0, listSize-1);
 
 
     // sortedVectorToList(list, vector, listSize); 
-    printf("\nTransformando vetor em lista...\n");
+    // printf("\nTransformando vetor em lista...\n");
     list = structVectorToList(list, vector, listSize); 
     // free(vector); 
 }
@@ -73,14 +73,16 @@ int main() {
     printf("Inicio: ");
     printTList(linked_list); 
 
-    int vector[] = {29, 8, 41, 11, 20 }; 
+    int vector[] = {24, 30, 19, 38, 19, 31, 11, 12, 27, 34, 1, 37, 43, 17, 1, 28, 36, 31, 45, 27, 4, 48, 23, 46, 36, 31, 41, 37, 33, 6, 24, 10, 43, 23, 12, 4, 18, 24, 25, 7, 48, 15, 29, 45, 0, 8, 32, 12, 19, 6}; 
     int listSize = sizeof(vector)/sizeof(int);
+    // printf("Tamanho: %d", listSize); 
+
     linked_list = vectorToNewList(linked_list, vector, listSize); 
 
     printf("\nAntes da ordenacao: ");
     printTList(linked_list); 
     
-    mergeSort(linked_list, listSize-1);
+    mergeSort(linked_list, listSize);
 
     printf("\nDepois da ordenacao: ");
     printTList(linked_list); 
