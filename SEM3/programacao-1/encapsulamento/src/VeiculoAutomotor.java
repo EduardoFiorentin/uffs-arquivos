@@ -7,26 +7,27 @@ class Veiculo {
     private double limiteVelocidade; 
 
     private boolean ligado;
-    private double capacidadeAceletacao; // quanto a velocidade varia a cada aceleração ou frenagem 
+    private double capacidadeAceletacao; // quanto a velocidade varia a cada aceleração ou desaceleração  
     private double consumoPorHora; 
 
     
     // setters / getters
-    public double getVelocidadeAtual ()                      {return velocidadeAtual;}
-    public double getQuantidadeCombustivel ()                {return quantidadeCombustivel;}
-    public double getCapacidadeTanque ()                     {return capacidadeTanque;}
-    public double getLimiteVelocidade ()                     {return limiteVelocidade;}
-    public boolean getLigado ()                              {return ligado;}
-    public double getCapacidadeAceleracao ()                 {return capacidadeAceletacao;}
-    public double getConsumoPorHora ()                       {return consumoPorHora; }
+    public double getVelocidadeAtual ()            {return velocidadeAtual;}
+    public double getQuantidadeCombustivel ()      {return quantidadeCombustivel;}
+    public double getCapacidadeTanque ()           {return capacidadeTanque;}
+    public double getLimiteVelocidade ()           {return limiteVelocidade;}
+    public boolean getLigado ()                    {return ligado;}
+    public double getCapacidadeAceleracao ()       {return capacidadeAceletacao;}
+    public double getConsumoPorHora ()             {return consumoPorHora; }
     
     
-    public void setLigado (boolean ligado)                                    {this.ligado = ligado;}
+    private void setLigado (boolean ligado)                                   {this.ligado = ligado;}
     private void setCapacidadeTanque (double capacidadeTanque)                {this.capacidadeTanque = capacidadeTanque;}
     private void setLimiteVelocidade (double limiteVelocidade)                {this.limiteVelocidade = limiteVelocidade;}
     private void setCapacidadeAceleracao (double capacidadeAceleracao)        {this.capacidadeAceletacao = capacidadeAceleracao;}
-    private void setConsumoPorHora(double consumoPorHora)                     {this.consumoPorHora = consumoPorHora; }
+    private void setConsumoPorHora (double consumoPorHora)                     {this.consumoPorHora = consumoPorHora; }
     
+
     private void setQuantidadeCombustivel (double novaQuantidade) {
         if (novaQuantidade < 0) {
             mensagemErro("! Valor inválido para quantidade de combustível"); 
@@ -227,6 +228,7 @@ public class VeiculoAutomotor {
                     break;
 
                 case '4':
+                    System.out.println("- Opção de desacelerar.");
                     carro1.desacelerar();
                     break;
 
@@ -297,3 +299,11 @@ public class VeiculoAutomotor {
 // Faça um laço de menu de operação do veículo com cada opção que julgar necessária
 // e “ande com o veículo” e observe os acontecimentos sobre a sua abstração. 
 
+
+
+// contaA
+// contaB
+
+// contaA -> contaB
+
+// contaB.receberTransferencia(contaA.transferir(valor) -> double)
