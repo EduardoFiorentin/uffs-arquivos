@@ -6,13 +6,13 @@ class ContaCorrente {
     private boolean bloqueado; 
 
 
-    private Titular getTitular() {return this.titular;}
+    public Titular getTitular() {return this.titular;}
     private double getSaldo() {return this.saldo;}
     private double getSaldoDevedor() {return this.saldoDevedor;}
     private double getLimite() {return this.limite;}
     private double getLimiteDisponivel() {return this.limiteDisponivel;}
-    private int getNumeroConta() {return this.numeroConta;}
-    private int getDigitoVerificador() {return this.digitoVerificador;}
+    public int getNumeroConta() {return this.numeroConta;}
+    public int getDigitoVerificador() {return this.digitoVerificador;}
     private String getSenha() {return this.senha;}
     private String getNumeroBanco() {return this.numeroBanco;}
     private boolean isBloqueado() {return this.bloqueado;}
@@ -24,11 +24,19 @@ class ContaCorrente {
     private void setLimite(double limite) {this.limite = limite;}
     private void setLimiteDisponivel(double limiteDisponivel) {this.limiteDisponivel = limiteDisponivel;}
     private void setNumeroConta(int numeroConta) {this.numeroConta = numeroConta;}
-    private void setDigitoVerificador(int digitoVerificador) {this.digitoVerificador = digitoVerificador;}
     private void setSenha(String senha) {this.senha = senha;}
     private void setNumeroBanco(String numeroBanco) {this.numeroBanco = numeroBanco;}
     private void setBloqueado(boolean bloqueado) {this.bloqueado = bloqueado;}
     
+    private void setDigitoVerificador(int digitoVerificador, int numeroConta) {
+
+        if (numeroConta % 100 != digitoVerificador) {
+            mensagemErro("Digito verificador inválido!");
+            return; 
+        }
+        
+        this.digitoVerificador = digitoVerificador;
+    }
     
 
     public ContaCorrente (Titular titular, 
@@ -39,27 +47,15 @@ class ContaCorrente {
                     double salario) 
     { 
         
-        // validar digito verificador
-        if (numeroConta % 100 != digitoVerificador) throw new Error("Digito verificador inválido!"); 
-        
-        // gravar valores
-        // this.titular            = titular; 
-        // this.numeroBanco        = numeroBanco; 
-        // this.numeroConta        = numeroConta; 
-        // this.digitoVerificador  = digitoVerificador; 
-        // this.senha              = senha; 
-        // this.titular.salario    = salario; 
-
         setTitular(titular);
         setNumeroBanco(numeroBanco);
         setNumeroConta(numeroConta);
-        setDigitoVerificador(digitoVerificador);
+        setDigitoVerificador(digitoVerificador, numeroConta);
         setSenha(senha);
         setBloqueado(false);
         setSaldoDevedor(0);
         setSaldo(0);
-        
-        // calcular limite 
+
         calcularLimite();
     }
 
@@ -75,10 +71,19 @@ class ContaCorrente {
     }
 
     private void removerSaldo(double valor) {
+        if (valor < 0) {
+            mensagemErro("Valor inválido de saldo para remover!");
+        }
+        if (valor > getSaldo()) {
+            mensagemErro("Não há saldo suficiente para remover!");
+        }
         setSaldo(getSaldo() - valor);
     }
 
     private void acrescentarSaldo(double valor) {
+        if (valor < 0) {
+            mensagemErro("Valor de saldo inválido para acrescentar!");
+        }
         setSaldo(getSaldo() + valor);
     }
 
@@ -126,6 +131,10 @@ class ContaCorrente {
         // }
     }
     public boolean depositarValor(double valor) {
+        if (isBloqueado()) {
+            return false; 
+        }
+
         setSaldo(getSaldo() + valor);
         return true; 
     }
@@ -143,39 +152,41 @@ class ContaCorrente {
         System.out.printf("Conta: %d\n\tTitular: %s - %s\n\tSaldo:%.2f \n\tSalário:%.2f \n\tLimite Disponivel: %.2f \n\tLimite total: %.2f\n", this.numeroConta, this.titular.nome, this.titular.cpf, this.saldo, this.titular.salario, this.limiteDisponivel, this.limite);
     }
     
-    // métodos auxiliares 
-    // private void mensagemSucesso (String mensagem) {
-    //     System.err.println("\u001B[1;32m"+ mensagem + "\u001B[0m");
-    // }
-    
-    // private void mensagemErro (String mensagem) {
-    //     System.err.println("\u001B[1;31m"+ mensagem + "\u001B[0m");
-        
-    // }
+
     // metodos estáticos 
     
     // remetente - quem transfere
     // destinatario - quem recebe a transforencia
     static public void transferirValor(ContaCorrente remetente, ContaCorrente destinatario, double valor) {
         if (remetente.isBloqueado()) {
-            System.err.println("\u001B[1;31m"+ "Contas bloqueadas não podem transferir valores!" + "\u001B[0m");
+            System.out.println("\u001B[1;31m"+ "Contas bloqueadas não podem transferir valores!" + "\u001B[0m");
             return; 
         }
 
         if (destinatario.isBloqueado()) {
-            System.err.println("\u001B[1;31m"+ "Contas bloqueadas não podem receber transferencias!" + "\u001B[0m");
+            System.out.println("\u001B[1;31m"+ "Contas bloqueadas não podem receber transferencias!" + "\u001B[0m");
             return; 
         }
         
         if (remetente.getSaldo() < valor) {
-            System.err.println("\u001B[1;31m"+ "Remetente não tem saldo suficiente!" + "\u001B[0m");
+            System.out.println("\u001B[1;31m"+ "Remetente não tem saldo suficiente!" + "\u001B[0m");
             return; 
         }
 
         remetente.removerSaldo(valor);
         destinatario.acrescentarSaldo(valor);
         
-        System.err.println("\u001B[1;32m"+ "Transferência realizada com sucesso!" + "\u001B[0m");
+        System.out.println("\u001B[1;32m"+ "Transferência realizada com sucesso!" + "\u001B[0m");
+    }
+
+    // métodos auxiliares 
+    void mensagemSucesso (String mensagem) {
+        System.err.println("\u001B[1;32m"+ mensagem + "\u001B[0m");
+    }
+    
+    void mensagemErro (String mensagem) {
+        System.err.println("\u001B[1;31m"+ mensagem + "\u001B[0m");
+        
     }
 }
 
@@ -204,15 +215,15 @@ class Titular {
 public class ContaBancaria {
     public static void main(String[] args) throws Exception {
 
-        Titular titularA = new Titular("Eduardo", "111.111.111-22", 1350.25); 
-        ContaCorrente contaA = new ContaCorrente(titularA, 123, 743, "aabnnde", "134", 135.02); 
+        Titular titularA = new Titular("Nome", "xxx.xxx.xxx-xx", 13050.25); 
+        ContaCorrente contaA = new ContaCorrente(titularA, 123123, 23, "aabnnde", "134", 135.02); 
 
         // titularA.nome = "Eduardo"; 
         // titularA.cpf = "038.824.330-94"; 
 
         // contaA.abrirConta(titularA, 4432, 32, "aabn6495", "138", 1200); 
 
-        // System.out.printf("%s %d %d", contaA.titular.nome, contaA.numeroConta, contaA.digitoVerificador);
+        System.out.printf("%s %d %d", contaA.getTitular().getNome(), contaA.getNumeroConta(), contaA.getDigitoVerificador());
 
         // contaA.exibirInformacoes();
         // contaA.depositarValor(150.0); 

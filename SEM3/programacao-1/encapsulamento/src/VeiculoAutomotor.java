@@ -29,10 +29,13 @@ class Veiculo {
     
 
     private void setQuantidadeCombustivel (double novaQuantidade) {
+        // quantidade mínima = 0 litros 
         if (novaQuantidade < 0) {
             mensagemErro("! Valor inválido para quantidade de combustível"); 
             return; 
         }
+
+        // quantidade máxima - capacidade do tanque
         if (novaQuantidade > getCapacidadeTanque()) {
             mensagemErro("! A quantidade de combustível excede o limite do tanque!"); 
             return; 
@@ -42,8 +45,13 @@ class Veiculo {
     }
     
     private void setVelocidadeAtual (double novaVelocidade) {
+        // velocidade mínima = 0
         if (novaVelocidade < 0)                             velocidadeAtual = 0;
+        
+        // velocidade máxima - limite de velocidade 
         else if (novaVelocidade > getLimiteVelocidade())    velocidadeAtual = getLimiteVelocidade();
+
+        // valor válido 
         else                                                velocidadeAtual = novaVelocidade;
     }
 
@@ -58,8 +66,8 @@ class Veiculo {
         setConsumoPorHora(16);
     }
     
-    // capacidade de acelerar e freiar (+- 20km/h por execução)
-    void acelerar () {
+    
+    public void acelerar () {
         // se estiver desligado
         if (!getLigado()) {
             mensagemErro("! Veículo está desligado!");
@@ -82,7 +90,8 @@ class Veiculo {
         mensagemSucesso("Acelerando... ["+getVelocidadeAtual()+"/"+getLimiteVelocidade()+"] km/h");
     }
     
-    void desacelerar () {
+    public void desacelerar () {
+        
         if ((getVelocidadeAtual() - getCapacidadeAceleracao()) <= 0 && getVelocidadeAtual() == 0) {
             mensagemErro("! Velocidade mínima atingida!");
             return; 
@@ -92,7 +101,7 @@ class Veiculo {
         mensagemSucesso("Desacelerando... ["+getVelocidadeAtual()+"/"+getLimiteVelocidade()+"] km/h");
     }
 
-    void abastecer () {
+    public void abastecer () {
         
         if (getVelocidadeAtual() > 0) {
             mensagemErro("! Pare o veículo para abastecer.");
@@ -111,21 +120,21 @@ class Veiculo {
         System.out.println("Quanto combustível deseja abastecer? :");
         quantidadeAbastecida = inputUsuario.nextDouble(); 
 
-        double qtdCombustivelAntiga = getQuantidadeCombustivel();
+        double qtdCombustivelAnterior = getQuantidadeCombustivel();
         setQuantidadeCombustivel(getQuantidadeCombustivel() + quantidadeAbastecida);
         
         // confirmação do abastecimento 
-        if (getQuantidadeCombustivel() > qtdCombustivelAntiga) {
+        if (getQuantidadeCombustivel() > qtdCombustivelAnterior) {
             mensagemSucesso("Abastecendo... ["+getQuantidadeCombustivel()+"/"+getCapacidadeTanque()+"]");
         }
     }
 
-    void partida () { 
+    public void partida () { 
         if (getLigado()) {
             mensagemErro("! Veículo já está ligado!");
             return; 
         }
-        // se não tem combustivel
+
         if (getQuantidadeCombustivel() == 0) {
             mensagemErro("! Veículo está sem combustivel!");
             return;    
@@ -136,7 +145,7 @@ class Veiculo {
     }
 
     
-    void desligar () { 
+    public void desligar () { 
         if (!getLigado()) {
             mensagemErro("! Veículo já está desligado.");
             return; 
@@ -152,7 +161,7 @@ class Veiculo {
     }
 
     // simula 1 hora de deslocamento - consumo de 16L de combustível 
-    void andar () {
+    public void andar () {
         if (getQuantidadeCombustivel() < getConsumoPorHora()) {
             mensagemErro("O combustível restante não é suficiente para andar por 1 hora. ["+getQuantidadeCombustivel()+"/"+getCapacidadeTanque()+"]");
             return; 
@@ -163,7 +172,7 @@ class Veiculo {
     }
 
     // mostra velocidade atual e qtd de combustível
-    void mostrarStatus () {
+    public void mostrarStatus () {
         System.err.println(
             "\nVelocidade Atual: [" + getVelocidadeAtual() + " / " + getLimiteVelocidade() + "] Km/h" +
             "\nQuantidade de combustível: [" + getQuantidadeCombustivel() + " / " + getCapacidadeTanque() + "] L"
@@ -172,11 +181,11 @@ class Veiculo {
 
 
     // métodos auxiliares 
-    void mensagemSucesso (String mensagem) {
+    public void mensagemSucesso (String mensagem) {
         System.err.println("\u001B[1;32m"+ mensagem + "\u001B[0m");
     }
     
-    void mensagemErro (String mensagem) {
+    public void mensagemErro (String mensagem) {
         System.err.println("\u001B[1;31m"+ mensagem + "\u001B[0m");
         
     }
@@ -186,7 +195,7 @@ class Veiculo {
 public class VeiculoAutomotor {
     public static void main(String[] args) {
 
-        Veiculo carro1 = new Veiculo(120); 
+        Veiculo veiculo = new Veiculo(120); 
         boolean rodando = true; 
         Scanner charSc = new Scanner(System.in); 
         Scanner doubleSc = new Scanner(System.in);
@@ -208,37 +217,37 @@ public class VeiculoAutomotor {
                     
                 case '1':
                     System.out.println("- Opção de ligar veículo.");
-                    carro1.partida();
+                    veiculo.partida();
                     break;
 
                 case '2':
                     System.out.println("- Opção de desligar veículo.");
-                    carro1.desligar();
+                    veiculo.desligar();
                     break;
 
                 case '3':
                     System.out.println("- Opção de acelerar.");
-                    carro1.acelerar();
+                    veiculo.acelerar();
                     break;
 
                 case '4':
                     System.out.println("- Opção de desacelerar.");
-                    carro1.desacelerar();
+                    veiculo.desacelerar();
                     break;
 
                 case '5':
                     System.out.println("- Opção de abastecer.");
-                    carro1.abastecer();
+                    veiculo.abastecer();
                     break;
                     
                 case '6':
                     System.out.println("- Opção de rodar por 1 hora.");
-                    carro1.andar();
+                    veiculo.andar();
                     break;
                     
                 case '7':
                     System.out.println("- Opção de mostrar status do veículo.");
-                    carro1.mostrarStatus();
+                    veiculo.mostrarStatus();
                     break;
                     
             
@@ -250,7 +259,7 @@ public class VeiculoAutomotor {
         } while (rodando); 
 
 
-        carro1.mostrarStatus();
+        veiculo.mostrarStatus();
         System.err.println("Programa finalizado!");
         
         charSc.close();
@@ -292,12 +301,3 @@ public class VeiculoAutomotor {
 
 // Faça um laço de menu de operação do veículo com cada opção que julgar necessária
 // e “ande com o veículo” e observe os acontecimentos sobre a sua abstração. 
-
-
-
-// contaA
-// contaB
-
-// contaA -> contaB
-
-// contaB.receberTransferencia(contaA.transferir(valor) -> double)
