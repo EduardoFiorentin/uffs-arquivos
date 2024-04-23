@@ -45,12 +45,6 @@ class Veiculo {
         if (novaVelocidade < 0)                             velocidadeAtual = 0;
         else if (novaVelocidade > getLimiteVelocidade())    velocidadeAtual = getLimiteVelocidade();
         else                                                velocidadeAtual = novaVelocidade;
-
-        // if (novaVelocidade < 0) velocidadeAtual = 0; 
-        // else {
-        //     if (novaVelocidade > getLimiteVelocidade()) velocidadeAtual = getLimiteVelocidade();
-        //     else velocidadeAtual = novaVelocidade; 
-        // }
     }
 
 
