@@ -102,7 +102,7 @@ class ContaCorrente {
         resetarLimite(); 
     }
     
-    // pagamento usando saldo e limite
+    // pagamento usando saldo
     public void pagamentoDebito(double valor, String senha) {
         if (!validarSenha(senha)) {
             mensagemErro("Senha incorreta!");
@@ -115,17 +115,18 @@ class ContaCorrente {
         if (valor > getSaldo()) {
             mensagemErro("Saldo insuficiente para realizar o pagamento!");
             return;
-        }; 
+        } 
         if (valor < 0) {
             mensagemErro("Valor do pagamento não pode ser negativo!");
             return; 
-        }; 
+        } 
         
         removerSaldo(valor);
         mensagemSucesso("Pagamento realizado com sucesso!"); 
         
     }
 
+    // pagamento usando limite disponível
     public void pagamentoCredito(double valor, String senha) {
         if (!validarSenha(senha)) {
             mensagemErro("Senha incorreta!");
@@ -137,11 +138,11 @@ class ContaCorrente {
         if (valor > getLimiteDisponivel()) {
             mensagemErro("Crédito insuficiente para realizar o pagamento!");
             return; 
-        }; 
+        } 
         if (valor < 0) {
             mensagemErro("Valor do pagamento não pode ser negativo!");
             return; 
-        }; 
+        } 
         
         setLimiteDisponivel(getLimiteDisponivel() - valor);
         mensagemSucesso("Pagamento realizado com sucesso!");
@@ -155,7 +156,7 @@ class ContaCorrente {
         if (valor < 0) {
             mensagemErro("Valor do deposito não pode ser negativo!");
             return; 
-        }; 
+        } 
 
         acrescentarSaldo(valor);
         mensagemSucesso("O valor de R$" + valor + " foi depositado com sucesso!");
@@ -173,11 +174,11 @@ class ContaCorrente {
         if (valor > getSaldo()) {
             mensagemErro("Saldo insuficiente para realizar o saque!");
             return;
-        }; 
+        }
         if (valor < 0) {
             mensagemErro("Valor de saque não pode ser negativo!");
             return; 
-        }; 
+        }
         
         removerSaldo(valor);
         mensagemSucesso("Saque realizado com sucesso!");
