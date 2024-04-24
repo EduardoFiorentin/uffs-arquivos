@@ -37,11 +37,11 @@ class Veiculo {
 
         // quantidade máxima - capacidade do tanque
         if (novaQuantidade > getCapacidadeTanque()) {
-            mensagemErro("! A quantidade de combustível excede o limite do tanque!"); 
+            mensagemErro("! A quantidade de combustível excede o limite do tanque! [" + getCapacidadeTanque() +" L]"); 
             return; 
         }
         
-        this.quantidadeCombustivel = novaQuantidade;
+        quantidadeCombustivel = novaQuantidade;
     }
     
     private void setVelocidadeAtual (double novaVelocidade) {
@@ -162,6 +162,10 @@ class Veiculo {
 
     // simula 1 hora de deslocamento - consumo de 16L de combustível 
     public void andar () {
+        if (!getLigado()) {
+            mensagemErro("! Ligue o veículo!");
+            return; 
+        }
         if (getQuantidadeCombustivel() < getConsumoPorHora()) {
             mensagemErro("O combustível restante não é suficiente para andar por 1 hora. ["+getQuantidadeCombustivel()+"/"+getCapacidadeTanque()+"]");
             return; 
@@ -207,8 +211,6 @@ public class VeiculoAutomotor {
             
             opcao = charSc.nextLine().charAt(0);
 
-
-            // case 
 
             switch (opcao) {
                 case '0': // finaliza o programa
