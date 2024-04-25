@@ -1,1 +1,1 @@
-nova frase
+frase nova pro arquivo
