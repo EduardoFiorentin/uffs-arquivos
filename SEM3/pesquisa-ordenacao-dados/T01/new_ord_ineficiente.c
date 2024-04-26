@@ -2,6 +2,7 @@
 #include "stdlib.h"
 #include "linked_list.c"
 
+
 // troca os valores duas posições do vetor
 void swap (Tlist *vector, int i, int j) {
     Tlist ref = vector[i];
@@ -9,10 +10,11 @@ void swap (Tlist *vector, int i, int j) {
     vector[j] = ref;
 }
 
-void bubbleSort(Tlist *list, int listSize) {
+Tlist* bubbleSort(Tlist *list, int listSize) {
 
     // Cria vetor com os nodos da lista encadeada 
     Tlist* vector = listToStructVector(list, listSize);
+    freeList(list);
 
     // bubble está quebrado 
     int i = listSize - 1;
@@ -32,8 +34,12 @@ void bubbleSort(Tlist *list, int listSize) {
         i--;
     }
 
+
     // transforma o vetor ordenado novamente em uma lista encadeada
-    list = structVectorToList(list, vector, listSize); 
+    list = structVectorToList(vector, listSize); 
+    free(vector); 
+
+    return list;
 }
 
 int main() {
@@ -55,7 +61,7 @@ int main() {
     printTList(linked_list); 
     
     // ordena a lista encadeada
-    bubbleSort(linked_list, listSize);
+    linked_list = bubbleSort(linked_list, listSize);
 
     printf("\nDepois da ordenacao: ");
     printTList(linked_list); 

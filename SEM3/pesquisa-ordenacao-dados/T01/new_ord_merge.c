@@ -3,6 +3,7 @@
 #include "linked_list.c"
 
 
+
 void merge(Tlist *A, int start, int mid, int end) {
     int size = end-start+1;
     Tlist* aux = (Tlist*)malloc(sizeof(Tlist) * size);
@@ -53,15 +54,21 @@ void mergeSortAux(Tlist* A, int inicio, int fim) {
 
 
 // função de chamada do merge sort 
-void mergeSort(Tlist* list, int listSize) {
+Tlist* mergeSort(Tlist* list, int listSize) {
 
     // Cria vetor com os nodos da lista encadeada 
     Tlist* vector = listToStructVector(list, listSize);
 
+    // ordenar vetor de nodos
     mergeSortAux(vector, 0, listSize-1);
 
+    freeList(list); 
+
     // transforma o vetor ordenado novamente em uma lista encadeada
-    list = structVectorToList(list, vector, listSize); 
+    list = structVectorToList(vector, listSize); 
+    free(vector); 
+    
+    return list; 
 }
 
 int main() {
@@ -83,7 +90,7 @@ int main() {
     printTList(linked_list); 
 
     // cria uma nova lista encadeada a partir dos valores passado em "vector"
-    mergeSort(linked_list, listSize);
+    linked_list = mergeSort(linked_list, listSize);
 
     printf("\nDepois da ordenacao: ");
     printTList(linked_list); 

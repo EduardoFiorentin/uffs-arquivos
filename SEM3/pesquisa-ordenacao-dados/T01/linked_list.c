@@ -1,7 +1,6 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-
 //tipos 
 typedef struct tlist
 {
@@ -9,6 +8,12 @@ typedef struct tlist
     struct tlist* next; 
 } Tlist;
 
+Tlist* insertNode(Tlist* list, int newValue);
+Tlist* vectorToNewList(Tlist* list, int* vector, int vectorSize);
+Tlist* listToStructVector(Tlist* list, int listSize);
+Tlist* structVectorToList(Tlist* vector, int listSize);
+void printTList(Tlist* list);
+void freeList(Tlist* list);
 
 
 // cria nodo no final da lista  
@@ -22,7 +27,7 @@ Tlist* insertNode(Tlist* list, int newValue) {
     newNode->value = newValue; 
 
     // inserir nodo
-        // se a lista estiver vazia, o vetor se torna a raiz da lista 
+        // se a lista estiver vazia, o nodo se torna a raiz da lista 
         // se não é inserido no final
     if (list == NULL) {
         list = newNode;
@@ -46,6 +51,7 @@ Tlist* vectorToNewList(Tlist* list, int* vector, int vectorSize) {
 }
 
 
+// transforma uma lista encadeada em um vetor do tipo Tlist
 Tlist* listToStructVector(Tlist* list, int listSize) {
     Tlist *vector = (Tlist*) malloc(sizeof(Tlist) * listSize);
     Tlist *aux = list; 
@@ -59,28 +65,17 @@ Tlist* listToStructVector(Tlist* list, int listSize) {
 }
 
 // transforma um vetor de nodos de struct do tipo TList em uma lista encadeada 
-Tlist* structVectorToList(Tlist* list, Tlist* vector, int listSize) {
+Tlist* structVectorToList(Tlist* vector, int listSize) {
 
-    // copia o primeiro elemento ordenado para o endereço original 
-    // da lista encadeada, mantendo o primeiro elemento da lista 
-    // no mesmo endereço de memória
-    *list = vector[0]; 
-    
-    Tlist *aux; 
-    aux = list;
+    Tlist *newList = NULL; 
 
-
-    // atualiza os parametros next de cada nodo para o próximo elemento do vetor
-    // mantém os nodos no local de memória correspondente ao vetor, mas os trata como lista encadeada
-    for(int i = 1; i < listSize; i++) {
-        aux->next = &vector[i]; 
-        aux = aux->next;
+    // nova lista com os valores ordenados 
+    for(int i = 0; i < listSize; i++) {
+        printf("\nvalor: ", vector[i].value);
+        newList = insertNode(newList, vector[i].value);
     }
-    
-    // setar next do último elemento como null
-    aux->next = NULL; 
 
-    return list; 
+    return newList; 
 
 }
 
@@ -104,7 +99,6 @@ void freeList(Tlist* list) {
     Tlist* aux; 
 
     while (list != NULL) {
-        printf("\n%d", aux->value);
         aux = list; 
         list = list->next;
         free(aux); 

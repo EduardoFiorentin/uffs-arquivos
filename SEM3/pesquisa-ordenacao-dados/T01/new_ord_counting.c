@@ -3,10 +3,15 @@
 #include "linked_list.c"
 
 // método de ordenação counting sort
-void countingSort(Tlist* list, int listSize) {
+Tlist* countingSort(Tlist* list, int listSize) {
 
     // Cria vetor com os nodos da lista encadeada 
     Tlist* vector = listToStructVector(list, listSize);
+
+    printf("Vector: ");
+    for (int i = 0; i < listSize; i++) {
+        printf("%d ", vector[i].value); 
+    }
 
     int k = -1; 
     // encontra o maior
@@ -36,7 +41,13 @@ void countingSort(Tlist* list, int listSize) {
     }
 
     // transforma o vetor ordenado novamente em uma lista encadeada
-    list = structVectorToList(list, aux, listSize); 
+    list = structVectorToList(aux, listSize); 
+
+    free(vector);
+    free(aux); 
+    free(count); 
+
+    return list; 
 
 }
 
@@ -58,7 +69,7 @@ int main() {
     printTList(linked_list); 
     
     // ordena a lista encadeada
-    countingSort(linked_list, listSize);
+    linked_list = countingSort(linked_list, listSize);
 
     printf("\nDepois da ordenacao: ");
     printTList(linked_list); 
