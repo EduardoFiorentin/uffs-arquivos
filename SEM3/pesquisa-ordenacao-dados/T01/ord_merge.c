@@ -62,42 +62,42 @@ Tlist* mergeSort(Tlist* list, int listSize) {
     // ordenar vetor de nodos
     mergeSortAux(vector, 0, listSize-1);
 
-    // limpa valores da lista antiga
-    freeList(list); 
-
     // transforma o vetor ordenado novamente em uma lista encadeada
-    list = tListVectorToList(vector, listSize); 
+    Tlist* sortedList = tListVectorToList(vector, listSize); 
     free(vector); 
     
-    return list; 
+    return sortedList; 
 }
 
 int main() {
 
-    Tlist* linked_list = NULL; 
+    Tlist* linkedList = NULL; 
 
     // imprimir lista encadeada 
     printf("Inicio: ");
-    printTList(linked_list); 
+    printTList(linkedList); 
 
     int vector[] = {24, 30, 19, 38, 19, 31, 11, 12, 27, 34, 1, 37, 43, 17, 1, 28, 36, 31, 45, 27, 4, 48, 23, 46, 36, 31, 41, 37, 33, 6, 24, 10, 43, 23, 12, 4, 18, 24, 25, 7, 48, 15, 29, 45, 0, 8, 32, 12, 19, 6}; 
     int listSize = sizeof(vector)/sizeof(int);
 
     // cria uma nova lista encadeada a partir dos valores passado em "vector"
 
-    linked_list = vectorToNewList(linked_list, vector, listSize); 
+    linkedList = vectorToNewList(linkedList, vector, listSize); 
 
     printf("\nAntes da ordenacao: ");
-    printTList(linked_list); 
+    printTList(linkedList); 
 
     // cria uma nova lista encadeada a partir dos valores passado em "vector"
-    linked_list = mergeSort(linked_list, listSize);
+    Tlist* sortedList = mergeSort(linkedList, listSize);
+    
+    // libera memória alocada para a lista inicial 
+    free(linkedList);
 
     printf("\nDepois da ordenacao: ");
-    printTList(linked_list); 
+    printTList(sortedList); 
 
     // libera memória alocada para a lista encadeada 
-    freeList(linked_list);
+    freeList(sortedList);
 
     return 0; 
 }

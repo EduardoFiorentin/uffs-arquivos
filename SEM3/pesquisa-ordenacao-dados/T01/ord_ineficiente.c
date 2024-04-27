@@ -36,40 +36,41 @@ Tlist* bubbleSort(Tlist *list, int listSize) {
 
     // transforma o vetor ordenado novamente em uma lista encadeada
 
-        // limpa valores da lista antiga
-    freeList(list);
-    list = tListVectorToList(vector, listSize); 
+    Tlist* sortedList = tListVectorToList(vector, listSize); 
     free(vector); 
 
-    return list;
+    return sortedList;
 }
 
 int main() {
 
-    Tlist* linked_list = NULL; 
+    Tlist* linkedList = NULL; 
 
     // imprimir lista encadeada 
     printf("Inicio: ");
-    printTList(linked_list); 
+    printTList(linkedList); 
 
     int vector[] = {4, 40, 9, 42, 8, 17, 7, 0, 13, 50, 3, 49, 4, 2, 46, 3, 4, 28, 24, 27, 28, 35, 31, 22, 28, 2, 34, 35, 48, 35, 1, 49, 27, 16, 10, 28, 36, 1, 31, 3, 47, 2, 17, 29, 23, 29, 13, 43, 14, 37}; 
 
     int listSize = sizeof(vector)/sizeof(int);
 
     // cria uma nova lista encadeada a partir dos valores passado em "vector"
-    linked_list = vectorToNewList(linked_list, vector, listSize); 
+    linkedList = vectorToNewList(linkedList, vector, listSize); 
 
     printf("\nAntes da ordenacao: ");
-    printTList(linked_list); 
+    printTList(linkedList); 
     
     // ordena a lista encadeada
-    linked_list = bubbleSort(linked_list, listSize);
+    Tlist* sortedList = bubbleSort(linkedList, listSize);
+    
+    // libera memória alocada para a lista inicial 
+    freeList(linkedList);
 
     printf("\nDepois da ordenacao: ");
-    printTList(linked_list); 
+    printTList(sortedList); 
 
     // libera memória alocada para a lista encadeada 
-    freeList(linked_list);
+    freeList(sortedList);
 
     return 0; 
 }
