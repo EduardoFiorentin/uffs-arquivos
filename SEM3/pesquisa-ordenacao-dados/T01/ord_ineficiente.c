@@ -14,7 +14,6 @@ Tlist* bubbleSort(Tlist *list, int listSize) {
 
     // Cria vetor com os nodos da lista encadeada 
     Tlist* vector = listToStructVector(list, listSize);
-    freeList(list);
 
     // bubble está quebrado 
     int i = listSize - 1;
@@ -36,7 +35,10 @@ Tlist* bubbleSort(Tlist *list, int listSize) {
 
 
     // transforma o vetor ordenado novamente em uma lista encadeada
-    list = structVectorToList(vector, listSize); 
+
+        // limpa valores da lista antiga
+    freeList(list);
+    list = tListVectorToList(vector, listSize); 
     free(vector); 
 
     return list;

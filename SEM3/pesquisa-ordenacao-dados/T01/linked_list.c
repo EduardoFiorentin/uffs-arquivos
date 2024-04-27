@@ -8,13 +8,6 @@ typedef struct tlist
     struct tlist* next; 
 } Tlist;
 
-Tlist* insertNode(Tlist* list, int newValue);
-Tlist* vectorToNewList(Tlist* list, int* vector, int vectorSize);
-Tlist* listToStructVector(Tlist* list, int listSize);
-Tlist* structVectorToList(Tlist* vector, int listSize);
-void printTList(Tlist* list);
-void freeList(Tlist* list);
-
 
 // cria nodo no final da lista  
 Tlist* insertNode(Tlist* list, int newValue) {
@@ -64,14 +57,13 @@ Tlist* listToStructVector(Tlist* list, int listSize) {
     return vector;
 }
 
-// transforma um vetor de nodos de struct do tipo TList em uma lista encadeada 
-Tlist* structVectorToList(Tlist* vector, int listSize) {
+// transforma um vetor de nodos de struct do tipo TList em uma nova lista encadeada 
+Tlist* tListVectorToList(Tlist* vector, int listSize) {
 
     Tlist *newList = NULL; 
 
     // nova lista com os valores ordenados 
     for(int i = 0; i < listSize; i++) {
-        printf("\nvalor: ", vector[i].value);
         newList = insertNode(newList, vector[i].value);
     }
 

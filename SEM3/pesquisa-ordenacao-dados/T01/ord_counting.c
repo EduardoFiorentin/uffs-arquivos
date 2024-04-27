@@ -8,13 +8,7 @@ Tlist* countingSort(Tlist* list, int listSize) {
     // Cria vetor com os nodos da lista encadeada 
     Tlist* vector = listToStructVector(list, listSize);
 
-    printf("Vector: ");
-    for (int i = 0; i < listSize; i++) {
-        printf("%d ", vector[i].value); 
-    }
-
     int k = -1; 
-    // encontra o maior
     for (int i = 0; i < listSize; i++) if (vector[i].value > k) k = vector[i].value;
 
     // inicia vetor count 
@@ -26,7 +20,7 @@ Tlist* countingSort(Tlist* list, int listSize) {
 
     // inicia vetor aux 
     Tlist* aux;
-    aux = (Tlist*) malloc(listSize * sizeof(int)); 
+    aux = (Tlist*) malloc(listSize * sizeof(Tlist)); 
 
     // incrementa o contador 
     for (int i = 0; i < listSize; i++) count[vector[i].value]++; 
@@ -41,7 +35,9 @@ Tlist* countingSort(Tlist* list, int listSize) {
     }
 
     // transforma o vetor ordenado novamente em uma lista encadeada
-    list = structVectorToList(aux, listSize); 
+        // limpa valores da lista antiga
+    freeList(list);
+    list = tListVectorToList(aux, listSize); 
 
     free(vector);
     free(aux); 

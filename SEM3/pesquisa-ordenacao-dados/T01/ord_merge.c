@@ -40,7 +40,7 @@ void merge(Tlist *A, int start, int mid, int end) {
     free(aux);
 }
 
-// merge sort 
+// algoritmo merge sort 
 void mergeSortAux(Tlist* A, int inicio, int fim) {
     if (inicio < fim) {
         int meio;
@@ -62,10 +62,11 @@ Tlist* mergeSort(Tlist* list, int listSize) {
     // ordenar vetor de nodos
     mergeSortAux(vector, 0, listSize-1);
 
+    // limpa valores da lista antiga
     freeList(list); 
 
     // transforma o vetor ordenado novamente em uma lista encadeada
-    list = structVectorToList(vector, listSize); 
+    list = tListVectorToList(vector, listSize); 
     free(vector); 
     
     return list; 
