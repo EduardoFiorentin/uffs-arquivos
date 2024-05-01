@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>mux4x2</string>
+        </entry>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>D0,D1,D2,D3,s0,s1</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity mux4x2 is 
+port (
+
+    	D0, D1, D2, D3 : in std_logic; 
+    	s0, s1: in std_logic; 
+    	y: out std_logic
+
+); 
+end mux4x2; 
+
+architecture behav_mux4x2 of mux4x2 is
+
+    	signal sel : std_logic_vector(1 downto 0) := &quot;00&quot;; 
+
+begin
+    	-- concatenação de s1 e s0 para o logic vector 
+	sel &lt;= s1 &amp; s0; 
+    	
+	-- else é obrigatório  
+	y &lt;= 	d0 when sel = &quot;00&quot; else 
+		d1 when sel = &quot;01&quot; else 
+		d2 when sel = &quot;10&quot; else 
+		d3; 	
+    
+end architecture behav_mux4x2;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>y</string>
+        </entry>
+      </elementAttributes>
+      <pos x="500" y="260"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="440" y="260"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="440" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="400" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="440" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="440" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="400" y="360"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes/>
+      <pos x="640" y="320"/>
+    </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>verify_button</string>
+        </entry>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>B0,B1,B2,B3</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>-- sistema que recebe quatro botões e responde se mais de um 
+-- for pressionado
+
+library IEEE; 
+use IEEE.std_logic_1164.all; 
+use IEEE.numeric_std.all;
+ 
+
+entity verify_button is 
+port (
+	
+	B0, B1, B2, B3: in std_logic; 
+	Y: out std_logic
+	
+);  
+end verify_button;
+
+architecture behav_verify_button of verify_button is 
+	signal sel : std logic_vector(3 downto 0) := &quot;0000&quot;;
+begin 
+	sel &lt;= b0 &amp; b1 &amp; b2 &amp; b3; 
+	with sel select 
+		Y &lt;= &apos;0&apos; when &quot;0001&quot; | &quot;0010&quot; | &quot;0100&quot; | &quot;1000&quot;, 
+		     &apos;1&apos; when others;  	
+
+end architecture behav_verify_button;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>Y</string>
+        </entry>
+      </elementAttributes>
+      <pos x="900" y="40"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="560" y="320"/>
+      <p2 x="640" y="320"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="260"/>
+      <p2 x="500" y="260"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="340"/>
+      <p2 x="500" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="400" y="280"/>
+      <p2 x="500" y="280"/>
+    </wire>
+    <wire>
+      <p1 x="400" y="360"/>
+      <p2 x="500" y="360"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="300"/>
+      <p2 x="500" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="380"/>
+      <p2 x="500" y="380"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
