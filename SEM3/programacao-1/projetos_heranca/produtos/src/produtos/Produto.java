@@ -37,15 +37,7 @@ public abstract class Produto {
     }
 
 
-    @Override
     protected void finalize() throws Throwable {
-        // TODO Auto-generated method stub
         decrementaEstoque();
-        super.finalize();
     }
-
-
-
-
-
 }

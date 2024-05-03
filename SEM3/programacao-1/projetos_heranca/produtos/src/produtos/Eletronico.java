@@ -1,7 +1,6 @@
 package produtos;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Eletronico extends Produto {
     private String marca, modelo; 
@@ -19,5 +18,9 @@ public class Eletronico extends Produto {
         setMarca(marca);
         setModelo(modelo);
 
+    }
+
+    public void imprimeProduto() {
+        System.out.printf("\nTipo: Eletronico\nID: %s\nNome: %s / %s\nPreco: %.2f\nStatus: %s\n", super.getId(), super.getNome(), getModelo(), super.getPreco(), super.isDisponivel() ? "Disponível" : "Indisponível");
     }
 }
