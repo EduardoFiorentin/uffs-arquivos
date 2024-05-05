@@ -6,13 +6,23 @@ public class VeiculoCombustao extends VeiculoAutomotor {
     private double capacidadeTanque; 
     private double consumoPorKm;
 
-    public double getQuantidadeCombustivel ()               {return quantidadeCombustivel;}
-    public double getCapacidadeTanque()                     {return capacidadeTanque;}
-    public double getConsumoPorKm()                         {return consumoPorKm;}
+    private double getQuantidadeCombustivel ()               {return quantidadeCombustivel;}
+    private double getCapacidadeTanque()                     {return capacidadeTanque;}
+    private double getConsumoPorKm()                         {return consumoPorKm;}
 
     private void setCapacidadeTanque(double capacidadeTanque)                           {this.capacidadeTanque = capacidadeTanque;}
     private void setConsumoPorHora(double consumoPorKmm)                                {this.consumoPorKm = consumoPorKmm;}
     
+    
+    public VeiculoCombustao(double limiteVelocidade, double capacidadeAceleracao, double capacidadeTanque, double consumoPorKm) {
+        super(limiteVelocidade, capacidadeAceleracao); 
+        setCapacidadeTanque(capacidadeTanque);
+        setConsumoPorHora(consumoPorKm);
+        setQuantidadeCombustivel(0);
+    }
+    
+
+    // metodos obrigatórios implementados 
     protected void setQuantidadeCombustivel (double novaQuantidade) {
         if (novaQuantidade < 0) {
             mensagemErro("! Quantidade de combustivel não pode ser negativa!");
@@ -22,30 +32,28 @@ public class VeiculoCombustao extends VeiculoAutomotor {
             mensagemErro("! Nova quantidade de combustível excede a capacidade do tanque!");
         }
         quantidadeCombustivel = novaQuantidade;
-        
-    }
-    
-
-    public VeiculoCombustao(double limiteVelocidade, double capacidadeAceleracao, double capacidadeTanque, double consumoPorKm) {
-        super(limiteVelocidade, capacidadeAceleracao); 
-        setCapacidadeTanque(capacidadeTanque);
-        setConsumoPorHora(consumoPorKm);
-        setQuantidadeCombustivel(0);
     }
 
-    protected boolean podeDeslocar(double distancia) {
-        if (distancia == 0) {
-            
-        }
 
+    protected boolean podeGerarForcaMotriz() {
         if (getQuantidadeCombustivel() == 0) {
             mensagemErro("! Abasteça o veiculo para deslocar!");
             return false; 
         }
-        // if ()
 
         return true;
     };
+
+    protected boolean temForcaMotrizSuficiente(double distancia) {
+        if (getQuantidadeCombustivel() < getConsumoPorKm() * distancia) { 
+            return false; 
+        }
+        return true; 
+    }
+
+    protected void removerCapacidadeMotriz(double distancia) {
+        setQuantidadeCombustivel(getQuantidadeCombustivel() - (getConsumoPorKm() * distancia));
+    }
 
     public void mostrarStatus() {
         System.out.println("----------* Veículo a combustão *----------");
@@ -56,24 +64,8 @@ public class VeiculoCombustao extends VeiculoAutomotor {
         System.out.println("-------------------------------------------");
     }; 
 
-    
-    public void andar(double distancia) {
-        if (!isLigado()) {
-            mensagemErro("! Ligue o veículo para andar!");
-            return; 
-        }
-        if (getQuantidadeCombustivel() < getConsumoPorKm() * distancia) { 
-            mensagemErro("! Não há combustivel suficiente para andar por esta distância!");
-        }
-        if (!podeDeslocar()) {
-            mensagemErro("Veículo sem combustivel");
-            return; 
-        }
-        setQuantidadeCombustivel(getQuantidadeCombustivel() - (getConsumoPorKm() * distancia));
-        mensagemSucesso("Veículo andou por " + distancia + " Km. Combustível: " + getQuantidadeCombustivel() + " / " + getCapacidadeTanque());
-    }; 
 
-
+    // métodos do funcionamento da classe 
     public void abastecer(double quantidadeAbastecida) {
         if (quantidadeAbastecida <= 0) {
             mensagemErro("! Não é possível abastecer quantidades negativas.");

@@ -9,64 +9,59 @@ abstract class VeiculoAutomotor {
     private boolean ligado;
     private double capacidadeAceletacao; // quanto a velocidade varia a cada aceleração ou desaceleração  
     // private double consumoPorHora; 
-
+    
     
     // setters / getters
-    public double getVelocidadeAtual ()            {return velocidadeAtual;}
-    // public double getQuantidadeCombustivel ()      {return quantidadeCombustivel;}
-    // public double getCapacidadeTanque ()           {return capacidadeTanque;}
-    public double getLimiteVelocidade ()           {return limiteVelocidade;}
-    public boolean isLigado ()                    {return ligado;}
-    public double getCapacidadeAceleracao ()       {return capacidadeAceletacao;}
-    // public double getConsumoPorHora ()             {return consumoPorHora; }
+    public double getVelocidadeAtual ()             {return velocidadeAtual;}
+    public double getLimiteVelocidade ()            {return limiteVelocidade;}
+    public boolean isLigado ()                      {return ligado;}
+    public double getCapacidadeAceleracao ()        {return capacidadeAceletacao;}
     
     
     private void setLigado (boolean ligado)                                   {this.ligado = ligado;}
     private void setLimiteVelocidade (double limiteVelocidade)                {this.limiteVelocidade = limiteVelocidade;}
     private void setCapacidadeAceleracao (double capacidadeAceleracao)        {this.capacidadeAceletacao = capacidadeAceleracao;}
-    
-
-    
-    // private void setQuantidadeCombustivel (double novaQuantidade) {
-    //     // quantidade mínima = 0 litros 
-    //     if (novaQuantidade < 0) {
-    //         mensagemErro("! Valor inválido para quantidade de combustível"); 
-    //         return; 
-    //     }
-
-    //     // quantidade máxima - capacidade do tanque
-    //     if (novaQuantidade > getCapacidadeTanque()) {
-    //         mensagemErro("! A quantidade de combustível excede o limite do tanque! [" + getCapacidadeTanque() +" L]"); 
-    //         return; 
-    //     }
-        
-    //     quantidadeCombustivel = novaQuantidade;
-    // }
-    
-    protected abstract boolean podeDeslocar(double distancia);
-    // protected abstract void setQuantidadeCombustivel(double novaQuantidade);
-    public abstract void mostrarStatus(); 
-    public abstract void andar(double distancia); 
-    // protected abstract boolean podeDeslocar(double distancia);
-
-    
     private void setVelocidadeAtual (double novaVelocidade) {
         // velocidade mínima = 0
         if (novaVelocidade < 0)                             velocidadeAtual = 0;
         
         // velocidade máxima - limite de velocidade 
         else if (novaVelocidade > getLimiteVelocidade())    velocidadeAtual = getLimiteVelocidade();
-
+    
         // valor válido 
         else                                                velocidadeAtual = novaVelocidade;
     }
-
+    
+    
+    // métodos obrigatórios para classes derivadas 
+    protected abstract boolean podeGerarForcaMotriz();              // verifica se tem a energia/combustível necessário 
+    protected abstract boolean temForcaMotrizSuficiente(double distancia);      // verifica se tem energia suficiente para deslocar a distância 
+    protected abstract void removerCapacidadeMotriz(double distancia); 
+    public abstract void mostrarStatus();                           
 
     public VeiculoAutomotor (double limiteVelocidade, double capacidadeAceleracao) {
         setVelocidadeAtual(0);
         setLimiteVelocidade(limiteVelocidade);
         setCapacidadeAceleracao(capacidadeAceleracao);
     }
+
+    public void andar(double distancia) {
+        if (!isLigado()) {
+            mensagemErro("! Ligue o veículo para andar!");
+            return; 
+        }
+        if (!temForcaMotrizSuficiente(distancia)) { 
+            mensagemErro("! Não há combustivel/carga suficiente para andar por esta distância!");
+            return; 
+        }
+        if (!podeGerarForcaMotriz()) {
+            mensagemErro("! Abasteça/carregue o veículo!");
+            return; 
+        }
+
+        removerCapacidadeMotriz(distancia);
+        mensagemSucesso("Veículo andou por " + distancia + " Km. Combustível: ");
+    }; 
     
     
     public void acelerar () {
@@ -77,7 +72,7 @@ abstract class VeiculoAutomotor {
         }
         
         // se não tem combustivel
-        if (!podeDeslocar(0)) {
+        if (!podeGerarForcaMotriz()) {
             mensagemErro("! Veículo está sem combustivel/descarregado!");
             return;    
         }
@@ -109,7 +104,7 @@ abstract class VeiculoAutomotor {
             return; 
         }
 
-        if (!podeDeslocar(0)) {
+        if (!podeGerarForcaMotriz()) {
             mensagemErro("! Veículo sem energia/combustivel!");
             return;
         }
