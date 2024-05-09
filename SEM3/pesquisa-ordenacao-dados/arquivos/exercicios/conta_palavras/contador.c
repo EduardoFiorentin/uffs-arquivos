@@ -1,3 +1,6 @@
+// Contagem de Palavras em um Arquivo: Escreva um programa que abra um arquivo
+// de texto, conte o número de palavras nele e exiba o resultado na tela
+
 #include "stdio.h"
 #include "stdlib.h"
 

@@ -1,0 +1,3 @@
+texto base 
+para o algoritmo de 
+encontrar caracteres    
