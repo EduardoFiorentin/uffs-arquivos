@@ -1,32 +1,37 @@
-// Lista o conteúdo de um arquivo que contém números reais em formato binário 
- 
 #include <stdio.h>
 #include <stdlib.h>
- 
-#define ARQUIVO "numeros.dat"
- 
-int main (int argc, char *argv[])
-{
-  FILE* arq ;
-  int value ;
- 
-  // abre o arquivo em modo leitura
-  arq = fopen (ARQUIVO, "r") ;
-  if (!arq)
-  {
-    perror ("Erro ao abrir arquivo") ;
-    exit (1) ;
+
+#define TAMANHO 10
+
+int main() {
+
+  FILE* file = fopen("file.dat", "rb");
+
+  if (file == NULL) {
+    printf("Erro!");
+    exit(1); 
   }
- 
-  // lê e imprime os valores contidos no arquivo
-  fread (&value, sizeof (int), 1, arq) ;
-  while (! feof (arq))
-  {
-    printf ("%f\n", value) ;
-    fread (&value, sizeof (int), 1, arq) ;
+
+  int reg[TAMANHO]; 
+  fread(reg, sizeof(int), TAMANHO, file);
+
+  int min, max, sum; 
+
+  min = reg[0];
+  max = reg[0]; 
+  sum = 0; 
+
+  for (int i = 0; i < TAMANHO; i++) {
+    if (min > reg[i]) min = reg[i];
+    if (max < reg[i]) max = reg[i]; 
+    sum += reg[i]; 
   }
- 
-  // fecha o arquivo
-  fclose (arq) ;
-  return (0) ;
+
+  printf("Minimo: %d\n", min); 
+  printf("Maximo: %d\n", max); 
+  printf("Media: %.2f\n", (double) sum/TAMANHO); 
+
+  fclose(file); 
+
+  return 0; 
 }
