@@ -4,8 +4,10 @@ use IEEE.numeric_std.all;
 
 entity contmod5 is 
 port (
-    S, CLK, reset: in std_logic, 
-    cont: out std_logic_vector(3 downto 0)
+    -- S = 0 - decrementa 
+    -- S = 1 - incrementa 
+    S, CLK, reset: in std_logic;
+    cont: out std_logic_vector(2 downto 0)
 );
 end entity contmod5;
 
@@ -13,21 +15,54 @@ end entity contmod5;
 
 architecture behav_contmod5 of contmod5 is 
 type states is (A, B, C, D, E); 
-signal state: A; 
+signal state: states := A; 
+
 begin
     process(reset, CLK, S)
     begin
         if reset = '1' then
             state <= A; 
-        elsif (CLK'EVENT and clock = '1') then 
-            -- case state is 
-            --     when A => 
+        elsif (CLK'EVENT and CLK = '1') then 
+            case state is 
+                when A => 
+                    if S = '0' then 
+                        state <= E;
+                    else 
+                        state <= B;
+                    end if; 
 
-            -- end case; 
-            state <= B;       
+                when B => 
+                    if S = '0' then 
+                        state <= A;
+                    else 
+                        state <= C;
+                    end if; 
+
+                when C => 
+                    if S = '0' then 
+                        state <= B;
+                    else 
+                        state <= D;
+                    end if; 
+
+                when D => 
+                    if S = '0' then 
+                        state <= C;
+                    else 
+                        state <= E;
+                    end if; 
+
+                when E => 
+                    if S = '0' then 
+                        state <= D;
+                    else 
+                        state <= A;
+                    end if; 
+
+                when others => 
+                    state <= A; 
+            end case; 
         end if;
-            
-
     end process; 
 
     process(state)
@@ -37,27 +72,15 @@ begin
                 cont <= "000";
             when B => 
                 cont <= "001"; 
+            when C => 
+                cont <= "010"; 
+            when D => 
+                cont <= "011"; 
+            when E => 
+                cont <= "100"; 
             when others => 
                 cont <= "111";
+        end case;                 
     end process;
 
-end behav_contmod5; 
-
--- case A is 
---     when "000" => 
---         Y <= "00000001";
---     when "001" => 
---         Y <= "00000010";
---     when "010" => 
---         Y <= "00000100";
---     when "011" => 
---         Y <= "00001000";
---     when "100" => 
---         Y <= "00010000";
---     when "101" => 
---         Y <= "00100000";
---     when "110" => 
---         Y <= "01000000";
---     when others => 
---         Y <= "10000000";
--- end case; 
+end architecture behav_contmod5; 
