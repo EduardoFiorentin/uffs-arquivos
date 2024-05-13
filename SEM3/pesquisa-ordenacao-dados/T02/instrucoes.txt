@@ -1,0 +1,32 @@
+Este trabalho tem como objetivo a prática de operações de ordenação simples, eficiente e lineares sobre estruturas de dados complexas.
+
+I Instruções 
+O trabalho deve conter, para cada questão, um arquivo com o código exigido, comentários explicando a lógica de implementação e uma 
+demonstração de funcionamento do código (função main). Os casos de teste serão publicados no SIGAA junto com a tarefa.
+
+II Entrega 
+A entrega da atividade será on-line através do SIGAA. O estudante deve enviar um único arquivo ZIP contendo as suas implementações e 
+demais itens solicitados.
+Data limite para entrega: 26/05/2024, 23h59m. 
+
+III Avaliação
+A avaliação será realizada de acordo com a entrega do estudante observados os seguintes critérios: 
+código compilando e funcionando sem alterações na lógica;
+nível de comentários explicando a lógica utilizada;
+presença da demonstração do código;
+construção das listas encadeadas simples;
+utilização dos laços de repetição da forma correta (for, while, do-while, etc).
+Em caso de plágio (incluindo utilização de ferramentas de geração de código), a entrega será desconsiderada e os estudantes envolvidos 
+receberão nota 0. Procedimentos administrativos poderão ser iniciados após consulta à coordenação de curso. Os professores do CCR se 
+reservam ao direito de solicitar que estudantes apresentem o código produzido para o trabalho após a entrega. 
+
+IV Atividades
+Implemente uma tabela hash para armazenamento de números inteiros positivos. 
+Esta tabela deve utilizar a função k mod M para cálculo dos índices.
+A tabela deve tratar as colisões através de encadeamento separado, com uma lista encadeada (ou seja) cada elemento da tabela hash 
+deve ser o início da lista encadeada.
+O tamanho da tabela hash M deve ser setado para 23. 
+
+Os itens que serão armazenados na tabela hash deverão ser lidos de um arquivo TXT:
+ O arquivo deve ser obrigatoriamente nomeado como casos_de_teste.txt.
+Considere que os elementos no arquivo estão separados por ; e não possuem espaços no início ou no final da linha, e nem entre os itens.
