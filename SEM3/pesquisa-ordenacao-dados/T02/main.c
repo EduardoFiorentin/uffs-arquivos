@@ -1,9 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <linked_list.c>
+
 
 #define SIZE_TEST 10
 #define SIZE_LINE 35
+#define SIZE_HASH 23
+
+int hash(int num, int size_hash) {
+    return size_hash % num; 
+}
 
 int main() {
     // ler numeros do arquivo de texto - casos_de_teste.txt
@@ -37,10 +44,21 @@ int main() {
         num = strtok(NULL, ";"); 
     }
 
+    // criar hash table 
+    Tlist* hash_table[SIZE_HASH]; 
 
-    // for (int i = 0; i < SIZE_TEST; i++) {
-    //     fgets(line, SIZE_LINE, file);
-    // }
+    for (int i = 0; i < SIZE_HASH; i++) {
+        hash_table[i] = NULL; 
+    }
+
+
+    // printar tabela hash completa 
+        printf("Tabela hash:");
+    for (int i = 0; i < SIZE_HASH; i++) {
+        print("\tLinha %d", i); 
+        printTList(hash_table[i]);
+    }
+
 
     printf("\n");
     for (int i = 0; i < SIZE_TEST; i++) {
