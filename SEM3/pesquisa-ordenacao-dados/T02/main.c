@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SIZE_TEST 31    // quantidade de números presentes no arquivo de entrada  
-#define SIZE_LINE 83    // numero de caracteres da 1ª linha do arquivo de entada + 1 
+#define SIZE_TEST 45    // quantidade de números presentes no arquivo de entrada  
+#define SIZE_LINE 125    // numero de caracteres da 1ª linha do arquivo de entada + 1 
 #define SIZE_HASH 23    // tamanho da tabela 
 
 typedef struct tlist
@@ -18,7 +18,7 @@ typedef struct tlist
     struct tlist* next; 
 } Tlist;
 
-// cria nodo no final da lista  
+// cria nodo no final da lista      
 Tlist* insertNode(Tlist* list, int newValue) {
     
     // criar novo nodo 
@@ -53,7 +53,7 @@ void printTList(Tlist* list) {
     }
 
     while (aux != NULL) {
-        printf("%d ", aux->value);
+        printf("\t%d ", aux->value);
         aux = aux->next;
     }
 }
@@ -71,7 +71,6 @@ void freeList(Tlist* list) {
 }
 
 int hash(int num, int size_hash) {
-    printf("\nHash: %d %d : pos: %d", num, size_hash, (num % size_hash));
     return num % size_hash; 
 }
 
@@ -96,7 +95,6 @@ int main() {
     fclose(file);
 
 
-    printf_s(line); 
     char *num = strtok(line, ";");
     int count = 0; 
 
@@ -128,9 +126,10 @@ int main() {
     // printar tabela hash completa 
         printf("Tabela hash:");
     for (int i = 0; i < SIZE_HASH; i++) {
-        printf("\n\t%d:\t", i); 
+        printf("\n\t%d:", i); 
         printTList(hash_table[i]);
     }
+    printf("\n");
 
     for (int i = 0; i < SIZE_HASH; i++) {
         freeList(hash_table[i]);
