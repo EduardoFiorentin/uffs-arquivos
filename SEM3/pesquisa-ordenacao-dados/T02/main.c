@@ -1,15 +1,78 @@
+// AO MODIFICAR O ARQUIVO DE ENTRADA 
+// atualizar o valor das constantes SIZE_TEST e SIZE_LINE
+    // SIZE_TEST - quantos números estão no arquivo  de entrada
+    // SIZE_LINE - quantos caracteres tem o arquivo de entrada + 1 
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <linked_list.c>
+
+#define SIZE_TEST 31    // quantidade de números presentes no arquivo de entrada  
+#define SIZE_LINE 83    // numero de caracteres da 1ª linha do arquivo de entada + 1 
+#define SIZE_HASH 23    // tamanho da tabela 
+
+typedef struct tlist
+{
+    int value; 
+    struct tlist* next; 
+} Tlist;
+
+// cria nodo no final da lista  
+Tlist* insertNode(Tlist* list, int newValue) {
+    
+    // criar novo nodo 
+    Tlist* newNode; 
+    newNode = (Tlist*) malloc(sizeof(Tlist));
+
+    newNode->next = NULL;
+    newNode->value = newValue; 
+
+    // inserir nodo
+        // se a lista estiver vazia, o nodo se torna a raiz da lista 
+        // se não é inserido no final
+    if (list == NULL) {
+        list = newNode;
+        return list; 
+    } 
+    else {
+        Tlist* aux = list; 
+        while (aux->next != NULL) aux = aux->next; 
+        aux->next = newNode; 
+        return list; 
+    }
+
+}
+
+// imprime o parametro value dos nodos da lista encadeada 
+void printTList(Tlist* list) {
+    Tlist* aux = list; 
+    if (aux == NULL) {
+        printf("."); 
+        return; 
+    }
+
+    while (aux != NULL) {
+        printf("%d ", aux->value);
+        aux = aux->next;
+    }
+}
 
 
-#define SIZE_TEST 10
-#define SIZE_LINE 35
-#define SIZE_HASH 23
+// liberar meméria alocada para lista encadeada
+void freeList(Tlist* list) {
+    Tlist* aux; 
+
+    while (list != NULL) {
+        aux = list; 
+        list = list->next;
+        free(aux); 
+    }
+}
 
 int hash(int num, int size_hash) {
-    return size_hash % num; 
+    printf("\nHash: %d %d : pos: %d", num, size_hash, (num % size_hash));
+    return num % size_hash; 
 }
 
 int main() {
@@ -52,43 +115,35 @@ int main() {
     }
 
 
+    // inserir elementos na tabela
+    printf("Insert...\n");
+    int pos; 
+    for (int i = 0 ; i < SIZE_TEST; i++) {
+        pos = hash(nums[i], SIZE_HASH);
+        hash_table[pos] = insertNode(hash_table[pos], nums[i]);
+    }
+
+    printf("\nFinal insert...\n");
+
     // printar tabela hash completa 
         printf("Tabela hash:");
     for (int i = 0; i < SIZE_HASH; i++) {
-        print("\tLinha %d", i); 
+        printf("\n\t%d:\t", i); 
         printTList(hash_table[i]);
     }
 
-
-    printf("\n");
-    for (int i = 0; i < SIZE_TEST; i++) {
-        printf("%d ", nums[i]); 
+    for (int i = 0; i < SIZE_HASH; i++) {
+        freeList(hash_table[i]);
     }
+
+    // printf("\n");
+    // for (int i = 0; i < SIZE_TEST; i++) {
+    //     printf("%d ", nums[i]); 
+    // }
 
     return 0; 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// armazenar na tebela hash 
-    // mod 23
 
 
 
