@@ -32,13 +32,13 @@ Tlist* insertNode(Tlist* list, int newValue) {
 void printTList(Tlist* list) {
     Tlist* aux = list; 
     if (aux == NULL) {
-        printf("Lista vazia..."); 
+        printf(" ."); 
         return; 
     }
 
     while (aux != NULL) {
         printf("\t%d ", aux->value);
-        aux = aux->next;void freeList(Tlist* list);
+        aux = aux->next;
     }
 }
 
