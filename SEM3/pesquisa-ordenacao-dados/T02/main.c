@@ -1,8 +1,3 @@
-// AO MODIFICAR O ARQUIVO DE ENTRADA 
-// atualizar o valor das constantes SIZE_TEST e SIZE_LINE
-    // SIZE_TEST - quantos números estão no arquivo  de entrada
-    // SIZE_LINE - quantos caracteres tem o arquivo de entrada + 1 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,12 +6,14 @@
 #define SIZE_HASH 23                        // tamanho da tabela 
 #define FILE_NAME "casos_de_teste.txt"      // nome do arquivo de entrada 
 
-
+// função que define a posição dos números na tabela hash
 int hash(int num, int size_hash) {
     return num % size_hash; 
 }
 
+// carreaga os números do arquivo externo em uma tabela hash
 void loadData(Tlist** hash_table) {
+
     // ler numeros do arquivo de texto - casos_de_teste.txt
     FILE* file = fopen(FILE_NAME, "r");
 
@@ -25,13 +22,17 @@ void loadData(Tlist** hash_table) {
         exit(1); 
     }
 
-    // encontrar numero de caracteres e números 
     char c;
     char str_num[10];
 
     int pos = 0; 
     int num, hash_pos; 
 
+    // percorre o arquivo de texto carregado digito a digito, salvando os digitos encontrados 
+    // em uma string
+    // quando um ; é encontrado ou a leitura chega ao final do arquivo, um \0 é adicionado para 
+    // sinalizar o final da string e, então, a função atoi() converte a string em inteiro, e em 
+    // seguida o número é adicionado à tabela. 
     while(!feof(file)) {
         c = getc(file);
         if (c != ';') {
@@ -55,12 +56,13 @@ int main() {
     // criar hash table 
     Tlist* hash_table[SIZE_HASH]; 
 
+    // inicializar todos os campos da tabela como null
     for (int i = 0; i < SIZE_HASH; i++) {
         hash_table[i] = NULL; 
     }
 
 
-    // inserir elementos na tabela
+    // inserir elementos do arquivo na tabela
     loadData(hash_table); 
 
 
@@ -72,6 +74,7 @@ int main() {
     }
     printf("\n");
 
+    // liberar memória alocada para os nodos da tabela
     for (int i = 0; i < SIZE_HASH; i++) {
         freeList(hash_table[i]);
     }

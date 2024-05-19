@@ -43,10 +43,12 @@ void printTList(Tlist* list) {
 }
 
 
-// liberar meméria alocada para lista encadeada
+// liberar memória alocada para lista encadeada
 void freeList(Tlist* list) {
     Tlist* aux; 
 
+    if (list == NULL) return; 
+    
     while (list != NULL) {
         aux = list; 
         list = list->next;
