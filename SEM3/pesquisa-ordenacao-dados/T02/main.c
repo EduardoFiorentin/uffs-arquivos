@@ -14,7 +14,7 @@ int hash(int num, int size_hash) {
 // carreaga os números do arquivo externo em uma tabela hash
 void loadData(Tlist** hash_table) {
 
-    // ler numeros do arquivo de texto - casos_de_teste.txt
+    // carregar dados do arquivo de texto - casos_de_teste.txt
     FILE* file = fopen(FILE_NAME, "r");
 
     if (file == NULL) {
@@ -66,7 +66,7 @@ int main() {
     loadData(hash_table); 
 
 
-    // printar tabela hash completa 
+    // imprimir tabela hash completa 
     printf("Tabela hash:");
     for (int i = 0; i < SIZE_HASH; i++) {
         printf("\n   L%02d:", i); 

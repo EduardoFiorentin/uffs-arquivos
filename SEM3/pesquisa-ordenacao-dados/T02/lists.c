@@ -49,6 +49,9 @@ void freeList(Tlist* list) {
 
     if (list == NULL) return; 
     
+    // percorre a lista, salvando a referência do nodo atual, 
+    // definindo o inicio da lista como o proximo nodo e então, 
+    // liberando o nodo salvo na referência
     while (list != NULL) {
         aux = list; 
         list = list->next;
