@@ -5,7 +5,7 @@ entity busArbiter is
     Port (
         KEY: in std_logic_vector(3 downto 0); 
         sw: in std_logic_vector(9 downto 0);
-		  ledR: out std_logic_vector(9 downto 0)
+		ledR: out std_logic_vector(9 downto 0)
     );
 end busArbiter;
 
