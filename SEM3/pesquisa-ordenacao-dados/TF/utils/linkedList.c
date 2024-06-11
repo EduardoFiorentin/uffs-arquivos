@@ -2,19 +2,8 @@
 #include <stdlib.h> 
 #include <string.h>
 #include "constants.h"
-#include "dict_functions.c"
+#include "dict_functions.h"
 
-typedef struct node {
-    char character; 
-    int frequency; 
-    struct node *left, *right, *next; 
-} Node; 
-
-typedef struct list 
-{
-    Node* begin; 
-    int size; 
-} List;
 
 // iniciar / resetar uma lista para os valores iniciais
 void begin_list(List *list) {
@@ -23,7 +12,53 @@ void begin_list(List *list) {
 }
 
 // inserção ordenada de novos elementos em lista encadeada 
-void insert(List *list, Node *new_node) {
+// void insert(List *list, Node *new_node) {
+
+//     // se lista vazia - novo nó é o primeiro 
+//     if (list->begin == NULL) {
+//         list->begin = new_node;
+//     }
+
+//     // Se a lista tiver elementos, mas o novo elemento precisa ser inserido no início
+//     // inserir no inicio se a frequencia do antigo primeiro for maior ou se 
+//     // a frequencia do antigo primeiro for igual a do novo, mas o caractere do novo deve vir antes
+//     else if (list->begin->frequency >= new_node->frequency || 
+//     list->begin->frequency == new_node->frequency && (int)list->begin->character > (int)new_node->character) {
+//         new_node->next = list->begin;
+//         list->begin = new_node; 
+//     }
+
+//     // caso o novo nó deva ser inserido no meio da lista ou no final 
+//     else {
+//         Node *aux;
+//         aux = list->begin; 
+
+//         // // avança até chegar nos nodos com mesma frequência do nodo novo 
+//         // while ( aux->next != NULL && aux->next->frequency < new_node->frequency ) {
+//         //     aux = aux->next; 
+//         // }
+//         // // avança dentre os nodos com mesma frequência do nodo novo até encontrar a posição correta  
+//         // while (aux->next != NULL && (int)aux->next->character < (int)new_node->character 
+//         //         && aux->next->frequency == new_node->frequency) {
+//         //     aux = aux->next; 
+//         // }
+//         // avança até encontrar a posição correta para o novo nó
+//         while (aux->next != NULL && 
+//               (aux->next->frequency < new_node->frequency || 
+//               (aux->next->frequency == new_node->frequency && (int)aux->next->character < (int)new_node->character))) {
+//             aux = aux->next; 
+//         }
+
+//         // caso de inserção no meio ou final da lista
+//         new_node->next = aux->next;
+//         aux->next = new_node; 
+//     }
+//     list->size++; 
+
+// }
+
+// inserção ordenada de novos elementos em lista encadeada 
+void insert_sorted_node(List *list, Node *new_node) {
 
     // se lista vazia - novo nó é o primeiro 
     if (list->begin == NULL) {
@@ -31,25 +66,31 @@ void insert(List *list, Node *new_node) {
     }
 
     // Se a lista tiver elementos, mas o novo elemento precisa ser inserido no início
-    else if (list->begin->frequency >= new_node->frequency) {
+    // inserir no inicio se a frequencia do antigo primeiro for maior ou se 
+    // a frequencia do antigo primeiro for igual a do novo, mas o caractere do novo deve vir antes
+    else if (list->begin->frequency > new_node->frequency || 
+    (list->begin->frequency == new_node->frequency && (int)list->begin->character > (int)new_node->character)) {
         new_node->next = list->begin;
         list->begin = new_node; 
     }
 
-    // caso o novo nó deva ser inserido no meio da lista
+    // caso o novo nó deva ser inserido no meio da lista ou no final 
     else {
         Node *aux;
         aux = list->begin; 
-        while ( aux->next != NULL && aux->next->frequency < new_node->frequency ) {
+
+        // avança até encontrar a posição correta para o novo nó
+        while (aux->next != NULL && 
+              (aux->next->frequency < new_node->frequency || 
+              (aux->next->frequency == new_node->frequency && (int)aux->next->character < (int)new_node->character))) {
             aux = aux->next; 
         }
 
-        // caso de inserção no meio ou final da lista
+        // insere o novo nó na posição correta
         new_node->next = aux->next;
         aux->next = new_node; 
     }
     list->size++; 
-
 }
 
 // Função de preenchimento da lista encadeada com os valores da tabela de frequência
@@ -66,7 +107,7 @@ void fill_list(List *list, int freq_table[], const char dict_chars[]) {
             new_node->right = NULL; 
             new_node->next = NULL; 
 
-            insert(list, new_node); 
+            insert_sorted_node(list, new_node); 
         }
     }
 }
@@ -76,7 +117,45 @@ void print_list(List *list) {
     
     printf("\nLista ordenada: Tamanho: %d\n", list->size);
     while (aux != NULL) {
-        printf("\tCaractere: %c - Freq: %d\n", aux->character, aux->frequency);
+
+        // se o caractere for um '\0'
+        if (aux->character == '\0') {
+            printf("\tCaractere: '\\0' - Freq: %d\n", aux->frequency, aux->next == NULL ? 1 : 0);
+        }
+
+        // se o caractere for um espaço
+        else if (aux->character == ' ') {
+            printf("\tCaractere: '_' - Freq: %d\n", aux->frequency);
+        }
+
+        else {
+            printf("\tCaractere: %c - Freq: %d\n", aux->character, aux->frequency);
+        }
+
         aux = aux->next;
     }
 }
+
+Node* remove_begin_node(List* list) {
+    Node *aux = NULL;
+
+    // passa o primeiro elemento da lista (caso exista) para aux e, então, o remove da lista 
+    if (list->begin != NULL) {
+        aux = list->begin;
+        list->begin = aux->next; 
+        aux->next = NULL; 
+
+        list->size--; 
+    }
+
+    return aux; 
+}
+
+// void free_list(List* list) {
+//     Node* aux;
+//     while(list->begin != NULL) {
+//         aux = list->begin;
+//         list->begin = list->begin->next;
+//         free(aux); 
+//     } 
+// }

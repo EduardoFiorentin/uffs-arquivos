@@ -4,6 +4,7 @@
 #include "utils/linkedList.c"
 #include "utils/constants.h"
 #include "utils/dict_functions.h"
+#include "utils/huffmanTree.c"
 
 
 void begin_table_values(int table[]) {
@@ -55,9 +56,7 @@ int main() {
 
 
 // ler o texto
-    char text[] = "  aabcdefghijklmnopqrstuvwxyzz"; 
-    const char DICT_CHARS[] = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    const int DICT_POSITION[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
+    char text[] = "codificacao de huffman"; 
 
 
 // gerar tabela de frequência 
@@ -71,7 +70,7 @@ int main() {
 
 
 
-// gerar lista / fila com nós da arvore 
+// gerar lista encadeada com nodos da arvore 
 
     List list; 
     begin_list(&list); 
@@ -79,13 +78,19 @@ int main() {
 
     print_list(&list); 
 
-    printf("\n\nposição: %d", get_dict_position(DICT_CHARS, 'z'));
 
+    
 
 // gerar arvore de huffman 
 
+    Node* huffman_tree = assemble_huffman_tree(&list); 
+    printf("Avore de huffman: \n"); 
+    print_huffman_tree(huffman_tree, 0); 
 
 // gerar dicionario de codificação
+
+
+// liberar memória alocada para a lista encadeada
 
 
 // codificar texto 
