@@ -5,6 +5,7 @@
 #include "dict_functions.h"
 #include "linked_list.h"
 
+// função de montagem da arvore de huffman 
 Node* assemble_huffman_tree(List* list) {
     
     Node *first, *second, *new_node; 
@@ -36,3 +37,18 @@ void print_huffman_tree(Node* root, int size) {
         print_huffman_tree(root->right, size + 1);
     }
 }
+
+// calcula a altura de uma árvore binária 
+int tree_height(Node* root) {
+    int left, right; 
+
+    if (root == NULL) return -1; 
+    else {
+        left = tree_height(root->left) + 1;
+        right = tree_height(root->right) + 1;
+        
+        if (left > right) return left;
+        else return right; 
+    }
+}
+
