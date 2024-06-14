@@ -1,7 +1,7 @@
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <string.h>
-#include "utils/constants.h"
+#include "constants.h"
 
 
 void begin_table_values(int table[]) {

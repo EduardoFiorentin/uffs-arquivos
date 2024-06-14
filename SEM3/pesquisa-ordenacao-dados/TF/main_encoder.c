@@ -13,6 +13,15 @@ int main() {
 // ler o texto
     char text[] = "abracadabra"; 
 
+    // abertura dos arquivos necessários no sistema 
+    FILE *original_file = fopen(ORIGINAL_FILE, "r"); 
+    FILE *encoded_file = fopen(ENCODED_FILE, "w"); 
+
+    if (original_file == NULL || encoded_file == NULL) {
+        printf("Não foi possível abrir um dos arquivos necessários!"); 
+        exit(1); 
+    }
+
 
 // gerar tabela de frequência 
 // a tabela guarda o espaço no primeiro slot e o alfabeto minusculo na sequencia
@@ -55,7 +64,22 @@ int main() {
 // codificar texto 
 
 
-// gravar texto no arquivo codificado 
+    // posicionar cursor no inicio do arquivo original 
+
+    // ler caractere por caractere do arquivo original, escrevendo o código 
+    // correspondente no codificado 
+    char c; 
+    fseek(original_file, 0, SEEK_SET);
+    while(!feof(original_file)) {
+        c = getc(original_file); 
+        fputs(dict[get_dict_position(c)], encoded_file); 
+    }
+
+    fclose(original_file);
+    fclose(encoded_file); 
+
+
+// decodificar arquivo 
 
 
 }

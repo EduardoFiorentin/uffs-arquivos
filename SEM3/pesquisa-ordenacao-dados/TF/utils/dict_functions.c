@@ -51,6 +51,16 @@ void fill_dict(char **dict, Node *root, const char *path, int size) {
     }
 }
 
+// calcula o tamanho necessário para o vetor de armazenamento do 
+// int get_code_size(char **dict, char *text) {
+//     int i, size = 0;
+
+//     while (text[i] != '\0') {
+//         size += strlen(dict[get_dict_position(text[i])]); 
+//     }
+
+//     return size + 1;
+// }
 
 void print_dict(char **dict) {
     printf("\nDicionario: \n"); 

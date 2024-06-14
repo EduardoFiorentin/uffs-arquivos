@@ -1,6 +1,12 @@
 #pragma once
 
+// tamanho do dicionario de caracteres 
 #define SIZE 27
+
+// nomes dos arquivos 
+#define ORIGINAL_FILE "amostra.txt"
+#define ENCODED_FILE "codificado.txt"
+#define DECODED_FILE "decodificado.txt"
 
 const char DICT_CHARS[] = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 const int DICT_POSITION[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
