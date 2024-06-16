@@ -3,11 +3,15 @@
 #include <string.h>
 #include "constants.h"
 
-// retorna a posição do caractere no vetor
-int get_dict_position(char chr) {
+// retorna a posição do caractere no vetor do dicionário
+// retorna -1 caso o caractere passado não exista no vetor 
+int get_dict_position(char c) {
     int i = 0; 
-    while (DICT_CHARS[i] != chr) i++; 
-    return i; 
+    while (i < SIZE) {
+        if (DICT_CHARS[i] == c) return i; 
+        i++;
+    }
+    return -1; 
 }
 
 // aloca memória para armazenamento do dicionario de codificação
@@ -50,17 +54,6 @@ void fill_dict(char **dict, Node *root, const char *path, int size) {
         fill_dict(dict, root->right, right, SIZE); 
     }
 }
-
-// calcula o tamanho necessário para o vetor de armazenamento do 
-// int get_code_size(char **dict, char *text) {
-//     int i, size = 0;
-
-//     while (text[i] != '\0') {
-//         size += strlen(dict[get_dict_position(text[i])]); 
-//     }
-
-//     return size + 1;
-// }
 
 void print_dict(char **dict) {
     printf("\nDicionario: \n"); 

@@ -11,51 +11,6 @@ void begin_list(List *list) {
     list->size = 0; 
 }
 
-// inserção ordenada de novos elementos em lista encadeada 
-// void insert(List *list, Node *new_node) {
-
-//     // se lista vazia - novo nó é o primeiro 
-//     if (list->begin == NULL) {
-//         list->begin = new_node;
-//     }
-
-//     // Se a lista tiver elementos, mas o novo elemento precisa ser inserido no início
-//     // inserir no inicio se a frequencia do antigo primeiro for maior ou se 
-//     // a frequencia do antigo primeiro for igual a do novo, mas o caractere do novo deve vir antes
-//     else if (list->begin->frequency >= new_node->frequency || 
-//     list->begin->frequency == new_node->frequency && (int)list->begin->character > (int)new_node->character) {
-//         new_node->next = list->begin;
-//         list->begin = new_node; 
-//     }
-
-//     // caso o novo nó deva ser inserido no meio da lista ou no final 
-//     else {
-//         Node *aux;
-//         aux = list->begin; 
-
-//         // // avança até chegar nos nodos com mesma frequência do nodo novo 
-//         // while ( aux->next != NULL && aux->next->frequency < new_node->frequency ) {
-//         //     aux = aux->next; 
-//         // }
-//         // // avança dentre os nodos com mesma frequência do nodo novo até encontrar a posição correta  
-//         // while (aux->next != NULL && (int)aux->next->character < (int)new_node->character 
-//         //         && aux->next->frequency == new_node->frequency) {
-//         //     aux = aux->next; 
-//         // }
-//         // avança até encontrar a posição correta para o novo nó
-//         while (aux->next != NULL && 
-//               (aux->next->frequency < new_node->frequency || 
-//               (aux->next->frequency == new_node->frequency && (int)aux->next->character < (int)new_node->character))) {
-//             aux = aux->next; 
-//         }
-
-//         // caso de inserção no meio ou final da lista
-//         new_node->next = aux->next;
-//         aux->next = new_node; 
-//     }
-//     list->size++; 
-
-// }
 
 // inserção ordenada de novos elementos em lista encadeada 
 void insert_sorted_node(List *list, Node *new_node) {
@@ -136,6 +91,7 @@ void print_list(List *list) {
     }
 }
 
+// remove e retorna o primeiro nodo da lista encadeada (caso exista)
 Node* remove_begin_node(List* list) {
     Node *aux = NULL;
 
@@ -150,12 +106,3 @@ Node* remove_begin_node(List* list) {
 
     return aux; 
 }
-
-// void free_list(List* list) {
-//     Node* aux;
-//     while(list->begin != NULL) {
-//         aux = list->begin;
-//         list->begin = list->begin->next;
-//         free(aux); 
-//     } 
-// }

@@ -1,6 +1,6 @@
 #pragma once
 
-// tamanho do dicionario de caracteres 
+// tamanho do dicionario de caracteres - numero de caracteres distintos 
 #define SIZE 27
 
 // nomes dos arquivos 
