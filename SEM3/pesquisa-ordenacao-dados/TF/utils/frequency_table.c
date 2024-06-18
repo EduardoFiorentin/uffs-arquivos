@@ -28,6 +28,6 @@ void fill_freq_table( FILE* original_file, int freq_table[]) {
 
 void print_table_freq(int table[]) {
     for (int i = 0; i < SIZE; i++) {
-        printf("\t%d = %d\n", i, table[i], i); 
+        printf("\t%d = %d\n", i, table[i]); 
     }
 }

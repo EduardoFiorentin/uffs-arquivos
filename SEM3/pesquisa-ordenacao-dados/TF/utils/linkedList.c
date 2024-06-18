@@ -75,7 +75,7 @@ void print_list(List *list) {
 
         // se o caractere for um '\0'
         if (aux->character == '\0') {
-            printf("\tCaractere: '\\0' - Freq: %d\n", aux->frequency, aux->next == NULL ? 1 : 0);
+            printf("\tCaractere: '\\0' - Freq: %d\n", aux->frequency);
         }
 
         // se o caractere for um espaço
