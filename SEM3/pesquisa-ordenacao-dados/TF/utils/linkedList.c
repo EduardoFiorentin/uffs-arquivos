@@ -67,30 +67,6 @@ void fill_list(List *list, int freq_table[], const char dict_chars[]) {
     }
 }
 
-void print_list(List *list) {
-    Node *aux = list->begin;
-    
-    printf("\nLista ordenada: Tamanho: %d\n", list->size);
-    while (aux != NULL) {
-
-        // se o caractere for um '\0'
-        if (aux->character == '\0') {
-            printf("\tCaractere: '\\0' - Freq: %d\n", aux->frequency);
-        }
-
-        // se o caractere for um espaço
-        else if (aux->character == ' ') {
-            printf("\tCaractere: '_' - Freq: %d\n", aux->frequency);
-        }
-
-        else {
-            printf("\tCaractere: %c - Freq: %d\n", aux->character, aux->frequency);
-        }
-
-        aux = aux->next;
-    }
-}
-
 // remove e retorna o primeiro nodo da lista encadeada (caso exista)
 Node* remove_begin_node(List* list) {
     Node *aux = NULL;

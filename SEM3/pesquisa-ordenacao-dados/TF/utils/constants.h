@@ -8,15 +8,17 @@
 #define ENCODED_FILE "codificado.txt"
 #define DECODED_FILE "decodificado.txt"
 
+// lista de todos os caracteres possíveis na codificação
 const char DICT_CHARS[] = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-const int DICT_POSITION[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
 
+// tipo utilizado para a árvore de huffman e para a lista encadeada
 typedef struct node {
     char character; 
     int frequency; 
     struct node *left, *right, *next; 
 } Node; 
 
+// tipo que define uma lista encadeada
 typedef struct list 
 {
     Node* begin; 

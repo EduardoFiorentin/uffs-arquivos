@@ -38,6 +38,9 @@ void fill_dict(char **dict, Node *root, const char *path, int size) {
 
     // quando um nó folha é encontrado, o seu caminho na árvore é salvo no dicionário
     if (root->left == NULL && root->right == NULL) {
+
+        // encontra a posição relativa ao caractere no dicionário e copia o caminho da raiz da arvore até 
+        // o caractere para o dicionário
         strcpy(dict[get_dict_position(root->character)], path);
     } 
 
@@ -52,12 +55,5 @@ void fill_dict(char **dict, Node *root, const char *path, int size) {
 
         fill_dict(dict, root->left, left, SIZE);
         fill_dict(dict, root->right, right, SIZE); 
-    }
-}
-
-void print_dict(char **dict) {
-    printf("\nDicionario: \n"); 
-    for (int i = 0; i < SIZE; i++) {
-        printf("\t%c: %s\n", DICT_CHARS[i], dict[i]);
     }
 }

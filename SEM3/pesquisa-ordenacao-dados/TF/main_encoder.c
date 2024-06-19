@@ -30,8 +30,6 @@ int main() {
 
     begin_table_values(freq_table);
     fill_freq_table(original_file, freq_table); 
-    print_table_freq(freq_table);
-
 
 
 
@@ -41,23 +39,15 @@ int main() {
     begin_list(&list); 
     fill_list(&list, freq_table, DICT_CHARS);
 
-    print_list(&list); 
-
-
-    
-
 // gerar arvore de huffman 
 
     Node* huffman_tree = assemble_huffman_tree(&list); 
-    printf("Avore de huffman: \n"); 
-    print_huffman_tree(huffman_tree, 0); 
 
 // gerar dicionario de codificação
 
     // int tree_h = tree_height(huffman_tree); // apenas para testar 
     char **dict = dict_aloc(SIZE);
     fill_dict(dict, huffman_tree, "", SIZE);
-    print_dict(dict);
 
 // liberar memória alocada para a lista encadeada
 

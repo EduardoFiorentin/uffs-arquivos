@@ -21,8 +21,8 @@ void encode_file_text(FILE *original_file, FILE *encoded_file, char** dict) {
 
 // lê um arquivo codificado e decodifica usando a árvore de huffman, salvando os caracteres encontrados 
 // em um novo arquivo 
-void decode_file_text(FILE *encoded_file, FILE *decoded_file, Node *root) {
-    Node *aux = root; 
+void decode_file_text(FILE *encoded_file, FILE *decoded_file, Node *huffman_tree) {
+    Node *aux = huffman_tree; 
     char c; 
 
     fseek(encoded_file, 0, SEEK_SET); // garante que a leitura inicie no inicio do arquivo 
@@ -44,7 +44,7 @@ void decode_file_text(FILE *encoded_file, FILE *decoded_file, Node *root) {
         // quando encontrar um nó folha, que representa um caractere.
         if (aux->left == NULL && aux->right == NULL) {
             fputc(aux->character, decoded_file); 
-            aux = root; 
+            aux = huffman_tree; 
         }
     }
 
