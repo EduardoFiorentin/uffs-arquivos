@@ -125,3 +125,7 @@ begin
     ha_Co <= ha_A and ha_B; 
 end behav_half_adder;
 
+
+
+
+DEAL_CARDS_D2, PLAYER_TURN, PLAYER_HIT, PLAYER_SCORE, DEALER_TURN, DEALER_HIT, DEALER_SCORE, FINAL_SCORE, WIN, TIE, LOSE);
