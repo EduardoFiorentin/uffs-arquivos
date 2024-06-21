@@ -30,8 +30,12 @@ architecture behavblackJack of blackJack is
 	signal score_player, score_dealer: integer range 0 to 31 := 0; 
 
 	-- sinais intermediarios 
+	-- display valor da carta
 	signal card_to_display: std_logic_vector(3 downto 0);
     signal card_display_output: std_logic_vector(6 downto 0);
+
+	-- controle de pontuação de cartas 
+	signal cards_score: integer range 0 to 11; 
 
 	-- display da carta recebida 
 	component cardDisplay is 
@@ -39,6 +43,15 @@ architecture behavblackJack of blackJack is
 		inputData: in std_logic_vector(3 downto 0);
 		outputData: out std_logic_vector(6 downto 0)
 	);
+	end component; 
+
+	-- calculadora da pontuação de cartas 
+	component scoreConverter is 
+	port (
+		input_card: in std_logic_vector(3 downto 0);
+		input_score: in integer range 0 to 31;
+		output_value: out integer range 0 to 11
+	); 
 	end component; 
 
 begin
@@ -49,6 +62,11 @@ begin
         outputData => card_display_output
     );
 
+	cardsScore_player: scoreConverter port map (
+		input_card => card,
+		input_score => score_player,
+		output_value => cards_score
+	); 
 
 	-- transição de estados no clock
 	process(KEY(0), KEY(1), CLK)
@@ -117,15 +135,24 @@ begin
 			
 
 		when DEALER_TURN =>	
-			next_state <= START;
+			if score_dealer >= 17 then 
+				next_state <= FINAL_SCORE; 
+			else
+				next_state <= DEALER_HIT; 
+			end if;
 			
 
 		when DEALER_HIT =>	
-			next_state <= START;
+			score_dealer <= score_dealer + to_integer(unsigned(card));
+			next_state <= DEALER_SCORE;
 			
 
 		when DEALER_SCORE =>	
-			next_state <= START;
+			if score_dealer > 21 then
+				next_state <= WIN;  
+			else
+				next_state <= DEALER_TURN;
+			end if; 
 			
 
 		when FINAL_SCORE =>	
@@ -136,6 +163,7 @@ begin
 			else 
 				next_state <= TIE; 
 			end if; 
+
 
 		when WIN =>	
 			next_state <= START;
@@ -199,30 +227,34 @@ begin
 
 		when PLAYER_TURN =>	
 			ledR <= "0000000000";
+			ledG <= "1000000000";
 		
 
 		when PLAYER_HIT =>	
-			ledR <= "0000000000";
+			ledR <= "1000000000";
+			ledG <= "1000000000";
 			
 
 		when PLAYER_SCORE =>	
 			ledR <= "0000000000";
+			ledG <= "1000000000";
 			
 
 		when DEALER_TURN =>	
-			ledR <= "0000000000";
+			ledR <= "1111111111";
+			ledG <= "0100000000";
 
 		when DEALER_HIT =>	
-			ledR <= "0000000000";
-			
+			ledR <= "1000000000";
+			ledG <= "0100000000";
 
 		when DEALER_SCORE =>	
 			ledR <= "0000000000";
-			
+			ledG <= "0100000000";
 
 		when FINAL_SCORE =>	
 			ledR <= "0000000000";
-	
+			ledG <= "0000000000";
 
 		when WIN =>	
 			ledG <= "1111111111"; 
@@ -302,3 +334,43 @@ begin
 		end case;
 	end process; 
 end architecture behavCardDisplay; 
+
+
+-- calculadora de pontuação 
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+USE ieee.numeric_std.all;
+
+entity scoreConverter is 
+port (
+	input_card: in std_logic_vector(3 downto 0);
+	input_score: in integer range 0 to 31;
+	output_value: out integer range 0 to 11
+);
+end scoreConverter; 
+
+architecture behavScoreConverter of scoreConverter is 
+begin
+	process(input_card)
+	begin
+		case input_card is
+			-- when "0000" => outputData <= "0000001"; -- 0
+			when "0000" => output_value <= 0; -- 0
+			when "0001" => output_value <= 0; -- 1
+			when "0010" => output_value <= 0; -- 2
+			when "0011" => output_value <= 0; -- 3
+			when "0100" => output_value <= 0; -- 4
+			when "0101" => output_value <= 0; -- 5
+			when "0110" => output_value <= 0; -- 6
+			when "0111" => output_value <= 0; -- 7
+			when "1000" => output_value <= 0; -- 8
+			when "1001" => output_value <= 0; -- 9
+			when "1010" => output_value <= 0; -- A
+			when "1011" => output_value <= 0; -- b
+			when "1100" => output_value <= 0; -- C
+			when "1101" => output_value <= 0; -- d
+			
+			when others => output_value <= 0; -- Default
+		end case;
+	end process; 
+end architecture behavScoreConverter; 
