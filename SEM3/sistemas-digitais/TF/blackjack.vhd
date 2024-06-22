@@ -1,3 +1,9 @@
+-- implementar sistema de decisão da pontuação do A
+-- implementar controlador de amostra da pontuação do player e dealer  
+-- 
+
+
+
 -- sistema principal --------------------------------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
@@ -53,6 +59,19 @@ architecture behavblackJack of blackJack is
 		output_value: out integer range 0 to 11
 	); 
 	end component; 
+
+	-- conversor de pontuação para 7seg
+	component scoreTo7Seg is 
+	port (
+		input_score: in integer range 0 to 31;
+		output_dec: out std_logic_vector(6 downto 0);
+		output_un: out std_logic_vector(6 downto 0)
+	); 
+	end component;
+
+	-- codigos da pontuação 
+	signal score_player_code_dec, score_player_code_un: std_logic_vector(6 downto 0) := "1111111"; 
+	signal score_dealer_code_dec, score_dealer_code_un: std_logic_vector(6 downto 0) := "1111111"; 
 
 begin
 
@@ -180,95 +199,137 @@ begin
 		end case; 
 	end process; 
 	
-	
+	-- conversores para mostrar pontuação 
+	score_convert_player: scoreTo7Seg port map (
+		input_score => score_player,
+		output_dec => score_player_code_dec,
+		output_un => score_player_code_un 
+	); 
+
+	score_convert_dealer: scoreTo7Seg port map (
+		input_score => score_dealer,
+		output_dec => score_dealer_code_dec,
+		output_un => score_dealer_code_un 
+	); 
+
 	-- processamento de saídas 
-	process(score_dealer, score_player, state)
+	-- process(score_dealer, score_player, state)
+	process(score_player_code_dec, score_player_code_un, score_dealer_code_dec, score_dealer_code_un, score_dealer, score_player, state)
 	begin
 	  case state is 
 		when START =>	
 			-- hex0 <= "1001111";
-			hex1 <= "0000000";
-			hex2 <= "0000001";
+			hex1 <= "1111111";
+			hex2 <= "1111111";
+
 			hex3 <= "0000000";
 			ledR <= "0000000000"; 
 			ledG <= "0000000000"; 
 			
 		when DEAL_CARDS_P1 =>	
+			hex1 <= score_player_code_un;
+			hex2 <= score_player_code_dec;
 			-- hex0 <= "0010010";
-			hex2 <= "1001111";
+			-- hex2 <= "1001111";
 			ledR <= "0000000000";
 			
 		when DEAL_CARDS_P2 =>
-			if score_player = 3 then 
-				hex1 <= "1111111";
-			else 
-				hex1 <= "0000000";
-			end if; 
+			hex1 <= score_player_code_un;
+			hex2 <= score_player_code_dec;
+			-- if score_player = 3 then 
+			-- 	hex1 <= "1111111";
+			-- else 
+			-- 	hex1 <= "0000000";
+			-- end if; 
 			-- hex0 <= "0000110";
-			hex2 <= "0010010";
+			-- hex2 <= "0010010";
 			hex3 <= "1111111";
 			ledR <= "0000000000";
 
 			
 		when DEAL_CARDS_D1 =>	
+			hex1 <= score_dealer_code_un;
+			hex2 <= score_dealer_code_dec;
 			-- hex0 <= "0011001";
-			hex1 <= "0000000";
-			hex2 <= "0000110";
+			-- hex1 <= "0000000";
+			-- hex2 <= "0000110";
 			hex3 <= "0000000";
 			ledR <= "0000000000";
 
 		when DEAL_CARDS_D2 =>	
+			hex1 <= score_dealer_code_un;
+			hex2 <= score_dealer_code_dec;
 			-- hex0 <= "0011001";
-			hex1 <= "0000000";
-			hex2 <= "1001100";
+			-- hex1 <= "0000000";
+			-- hex2 <= "1001100";
 			hex3 <= "0000000";
 			ledR <= "0000000000";
 
 
 		when PLAYER_TURN =>	
-			ledR <= "0000000000";
+			hex1 <= score_player_code_un;
+			hex2 <= score_player_code_dec;
+			ledR <= "1000000000";
 			ledG <= "1000000000";
 		
 
 		when PLAYER_HIT =>	
-			ledR <= "1000000000";
+			hex1 <= score_player_code_un;
+			hex2 <= score_player_code_dec;
+			ledR <= "0100000000";
 			ledG <= "1000000000";
 			
 
 		when PLAYER_SCORE =>	
-			ledR <= "0000000000";
+			hex1 <= score_player_code_un;
+			hex2 <= score_player_code_dec;
+			ledR <= "0010000000";
 			ledG <= "1000000000";
 			
 
 		when DEALER_TURN =>	
-			ledR <= "1111111111";
+			hex1 <= score_dealer_code_un;
+			hex2 <= score_dealer_code_dec;
+			ledR <= "0111111111";
 			ledG <= "0100000000";
 
 		when DEALER_HIT =>	
-			ledR <= "1000000000";
+			hex1 <= score_dealer_code_un;
+			hex2 <= score_dealer_code_dec;
+			ledR <= "1011111111";
 			ledG <= "0100000000";
 
 		when DEALER_SCORE =>	
-			ledR <= "0000000000";
+			hex1 <= score_dealer_code_un;
+			hex2 <= score_dealer_code_dec;
+			ledR <= "1101111111";
 			ledG <= "0100000000";
 
 		when FINAL_SCORE =>	
+			hex1 <= "1111111";
+			hex2 <= "1111111";
+			hex3 <= "1111111";
 			ledR <= "0000000000";
 			ledG <= "0000000000";
 
 		when WIN =>	
 			ledG <= "1111111111"; 
+			hex1 <= "1111111";
+			hex2 <= "1111111";
 			
 		when TIE =>	
 			ledR <= "1111111111"; 
 			ledG <= "1111111111"; 
+			hex1 <= "1111111";
+			hex2 <= "1111111";
 			
 		when LOSE =>	
 			ledR <= "1111111111"; 
+			hex1 <= "1111111";
+			hex2 <= "1111111";
 
 		when others => 
-			ledR(0) <= '1'; 
-			ledG(0) <= '1'; 
+			hex3 <= "0000000";
 						
 			end case; 
 	end process; 
@@ -336,7 +397,7 @@ begin
 end architecture behavCardDisplay; 
 
 
--- calculadora de pontuação 
+-- calculadora de pontuação -----------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 USE ieee.numeric_std.all;
@@ -355,22 +416,129 @@ begin
 	begin
 		case input_card is
 			-- when "0000" => outputData <= "0000001"; -- 0
-			when "0000" => output_value <= 0; -- 0
-			when "0001" => output_value <= 0; -- 1
-			when "0010" => output_value <= 0; -- 2
-			when "0011" => output_value <= 0; -- 3
-			when "0100" => output_value <= 0; -- 4
-			when "0101" => output_value <= 0; -- 5
-			when "0110" => output_value <= 0; -- 6
-			when "0111" => output_value <= 0; -- 7
-			when "1000" => output_value <= 0; -- 8
-			when "1001" => output_value <= 0; -- 9
-			when "1010" => output_value <= 0; -- A
-			when "1011" => output_value <= 0; -- b
-			when "1100" => output_value <= 0; -- C
-			when "1101" => output_value <= 0; -- d
+			when "0000" => output_value <= 1; -- 1 ou 11
+			when "0001" => output_value <= 2; -- 2
+			when "0010" => output_value <= 3; -- 3
+			when "0011" => output_value <= 4; -- 4
+			when "0100" => output_value <= 5; -- 5 
+			when "0101" => output_value <= 6; -- 6
+			when "0110" => output_value <= 7; -- 7
+			when "0111" => output_value <= 8; -- 8
+			when "1000" => output_value <= 9; -- 9
+			when "1001" => output_value <= 10; -- 10
+			when "1010" => output_value <= 10; -- J
+			when "1011" => output_value <= 10; -- Q
+			when "1100" => output_value <= 10; -- K
+			-- when "1101" => output_value <= 10; -- d
 			
 			when others => output_value <= 0; -- Default
 		end case;
 	end process; 
 end architecture behavScoreConverter; 
+
+-- se score <= 9 : (0, score)
+-- se score <= 19 : (1, score - 10)
+-- se score <= 29 : (2, score - 20)
+-- senao (3, score - 30)
+
+-- 0 ate 9 - 09 
+-- 10 ate 19 - 1X
+-- 20 ate 29 - 2X
+-- 30 ate 31 - 3X
+
+-- conversor score/7seg -----------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+USE ieee.numeric_std.all;
+
+entity scoreTo7Seg is 
+port (
+	input_score: in integer range 0 to 31;
+	output_dec: out std_logic_vector(6 downto 0);
+	output_un: out std_logic_vector(6 downto 0)
+	
+);
+end scoreTo7Seg; 
+
+architecture behavScoreTo7Seg of scoreTo7Seg is 
+
+	component intTo7Seg is
+	port (	
+		input_int: in integer range 0 to 9;
+		output_code: out std_logic_vector(6 downto 0)
+	);
+	end component; 
+
+	-- numero da unidade 
+	signal unity : integer range 0 to 9 := 0; 
+	signal unity_code : std_logic_vector(6 downto 0) := "0000000"; 
+
+begin
+
+	conv_dec: intTo7Seg port map (
+		input_int => unity,
+		output_code => unity_code
+	); 
+
+	process(input_score)
+	begin
+		if (input_score <= 9) then 
+			output_dec <= "0000001";
+			unity <= input_score;
+
+		
+		elsif (input_score <= 19) then 
+			output_dec <= "1001111";
+			unity <= (input_score - 10);
+	
+		elsif (input_score <= 29) then 
+			output_dec <= "0010010";
+			unity <= (input_score - 20);
+	
+		else
+			output_dec <= "0000110";
+			unity <= (input_score - 30);
+
+		end if;
+	end process;
+	
+	process(unity_code)
+	begin 		
+		output_un <= unity_code; 
+	end process; 
+
+end architecture behavScoreTo7Seg; 
+
+
+-- conversor num/7seg -----------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+USE ieee.numeric_std.all;
+
+entity intTo7Seg is 
+port (
+	input_int: in integer range 0 to 9;
+	output_code: out std_logic_vector(6 downto 0)
+);
+end intTo7Seg; 
+
+architecture behavIntTo7Seg of intTo7Seg is 
+begin
+	process(input_int)
+	begin
+		case input_int is
+            when 0 => output_code <= "0000001"; -- 0
+            when 1 => output_code <= "1001111"; -- 1
+            when 2 => output_code <= "0010010"; -- 2
+            when 3 => output_code <= "0000110"; -- 3
+            when 4 => output_code <= "1001100"; -- 4
+            when 5 => output_code <= "0100100"; -- 5
+            when 6 => output_code <= "0100000"; -- 6
+            when 7 => output_code <= "0001111"; -- 7
+            when 8 => output_code <= "0000000"; -- 8
+            when 9 => output_code <= "0000100"; -- 9
+
+            when others => output_code <= "1111111"; -- Default to all segments off
+        end case;
+	end process; 
+end architecture behavIntTo7Seg; 
