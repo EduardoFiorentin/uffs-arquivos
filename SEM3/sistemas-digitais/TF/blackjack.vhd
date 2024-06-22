@@ -378,19 +378,19 @@ begin
 	begin
 		case inputData is
 			-- when "0000" => outputData <= "0000001"; -- 0
-			when "0001" => outputData <= "1001111"; -- 1
-			when "0010" => outputData <= "0010010"; -- 2
-			when "0011" => outputData <= "0000110"; -- 3
-			when "0100" => outputData <= "1001100"; -- 4
-			when "0101" => outputData <= "0100100"; -- 5
-			when "0110" => outputData <= "0100000"; -- 6
-			when "0111" => outputData <= "0001111"; -- 7
+			when "0001" => outputData <= "1111001"; -- 1
+			when "0010" => outputData <= "0100100"; -- 2
+			when "0011" => outputData <= "0110000"; -- 3
+			when "0100" => outputData <= "0011001"; -- 4
+			when "0101" => outputData <= "0010010"; -- 5
+			when "0110" => outputData <= "0000010"; -- 6
+			when "0111" => outputData <= "1111000"; -- 7
 			when "1000" => outputData <= "0000000"; -- 8
-			when "1001" => outputData <= "0000100"; -- 9
+			when "1001" => outputData <= "0010000"; -- 9
 			when "1010" => outputData <= "0001000"; -- A
-			when "1011" => outputData <= "1100000"; -- b
-			when "1100" => outputData <= "0110001"; -- C
-			when "1101" => outputData <= "1000010"; -- D
+			when "1011" => outputData <= "0000011"; -- b
+			when "1100" => outputData <= "1000110"; -- C
+			when "1101" => outputData <= "0100001"; -- d
 			
 			when others => outputData <= "1111111"; -- Default to all segments off
 		end case;
@@ -472,7 +472,7 @@ architecture behavScoreTo7Seg of scoreTo7Seg is
 
 	-- numero da unidade 
 	signal unity : integer range 0 to 9 := 0; 
-	signal unity_code : std_logic_vector(6 downto 0) := "0000000"; 
+	signal unity_code : std_logic_vector(6 downto 0) := "1111111"; 
 
 begin
 
@@ -484,20 +484,20 @@ begin
 	process(input_score)
 	begin
 		if (input_score <= 9) then 
-			output_dec <= "0000001";
+			output_dec <= "1000000";
 			unity <= input_score;
 
 		
 		elsif (input_score <= 19) then 
-			output_dec <= "1001111";
+			output_dec <= "1111001";
 			unity <= (input_score - 10);
 	
 		elsif (input_score <= 29) then 
-			output_dec <= "0010010";
+			output_dec <= "0100100";
 			unity <= (input_score - 20);
 	
 		else
-			output_dec <= "0000110";
+			output_dec <= "0110000";
 			unity <= (input_score - 30);
 
 		end if;
@@ -528,18 +528,42 @@ begin
 	process(input_int)
 	begin
 		case input_int is
-            when 0 => output_code <= "0000001"; -- 0
-            when 1 => output_code <= "1001111"; -- 1
-            when 2 => output_code <= "0010010"; -- 2
-            when 3 => output_code <= "0000110"; -- 3
-            when 4 => output_code <= "1001100"; -- 4
-            when 5 => output_code <= "0100100"; -- 5
-            when 6 => output_code <= "0100000"; -- 6
-            when 7 => output_code <= "0001111"; -- 7
+            when 0 => output_code <= "1000000"; -- 0
+            when 1 => output_code <= "1111001"; -- 1
+            when 2 => output_code <= "0100100"; -- 2
+            when 3 => output_code <= "0110000"; -- 3
+            when 4 => output_code <= "0011001"; -- 4
+            when 5 => output_code <= "0010010"; -- 5
+            when 6 => output_code <= "0000010"; -- 6
+            when 7 => output_code <= "1111000"; -- 7
             when 8 => output_code <= "0000000"; -- 8
-            when 9 => output_code <= "0000100"; -- 9
+            when 9 => output_code <= "0010000"; -- 9
 
             when others => output_code <= "1111111"; -- Default to all segments off
         end case;
 	end process; 
 end architecture behavIntTo7Seg; 
+
+-- codigos corrigidos para fpga
+-- process(input_int)
+-- 	begin
+-- 		case input_int is
+-- 			when 0 => hex0 <= "1000000"; -- 0
+-- 			when 1 => hex0 <= "1111001"; -- 1
+-- 			when 2 => hex0 <= "0100100"; -- 2
+-- 			when 3 => hex0 <= "0110000"; -- 3
+-- 			when 4 => hex0 <= "0011001"; -- 4
+-- 			when 5 => hex0 <= "0010010"; -- 5
+-- 			when 6 => hex0 <= "0000010"; -- 6
+-- 			when 7 => hex0 <= "1111000"; -- 7
+-- 			when 8 => hex0 <= "0000000"; -- 8
+-- 			when 9 => hex0 <= "0010000"; -- 9
+-- 			when 10 => hex0 <= "0001000"; -- A
+-- 			when 11 => hex0 <= "0000011"; -- b
+-- 			when 12 => hex0 <= "1000110"; -- C
+-- 			when 13 => hex0 <= "0100001"; -- d
+-- 			when 14 => hex0 <= "0000110"; -- E
+-- 			when 15 => hex0 <= "0001110"; -- F
+-- 			when others => hex0 <= "1111111"; -- Default to all segments off
+--         end case;
+-- end process; 
