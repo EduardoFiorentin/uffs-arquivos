@@ -1,7 +1,7 @@
--- implementar sistema de decisão da pontuação do A
--- implementar controlador de amostra da pontuação do player e dealer  
--- 
-
+-- implementação do controle do A 
+--		se ganhou um A - hasA = 1
+--		se a pontuação excede 21 e tem A - (pontuação - 10)
+-- 		
 
 
 -- sistema principal --------------------------------------------------------------------------------------------------------
@@ -33,9 +33,10 @@ end blackJack;
 architecture behavblackJack of blackJack is
     type state_type is (START, DEAL_CARDS_P1, DEAL_CARDS_P2, DEAL_CARDS_D1, DEAL_CARDS_D2, PLAYER_TURN, PLAYER_HIT, PLAYER_SCORE, DEALER_TURN, DEALER_HIT, DEALER_SCORE, FINAL_SCORE, WIN, TIE, LOSE);
     signal state, next_state : state_type := START;  
-	signal score_player, score_dealer: integer range 0 to 31 := 0; 
+	signal score_player, score_dealer: integer range 0 to 31 := 0;
 
 	-- sinais intermediarios 
+
 	-- display valor da carta
 	signal card_to_display: std_logic_vector(3 downto 0);
     signal card_display_output: std_logic_vector(6 downto 0);
