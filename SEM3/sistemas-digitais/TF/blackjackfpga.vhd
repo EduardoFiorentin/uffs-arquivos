@@ -27,7 +27,7 @@ entity blackJack is
 		card: in std_logic_vector(3 downto 0);
 		hit: in std_logic; 
 		stay: in std_logic
-		  
+		-- start já configurado para key(1)
     );
 end blackJack;
 -- mudar:
@@ -77,13 +77,36 @@ architecture behavblackJack of blackJack is
 	signal score_player_code_dec, score_player_code_un: std_logic_vector(6 downto 0) := "1111111"; 
 	signal score_dealer_code_dec, score_dealer_code_un: std_logic_vector(6 downto 0) := "1111111"; 
 
+	-- controle de hit/stay 
+	--	00 - nada selecionado
+	--	01 - stay 
+	-- 	10 - hit 
+	-- 	11 - nada selecionado 
+	signal hit_stay_control : std_logic_vector(2 downto 0) := "00"; 
+
+	-- controle da dinâmica do A
+	signal has_A_player, has_A_dealer : std_logic := '0'; 
+
 begin
 
-	-- instancias dos elementos externos 
-    cardDisplay_inst: cardDisplay port map (
-        inputData => card_to_display,
-        outputData => card_display_output
-    );
+	-- conversores para mostrar pontuação 
+	score_convert_player: scoreTo7Seg port map (
+		input_score => score_player,
+		output_dec => score_player_code_dec,
+		output_un => score_player_code_un 
+	); 
+
+	score_convert_dealer: scoreTo7Seg port map (
+		input_score => score_dealer,
+		output_dec => score_dealer_code_dec,
+		output_un => score_dealer_code_un 
+	); 
+
+	-- conversores para mostrar pontuações 
+	cardDisplay_inst: cardDisplay port map (
+		inputData => card_to_display,
+		outputData => card_display_output
+	);
 
 	cardsScore_player: scoreConverter port map (
 		input_card => card,
@@ -107,6 +130,17 @@ begin
 	
 	end process; 
 
+	-- controle hit / stay 
+	process (hit, stay) 
+	begin
+		if hit = '1' then 
+			hit_stay_control <= "10";
+		elsif stay = '1' then 
+			hit_stay_control <= "01";
+		else 
+			hit_stay_control <= "00";
+		end if; 
+	end process; 
 	
 	-- controle de transição de estados
 	process(state, hit, stay)
@@ -135,13 +169,11 @@ begin
 
 		when PLAYER_TURN =>
 
-			if hit'event and hit = '1' then 
-				next_state <= PLAYER_HIT;
-			end if; 
-
-			if stay'event and stay = '1' then 
+			if stay_hit_control = "10" then 
+				next_state <= PLAYER_HIT; 
+			elsif stay_hit_control = "01" then 
 				next_state <= DEALER_TURN; 
-			end if; 
+			end if;
 			
 
 		when PLAYER_HIT =>	
@@ -153,14 +185,6 @@ begin
 			else
 				next_state <= PLAYER_TURN;
 			end if; 
-			
-
-		-- when PLAYER_SCORE =>	
-		-- 	if score_player > 21 then
-		-- 		next_state <= LOSE;  
-		-- 	else
-		-- 		next_state <= PLAYER_TURN;
-		-- 	end if; 
 			
 
 		when DEALER_TURN =>	
@@ -180,14 +204,6 @@ begin
 			else
 				next_state <= DEALER_TURN;
 			end if; 
-			
-
-		-- when DEALER_SCORE =>	
-		-- 	if score_dealer > 21 then
-		-- 		next_state <= WIN;  
-		-- 	else
-		-- 		next_state <= DEALER_TURN;
-		-- 	end if; 
 			
 
 		when FINAL_SCORE =>	
@@ -215,26 +231,16 @@ begin
 		end case; 
 	end process; 
 	
-	-- conversores para mostrar pontuação 
-	score_convert_player: scoreTo7Seg port map (
-		input_score => score_player,
-		output_dec => score_player_code_dec,
-		output_un => score_player_code_un 
-	); 
 
-	score_convert_dealer: scoreTo7Seg port map (
-		input_score => score_dealer,
-		output_dec => score_dealer_code_dec,
-		output_un => score_dealer_code_un 
-	); 
 
 	-- processamento de saídas 
 	-- process(score_dealer, score_player, state)
-	process(score_player_code_dec, score_player_code_un, score_dealer_code_dec, score_dealer_code_un, score_dealer, score_player, state)
+	process(score_player_code_dec, score_player_code_un, score_dealer_code_dec, score_dealer_code_un, score_dealer, score_player, state, card, card_display_output)
 	begin
+
+	-- atualização das saída de acordo com o estado atual
 	  case state is 
 		when START =>	
-			-- hex0 <= "1001111";
 			hex1 <= "1111111";
 			hex2 <= "1111111";
 
@@ -245,20 +251,11 @@ begin
 		when DEAL_CARDS_P1 =>	
 			hex1 <= score_player_code_un;
 			hex2 <= score_player_code_dec;
-			-- hex0 <= "0010010";
-			-- hex2 <= "1001111";
 			ledR <= "0000000000";
 			
 		when DEAL_CARDS_P2 =>
 			hex1 <= score_player_code_un;
 			hex2 <= score_player_code_dec;
-			-- if score_player = 3 then 
-			-- 	hex1 <= "1111111";
-			-- else 
-			-- 	hex1 <= "0000000";
-			-- end if; 
-			-- hex0 <= "0000110";
-			-- hex2 <= "0010010";
 			hex3 <= "1111111";
 			ledR <= "0000000000";
 
@@ -266,18 +263,12 @@ begin
 		when DEAL_CARDS_D1 =>	
 			hex1 <= score_dealer_code_un;
 			hex2 <= score_dealer_code_dec;
-			-- hex0 <= "0011001";
-			-- hex1 <= "0000000";
-			-- hex2 <= "0000110";
 			hex3 <= "0000000";
 			ledR <= "0000000000";
 
 		when DEAL_CARDS_D2 =>	
 			hex1 <= score_dealer_code_un;
 			hex2 <= score_dealer_code_dec;
-			-- hex0 <= "0011001";
-			-- hex1 <= "0000000";
-			-- hex2 <= "1001100";
 			hex3 <= "0000000";
 			ledR <= "0000000000";
 
@@ -335,26 +326,38 @@ begin
 			hex3 <= "0000000";
 						
 			end case; 
+
+
+		-- atualização do valor da carta atual 
+		if (state = DEAL_CARDS_P1 or state = DEAL_CARDS_P2 or state = DEAL_CARDS_D1 or state = DEAL_CARDS_D2 or state = PLAYER_HIT or state = DEALER_HIT) then 
+            card_to_display <= card;
+        else
+            card_to_display <= "1111";
+        end if;
+
+		-- 
+		hex0 <= card_display_output; 
+
 	end process; 
 	
 
 	-- display dos valores de cartas e pontuação 
 
 	-- mostra o valor atual da carta 
-	process(state, card)
-    begin
-		if (state = DEAL_CARDS_P1 or state = DEAL_CARDS_P2 or state = DEAL_CARDS_D1 or state = DEAL_CARDS_D2 or state = PLAYER_HIT or state = DEALER_HIT) then 
-            card_to_display <= card;
-        else
-            card_to_display <= "1111";
-        end if;
-	end process;
+	-- process(state, card)
+    -- begin
+	-- 	if (state = DEAL_CARDS_P1 or state = DEAL_CARDS_P2 or state = DEAL_CARDS_D1 or state = DEAL_CARDS_D2 or state = PLAYER_HIT or state = DEALER_HIT) then 
+    --         card_to_display <= card;
+    --     else
+    --         card_to_display <= "1111";
+    --     end if;
+	-- end process;
 
 	-- atualizar valor do display 
-	process(card_display_output) 
-	begin 
-		hex0 <= card_display_output; 
-	end process; 
+	-- process(card_display_output) 
+	-- begin 
+	-- 	hex0 <= card_display_output; 
+	-- end process; 
 
 
 			
