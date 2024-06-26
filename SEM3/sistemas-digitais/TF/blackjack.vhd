@@ -82,7 +82,7 @@ architecture behavblackJack of blackJack is
 	--	01 - stay 
 	-- 	10 - hit 
 	-- 	11 - nada selecionado 
-	signal hit_stay_control : std_logic_vector(1 downto 0) := "00"; 
+	-- signal hit_stay_control : std_logic_vector(1 downto 0) := "00"; 
 
 	-- controle da dinâmica do A
 	-- 0 - tem A valendo 1 ou 11 
@@ -136,17 +136,17 @@ begin
 	
 	end process; 
 
-	-- controle hit / stay 
-	process (hit, stay) 
-	begin
-		if hit = '1' then 
-			hit_stay_control <= "10";
-		end if; 
+	-- -- controle hit / stay 
+	-- process (hit, stay) 
+	-- begin
+	-- 	if hit = '1' then 
+	-- 		hit_stay_control <= "10";
+	-- 	end if; 
 
-		if stay = '1' then 
-			hit_stay_control <= "01";
-		end if; 
-	end process; 
+	-- 	if stay = '1' then 
+	-- 		hit_stay_control <= "01";
+	-- 	end if; 
+	-- end process; 
 
 
 	-- process(hit_stay_control)
@@ -162,6 +162,21 @@ begin
 	-- 			hex3 <= "1111111"; 
 	-- 	end case; 
 	-- end process; 
+
+	-- process (hit, stay)
+	-- begin 
+	-- 	if state = PLAYER_HIT then 
+
+	-- 		if (hit = '1') then 
+	-- 			next_state <= PLAYER_HIT; 
+	-- 		end if;
+
+	-- 		if (stay = '1') then 
+	-- 			next_state <= DEALER_TURN; 
+	-- 		end if;
+
+	-- 	end if; 
+	-- end process;
 
 	
 	-- controle de transição de estados
@@ -232,13 +247,23 @@ begin
 
 		when PLAYER_TURN =>
 
-			if hit'event and hit = '1' then 
+			-- if hit'event and hit = '1' then 
+			-- 	next_state <= PLAYER_HIT;
+			-- end if; 
+
+			-- if stay'event and stay = '1' then 
+			-- 	next_state <= DEALER_TURN; 
+			-- end if; 
+
+			if hit = '1' then 
 				next_state <= PLAYER_HIT;
 			end if; 
 
-			if stay'event and stay = '1' then 
+			if stay = '1' then 
 				next_state <= DEALER_TURN; 
 			end if; 
+
+			
 			-- if hit_stay_control = "10" then 
 			-- 	next_state <= PLAYER_HIT; 
 			-- end if;
