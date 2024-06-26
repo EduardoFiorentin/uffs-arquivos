@@ -85,7 +85,13 @@ architecture behavblackJack of blackJack is
 	signal hit_stay_control : std_logic_vector(2 downto 0) := "00"; 
 
 	-- controle da dinâmica do A
+	-- 0 - tem A valendo 1 ou 11 
 	signal has_A_player, has_A_dealer : std_logic := '0'; 
+
+	-- 1 - player tem A valendo 11 (pode haver um decrescimo de 10 caso a pontuação ultrapasse 21)
+	-- 0 - não tem A valendo 11 
+	signal dec_10_player, dec_10_dealer : std_logic := '0'; 
+
 
 begin
 
@@ -152,12 +158,30 @@ begin
 			score_player <= 0;
 			
 		when DEAL_CARDS_P1 =>	
-			score_player <= score_player + to_integer(unsigned(card));
-			next_state <= DEAL_CARDS_P2;
+			if card = "0001" then 
+				-- se a primeira for A, sempre vai valer 11 
+				dec_10_player <= '1'; 
+				has_A_player <= '1'; 
+				score_player <= score_Player + 11; 
+			else 
+				score_player <= score_player + to_integer(unsigned(card));
+				next_state <= DEAL_CARDS_P2;
+			end if; 
 			
 		when DEAL_CARDS_P2 =>	
-			next_state <= DEAL_CARDS_D1;
-			score_player <= score_player + to_integer(unsigned(card));
+			-- se ganhar um A como segunda carta, valerá 11 se a pontuação atual for 10 ou menos 
+			if card = "0001" then 
+				if score_player <= 10 then
+					dec_10_player <= '1'; 
+					has_A_player <= '1'; 
+					score_player <= score_Player + 11; 
+				else 
+					score_player <= score_Player + 1; 				
+				end if;
+			else 
+				next_state <= DEAL_CARDS_D1;
+				score_player <= score_player + to_integer(unsigned(card));
+			end if; 
 			
 		when DEAL_CARDS_D1 =>	
 			next_state <= DEAL_CARDS_D2;
@@ -422,19 +446,19 @@ begin
 	begin
 		case input_card is
 			-- when "0000" => outputData <= "0000001"; -- 0
-			when "0000" => output_value <= 1; -- 1 ou 11
-			when "0001" => output_value <= 2; -- 2
-			when "0010" => output_value <= 3; -- 3
-			when "0011" => output_value <= 4; -- 4
-			when "0100" => output_value <= 5; -- 5 
-			when "0101" => output_value <= 6; -- 6
-			when "0110" => output_value <= 7; -- 7
-			when "0111" => output_value <= 8; -- 8
-			when "1000" => output_value <= 9; -- 9
-			when "1001" => output_value <= 10; -- 10
-			when "1010" => output_value <= 10; -- J
-			when "1011" => output_value <= 10; -- Q
-			when "1100" => output_value <= 10; -- K
+			when "0001" => output_value <= 1; -- 1 ou 11
+			when "0010" => output_value <= 2; -- 2
+			when "0011" => output_value <= 3; -- 3
+			when "0100" => output_value <= 4; -- 4
+			when "0101" => output_value <= 5; -- 5 
+			when "0110" => output_value <= 6; -- 6
+			when "0111" => output_value <= 7; -- 7
+			when "1000" => output_value <= 8; -- 8
+			when "1001" => output_value <= 9; -- 9
+			when "1010" => output_value <= 10; -- 10
+			when "1011" => output_value <= 10; -- J
+			when "1100" => output_value <= 10; -- Q
+			when "1101" => output_value <= 10; -- K
 			-- when "1101" => output_value <= 10; -- d
 			
 			when others => output_value <= 0; -- Default

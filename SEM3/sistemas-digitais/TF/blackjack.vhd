@@ -77,6 +77,21 @@ architecture behavblackJack of blackJack is
 	signal score_player_code_dec, score_player_code_un: std_logic_vector(6 downto 0) := "1111111"; 
 	signal score_dealer_code_dec, score_dealer_code_un: std_logic_vector(6 downto 0) := "1111111"; 
 
+	-- controle de hit/stay 
+	--	00 - nada selecionado
+	--	01 - stay 
+	-- 	10 - hit 
+	-- 	11 - nada selecionado 
+	signal hit_stay_control : std_logic_vector(1 downto 0) := "00"; 
+
+	-- controle da dinâmica do A
+	-- 0 - tem A valendo 1 ou 11 
+	signal has_A_player, has_A_dealer : std_logic := '0'; 
+
+	-- 1 - player tem A valendo 11 (pode haver um decrescimo de 10 caso a pontuação ultrapasse 21)
+	-- 0 - não tem A valendo 11 
+	signal dec_10_player, dec_10_dealer : std_logic := '0'; 
+
 begin
 
 	-- instancias dos elementos externos 
@@ -89,6 +104,20 @@ begin
 		input_card => card,
 		input_score => score_player,
 		output_value => cards_score
+	); 
+
+		
+	-- conversores para mostrar pontuação 
+	score_convert_player: scoreTo7Seg port map (
+		input_score => score_player,
+		output_dec => score_player_code_dec,
+		output_un => score_player_code_un 
+	); 
+
+	score_convert_dealer: scoreTo7Seg port map (
+		input_score => score_dealer,
+		output_dec => score_dealer_code_dec,
+		output_un => score_dealer_code_un 
 	); 
 
 	-- transição de estados no clock
@@ -107,6 +136,33 @@ begin
 	
 	end process; 
 
+	-- controle hit / stay 
+	process (hit, stay) 
+	begin
+		if hit = '1' then 
+			hit_stay_control <= "10";
+		end if; 
+
+		if stay = '1' then 
+			hit_stay_control <= "01";
+		end if; 
+	end process; 
+
+
+	-- process(hit_stay_control)
+	-- begin 
+	-- 	case hit_stay_control is 
+	-- 		when "00" => 
+	-- 			hex3 <= "1000000";
+	-- 		when "01" => 
+	-- 			hex3 <= "0100000";
+	-- 		when "10" => 
+	-- 			hex3 <= "0010000";
+	-- 		when others => 
+	-- 			hex3 <= "1111111"; 
+	-- 	end case; 
+	-- end process; 
+
 	
 	-- controle de transição de estados
 	process(state, hit, stay)
@@ -118,20 +174,61 @@ begin
 			score_player <= 0;
 			
 		when DEAL_CARDS_P1 =>	
-			score_player <= score_player + to_integer(unsigned(card));
+			if card = "0001" then 
+				-- se a primeira for A, sempre vai valer 11 
+				dec_10_player <= '1'; 
+				has_A_player <= '1'; 
+				score_player <= score_Player + 11; 
+			else 
+				score_player <= score_player + to_integer(unsigned(card));
+			end if; 
+
 			next_state <= DEAL_CARDS_P2;
 			
 		when DEAL_CARDS_P2 =>	
+			-- se ganhar um A como segunda carta, valerá 11 se a pontuação atual for 10 ou menos 
+			if card = "0001" then 
+				if score_player <= 10 then
+					dec_10_player <= '1'; 
+					has_A_player <= '1'; 
+					score_player <= score_Player + 11; 
+				else 
+					score_player <= score_Player + 1; 				
+				end if;
+			else 
+				score_player <= score_player + to_integer(unsigned(card));
+			end if; 
 			next_state <= DEAL_CARDS_D1;
-			score_player <= score_player + to_integer(unsigned(card));
+
 			
 		when DEAL_CARDS_D1 =>	
-			next_state <= DEAL_CARDS_D2;
-			score_dealer <= score_dealer + to_integer(unsigned(card));
+			if card = "0001" then 
+				-- se a primeira for A, sempre vai valer 11 
+				dec_10_dealer <= '1'; 
+				has_A_dealer <= '1'; 
+				score_dealer <= score_dealer + 11; 
+			else 
+				score_dealer <= score_dealer + to_integer(unsigned(card));
+			end if; 
+
+
+		next_state <= DEAL_CARDS_D2;
 
 		when DEAL_CARDS_D2 =>	
+			-- se ganhar um A como segunda carta, valerá 11 se a pontuação atual for 10 ou menos 
+			if card = "0001" then 
+				if score_dealer <= 10 then
+					dec_10_dealer <= '1'; 
+					has_A_dealer <= '1'; 
+					score_dealer <= score_dealer + 11; 
+				else 
+					score_dealer <= score_dealer + 1; 				
+				end if;
+			else 
+				score_dealer <= score_dealer + to_integer(unsigned(card));
+			end if; 
+			
 			next_state <= PLAYER_TURN;
-			score_dealer <= score_dealer + to_integer(unsigned(card));
 
 		when PLAYER_TURN =>
 
@@ -142,25 +239,41 @@ begin
 			if stay'event and stay = '1' then 
 				next_state <= DEALER_TURN; 
 			end if; 
+			-- if hit_stay_control = "10" then 
+			-- 	next_state <= PLAYER_HIT; 
+			-- end if;
+
+			-- if hit_stay_control = "01" then 
+			-- 	next_state <= DEALER_TURN;
+			-- end if;
+		
 			
 
 		when PLAYER_HIT =>	
-			score_player <= score_player + to_integer(unsigned(card));
-			-- next_state <= PLAYER_SCORE;
+			
+			if card = "0001" then 
+				if score_player <= 10 then 
+					score_player <= score_player + 11;
+					dec_10_player <= '1'; 
+				else 
+					score_player <= score_player + 1; 
+				end if; 
+			else 
+				score_player <= score_player + to_integer(unsigned(card));
+			end if; 
 
-			if (score_player + to_integer(unsigned(card))) > 21 then
-				next_state <= LOSE;  
-			else
+			-- se estoura 21 e tem um A valendo 11 - remove os 11 
+			if (score_player + to_integer(unsigned(card))) > 21 and dec_10_player = '1' then
+				score_player <= score_player + to_integer(unsigned(card)) - 10;
+				dec_10_player <= '0'; 	-- não pode mais perder 10 pontos caso estoure 21 
+				next_state <= PLAYER_TURN;  
+
+			elsif score_player + to_integer(unsigned(card)) > 21 then 
+				next_state <= LOSE; 
+			else 
 				next_state <= PLAYER_TURN;
 			end if; 
-			
-
-		-- when PLAYER_SCORE =>	
-		-- 	if score_player > 21 then
-		-- 		next_state <= LOSE;  
-		-- 	else
-		-- 		next_state <= PLAYER_TURN;
-		-- 	end if; 
+			-- hit_stay_control <= "00";
 			
 
 		when DEALER_TURN =>	
@@ -172,22 +285,37 @@ begin
 			
 
 		when DEALER_HIT =>	
-			score_dealer <= score_dealer + to_integer(unsigned(card));
-			-- next_state <= DEALER_SCORE;
+			-- score_dealer <= score_dealer + to_integer(unsigned(card));
+			-- -- next_state <= DEALER_SCORE;
 
-			if (score_dealer + to_integer(unsigned(card))) > 21 then
-				next_state <= WIN;  
-			else
+			-- if (score_dealer + to_integer(unsigned(card))) > 21 then
+			-- 	next_state <= WIN;  
+			-- else
+			-- 	next_state <= DEALER_TURN;
+			-- end if; 
+
+			if card = "0001" then 
+				if score_dealer <= 10 then 
+					score_dealer <= score_dealer + 11;
+					dec_10_dealer <= '1'; 
+				else 
+					score_dealer <= score_dealer + 1; 
+				end if; 
+			else 
+				score_dealer <= score_dealer + to_integer(unsigned(card));
+			end if; 
+
+			-- se estoura 21 e tem um A valendo 11 - remove os 11 
+			if (score_dealer + to_integer(unsigned(card))) > 21 and dec_10_dealer = '1' then
+				score_dealer <= score_dealer + to_integer(unsigned(card)) - 10;
+				dec_10_dealer <= '0'; 	-- não pode mais perder 10 pontos caso estoure 21 
+				next_state <= DEALER_TURN;  
+
+			elsif score_dealer + to_integer(unsigned(card)) > 21 then 
+				next_state <= WIN; 
+			else 
 				next_state <= DEALER_TURN;
 			end if; 
-			
-
-		-- when DEALER_SCORE =>	
-		-- 	if score_dealer > 21 then
-		-- 		next_state <= WIN;  
-		-- 	else
-		-- 		next_state <= DEALER_TURN;
-		-- 	end if; 
 			
 
 		when FINAL_SCORE =>	
@@ -214,23 +342,11 @@ begin
 						
 		end case; 
 	end process; 
-	
-	-- conversores para mostrar pontuação 
-	score_convert_player: scoreTo7Seg port map (
-		input_score => score_player,
-		output_dec => score_player_code_dec,
-		output_un => score_player_code_un 
-	); 
 
-	score_convert_dealer: scoreTo7Seg port map (
-		input_score => score_dealer,
-		output_dec => score_dealer_code_dec,
-		output_un => score_dealer_code_un 
-	); 
 
 	-- processamento de saídas 
 	-- process(score_dealer, score_player, state)
-	process(score_player_code_dec, score_player_code_un, score_dealer_code_dec, score_dealer_code_un, score_dealer, score_player, state)
+	process(score_player_code_dec, score_player_code_un, score_dealer_code_dec, score_dealer_code_un, score_dealer, score_player, state, card, card_display_output)
 	begin
 	  case state is 
 		when START =>	
@@ -238,47 +354,33 @@ begin
 			hex1 <= "1111111";
 			hex2 <= "1111111";
 
-			hex3 <= "0000000";
+			-- hex3 <= "0000000";
 			ledR <= "0000000000"; 
 			ledG <= "0000000000"; 
 			
 		when DEAL_CARDS_P1 =>	
 			hex1 <= score_player_code_un;
 			hex2 <= score_player_code_dec;
-			-- hex0 <= "0010010";
-			-- hex2 <= "1001111";
 			ledR <= "0000000000";
 			
 		when DEAL_CARDS_P2 =>
 			hex1 <= score_player_code_un;
 			hex2 <= score_player_code_dec;
-			-- if score_player = 3 then 
-			-- 	hex1 <= "1111111";
-			-- else 
-			-- 	hex1 <= "0000000";
-			-- end if; 
-			-- hex0 <= "0000110";
-			-- hex2 <= "0010010";
-			hex3 <= "1111111";
+
+			-- hex3 <= "1111111";
 			ledR <= "0000000000";
 
 			
 		when DEAL_CARDS_D1 =>	
 			hex1 <= score_dealer_code_un;
 			hex2 <= score_dealer_code_dec;
-			-- hex0 <= "0011001";
-			-- hex1 <= "0000000";
-			-- hex2 <= "0000110";
-			hex3 <= "0000000";
+			-- hex3 <= "0000000";
 			ledR <= "0000000000";
 
 		when DEAL_CARDS_D2 =>	
 			hex1 <= score_dealer_code_un;
 			hex2 <= score_dealer_code_dec;
-			-- hex0 <= "0011001";
-			-- hex1 <= "0000000";
-			-- hex2 <= "1001100";
-			hex3 <= "0000000";
+			-- hex3 <= "0000000";
 			ledR <= "0000000000";
 
 
@@ -311,12 +413,13 @@ begin
 		when FINAL_SCORE =>	
 			hex1 <= "1111111";
 			hex2 <= "1111111";
-			hex3 <= "1111111";
+			-- hex3 <= "1111111";
 			ledR <= "0000000000";
 			ledG <= "0000000000";
 
 		when WIN =>	
 			ledG <= "1111111111"; 
+			ledR <= "0000000000";
 			hex1 <= "1111111";
 			hex2 <= "1111111";
 			
@@ -328,35 +431,25 @@ begin
 			
 		when LOSE =>	
 			ledR <= "1111111111"; 
+			ledG <= "0000000000";
 			hex1 <= "1111111";
 			hex2 <= "1111111";
 
 		when others => 
 			hex3 <= "0000000";
 						
-			end case; 
-	end process; 
-	
+		end case; 
 
-	-- display dos valores de cartas e pontuação 
-
-	-- mostra o valor atual da carta 
-	process(state, card)
-    begin
+		-- controle de exibição da carta atual 
 		if (state = DEAL_CARDS_P1 or state = DEAL_CARDS_P2 or state = DEAL_CARDS_D1 or state = DEAL_CARDS_D2 or state = PLAYER_HIT or state = DEALER_HIT) then 
             card_to_display <= card;
         else
             card_to_display <= "1111";
         end if;
-	end process;
 
-	-- atualizar valor do display 
-	process(card_display_output) 
-	begin 
 		hex0 <= card_display_output; 
+
 	end process; 
-
-
 			
 end architecture behavblackJack; 
 
@@ -419,19 +512,19 @@ begin
 	begin
 		case input_card is
 			-- when "0000" => outputData <= "0000001"; -- 0
-			when "0000" => output_value <= 1; -- 1 ou 11
-			when "0001" => output_value <= 2; -- 2
-			when "0010" => output_value <= 3; -- 3
-			when "0011" => output_value <= 4; -- 4
-			when "0100" => output_value <= 5; -- 5 
-			when "0101" => output_value <= 6; -- 6
-			when "0110" => output_value <= 7; -- 7
-			when "0111" => output_value <= 8; -- 8
-			when "1000" => output_value <= 9; -- 9
-			when "1001" => output_value <= 10; -- 10
-			when "1010" => output_value <= 10; -- J
-			when "1011" => output_value <= 10; -- Q
-			when "1100" => output_value <= 10; -- K
+			when "0001" => output_value <= 1; -- 1 ou 11
+			when "0010" => output_value <= 2; -- 2
+			when "0011" => output_value <= 3; -- 3
+			when "0100" => output_value <= 4; -- 4
+			when "0101" => output_value <= 5; -- 5 
+			when "0110" => output_value <= 6; -- 6
+			when "0111" => output_value <= 7; -- 7
+			when "1000" => output_value <= 8; -- 8
+			when "1001" => output_value <= 9; -- 9
+			when "1010" => output_value <= 10; -- 10
+			when "1011" => output_value <= 10; -- J
+			when "1100" => output_value <= 10; -- Q
+			when "1101" => output_value <= 10; -- K
 			-- when "1101" => output_value <= 10; -- d
 			
 			when others => output_value <= 0; -- Default
