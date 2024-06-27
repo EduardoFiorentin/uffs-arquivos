@@ -16,7 +16,7 @@
         </entry>
         <entry>
           <string>externalInputs</string>
-          <string>KEY:10,sw:10,CLK</string>
+          <string>KEY:4,sw:10</string>
         </entry>
         <entry>
           <string>externalOutputs</string>
@@ -28,7 +28,7 @@
         </entry>
         <entry>
           <string>CodeFile</string>
-          <file>C:\Users\aluno\Documents\GitHub\uffs-arquivos\SEM3\sistemas-digitais\TF\blackjackv2.vhd</file>
+          <file>D:\github\uffs-arquivos\SEM3\sistemas-digitais\TF\blackjackv3.vhd</file>
         </entry>
       </elementAttributes>
       <pos x="640" y="180"/>
@@ -42,7 +42,7 @@
         </entry>
         <entry>
           <string>Bits</string>
-          <int>10</int>
+          <int>4</int>
         </entry>
         <entry>
           <string>intFormat</string>
