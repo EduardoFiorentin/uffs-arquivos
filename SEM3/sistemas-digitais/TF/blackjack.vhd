@@ -23,10 +23,10 @@ entity blackJack is
 		hex2: out std_logic_vector(6 downto 0);
 		hex3: out std_logic_vector(6 downto 0);
 
-		CLK: in std_logic; 
-		card: in std_logic_vector(3 downto 0);
-		hit: in std_logic; 
-		stay: in std_logic
+		CLK: in std_logic
+		-- card: in std_logic_vector(3 downto 0);
+		-- hit: in std_logic; 
+		-- stay: in std_logic
 		  
     );
 end blackJack;
@@ -34,7 +34,9 @@ end blackJack;
 -- trocar clock para key(0)
 
 architecture behavblackJack of blackJack is
-    type state_type is (START, DEAL_CARDS_P1, DEAL_CARDS_P2, DEAL_CARDS_D1, DEAL_CARDS_D2, PLAYER_TURN, PLAYER_HIT, DEALER_TURN, DEALER_HIT, FINAL_SCORE, WIN, TIE, LOSE);
+    signal card : std_logic_vector (3 downto 0) := "0000";
+	
+	type state_type is (START, DEAL_CARDS_P1, DEAL_CARDS_P2, DEAL_CARDS_D1, DEAL_CARDS_D2, PLAYER_TURN, PLAYER_HIT, DEALER_TURN, DEALER_HIT, FINAL_SCORE, WIN, TIE, LOSE);
     signal state, next_state : state_type := START;  
 	signal score_player, score_dealer: integer range 0 to 31 := 0;
 
@@ -127,14 +129,19 @@ begin
 		if (KEY(1) = '0') then -- alt 	
 				state <= START; 
 				
-        -- elsif (KEY(0)'EVENT and KEY(0) = '0') then  -- alt
+        elsif (KEY(0)'EVENT and KEY(0) = '0') then  -- alt
         -- elsif (rising_edge(KEY(0))) then  -- alt
-        elsif (rising_edge(CLK)) then  -- alt
+        -- elsif (rising_edge(CLK)) then  -- alt
             state <= next_state; 
 			-- hex3 <= "1111111";
        end if; 
 	
 	end process; 
+
+	card(0) <= sw(0);
+	card(1) <= sw(1);
+	card(2) <= sw(2);
+	card(3) <= sw(3);
 
 	-- -- controle hit / stay 
 	-- process (hit, stay) 
@@ -180,7 +187,8 @@ begin
 
 	
 	-- controle de transição de estados
-	process(state, hit, stay)
+	-- process(state, hit, stay, key(1), key(2))
+	process(state, key(2), key(3))
 	begin
 	  case state is 
 		when START =>	
@@ -195,7 +203,7 @@ begin
 				has_A_player <= '1'; 
 				score_player <= score_Player + 11; 
 			else 
-				score_player <= score_player + to_integer(unsigned(card));
+				score_player <= score_player + cards_score;
 			end if; 
 
 			next_state <= DEAL_CARDS_P2;
@@ -211,7 +219,7 @@ begin
 					score_player <= score_Player + 1; 				
 				end if;
 			else 
-				score_player <= score_player + to_integer(unsigned(card));
+				score_player <= score_player + cards_score;
 			end if; 
 			next_state <= DEAL_CARDS_D1;
 
@@ -223,7 +231,7 @@ begin
 				has_A_dealer <= '1'; 
 				score_dealer <= score_dealer + 11; 
 			else 
-				score_dealer <= score_dealer + to_integer(unsigned(card));
+				score_dealer <= score_dealer + cards_score;
 			end if; 
 
 
@@ -240,7 +248,7 @@ begin
 					score_dealer <= score_dealer + 1; 				
 				end if;
 			else 
-				score_dealer <= score_dealer + to_integer(unsigned(card));
+				score_dealer <= score_dealer + cards_score;
 			end if; 
 			
 			next_state <= PLAYER_TURN;
@@ -255,11 +263,13 @@ begin
 			-- 	next_state <= DEALER_TURN; 
 			-- end if; 
 
-			if hit = '1' then 
+			-- if hit = '1' then 
+			if key(2) = '0' then 
 				next_state <= PLAYER_HIT;
 			end if; 
 
-			if stay = '1' then 
+			-- if stay = '1' then 
+			if key(3) = '0' then 
 				next_state <= DEALER_TURN; 
 			end if; 
 
@@ -284,16 +294,16 @@ begin
 					score_player <= score_player + 1; 
 				end if; 
 			else 
-				score_player <= score_player + to_integer(unsigned(card));
+				score_player <= score_player + cards_score;
 			end if; 
 
 			-- se estoura 21 e tem um A valendo 11 - remove os 11 
-			if (score_player + to_integer(unsigned(card))) > 21 and dec_10_player = '1' then
-				score_player <= score_player + to_integer(unsigned(card)) - 10;
+			if (score_player + cards_score) > 21 and dec_10_player = '1' then
+				score_player <= score_player + cards_score - 10;
 				dec_10_player <= '0'; 	-- não pode mais perder 10 pontos caso estoure 21 
 				next_state <= PLAYER_TURN;  
 
-			elsif score_player + to_integer(unsigned(card)) > 21 then 
+			elsif score_player + cards_score > 21 then 
 				next_state <= LOSE; 
 			else 
 				next_state <= PLAYER_TURN;
@@ -327,16 +337,16 @@ begin
 					score_dealer <= score_dealer + 1; 
 				end if; 
 			else 
-				score_dealer <= score_dealer + to_integer(unsigned(card));
+				score_dealer <= score_dealer + cards_score;
 			end if; 
 
 			-- se estoura 21 e tem um A valendo 11 - remove os 11 
-			if (score_dealer + to_integer(unsigned(card))) > 21 and dec_10_dealer = '1' then
-				score_dealer <= score_dealer + to_integer(unsigned(card)) - 10;
+			if (score_dealer + cards_score) > 21 and dec_10_dealer = '1' then
+				score_dealer <= score_dealer + cards_score - 10;
 				dec_10_dealer <= '0'; 	-- não pode mais perder 10 pontos caso estoure 21 
 				next_state <= DEALER_TURN;  
 
-			elsif score_dealer + to_integer(unsigned(card)) > 21 then 
+			elsif score_dealer + cards_score > 21 then 
 				next_state <= WIN; 
 			else 
 				next_state <= DEALER_TURN;
@@ -371,7 +381,7 @@ begin
 
 	-- processamento de saídas 
 	-- process(score_dealer, score_player, state)
-	process(score_player_code_dec, score_player_code_un, score_dealer_code_dec, score_dealer_code_un, score_dealer, score_player, state, card, card_display_output)
+	process(score_player_code_dec, score_player_code_un, score_dealer_code_dec, score_dealer_code_un, state, card, card_display_output)
 	begin
 	  case state is 
 		when START =>	
@@ -623,10 +633,7 @@ begin
 		end if;
 	end process;
 	
-	process(unity_code)
-	begin 		
-		output_un <= unity_code; 
-	end process; 
+	output_un <= unity_code; 
 
 end architecture behavScoreTo7Seg; 
 
