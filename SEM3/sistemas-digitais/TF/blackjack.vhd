@@ -47,7 +47,7 @@ architecture behavblackJack of blackJack is
     signal card_display_output: std_logic_vector(6 downto 0);
 
 	-- controle de pontuação de cartas 
-	signal cards_score: integer range 0 to 11; 
+	signal card_score: integer range 0 to 11; 
 
 	-- display da carta recebida 
 	component cardDisplay is 
@@ -105,7 +105,7 @@ begin
 	cardsScore_player: scoreConverter port map (
 		input_card => card,
 		input_score => score_player,
-		output_value => cards_score
+		output_value => card_score
 	); 
 
 		
@@ -203,7 +203,7 @@ begin
 				has_A_player <= '1'; 
 				score_player <= score_Player + 11; 
 			else 
-				score_player <= score_player + cards_score;
+				score_player <= score_player + card_score;
 			end if; 
 
 			next_state <= DEAL_CARDS_P2;
@@ -219,7 +219,7 @@ begin
 					score_player <= score_Player + 1; 				
 				end if;
 			else 
-				score_player <= score_player + cards_score;
+				score_player <= score_player + card_score;
 			end if; 
 			next_state <= DEAL_CARDS_D1;
 
@@ -231,7 +231,7 @@ begin
 				has_A_dealer <= '1'; 
 				score_dealer <= score_dealer + 11; 
 			else 
-				score_dealer <= score_dealer + cards_score;
+				score_dealer <= score_dealer + card_score;
 			end if; 
 
 
@@ -248,7 +248,7 @@ begin
 					score_dealer <= score_dealer + 1; 				
 				end if;
 			else 
-				score_dealer <= score_dealer + cards_score;
+				score_dealer <= score_dealer + card_score;
 			end if; 
 			
 			next_state <= PLAYER_TURN;
@@ -294,16 +294,16 @@ begin
 					score_player <= score_player + 1; 
 				end if; 
 			else 
-				score_player <= score_player + cards_score;
+				score_player <= score_player + card_score;
 			end if; 
 
 			-- se estoura 21 e tem um A valendo 11 - remove os 11 
-			if (score_player + cards_score) > 21 and dec_10_player = '1' then
-				score_player <= score_player + cards_score - 10;
+			if (score_player + card_score) > 21 and dec_10_player = '1' then
+				score_player <= score_player + card_score - 10;
 				dec_10_player <= '0'; 	-- não pode mais perder 10 pontos caso estoure 21 
 				next_state <= PLAYER_TURN;  
 
-			elsif score_player + cards_score > 21 then 
+			elsif score_player + card_score > 21 then 
 				next_state <= LOSE; 
 			else 
 				next_state <= PLAYER_TURN;
@@ -337,16 +337,16 @@ begin
 					score_dealer <= score_dealer + 1; 
 				end if; 
 			else 
-				score_dealer <= score_dealer + cards_score;
+				score_dealer <= score_dealer + card_score;
 			end if; 
 
 			-- se estoura 21 e tem um A valendo 11 - remove os 11 
-			if (score_dealer + cards_score) > 21 and dec_10_dealer = '1' then
-				score_dealer <= score_dealer + cards_score - 10;
+			if (score_dealer + card_score) > 21 and dec_10_dealer = '1' then
+				score_dealer <= score_dealer + card_score - 10;
 				dec_10_dealer <= '0'; 	-- não pode mais perder 10 pontos caso estoure 21 
 				next_state <= DEALER_TURN;  
 
-			elsif score_dealer + cards_score > 21 then 
+			elsif score_dealer + card_score > 21 then 
 				next_state <= WIN; 
 			else 
 				next_state <= DEALER_TURN;

@@ -1,11 +1,4 @@
--- implementação do controle do A 
---		se ganhou um A - hasA = 1
---		se a pontuação excede 21 e tem A - (pontuação - 10)
--- 		
-
--- remover estado de PLAYER_SCORE 
--- remover estado de DEALER_SCORE 
-
+-- antes de mudar para pontuação para vetores 
 
 -- sistema principal --------------------------------------------------------------------------------------------------------
 library IEEE;
@@ -31,12 +24,11 @@ architecture behavblackJack of blackJack is
 	
 	type state_type is (START, DEAL_CARDS_P1, DEAL_CARDS_P2, DEAL_CARDS_D1, DEAL_CARDS_D2, PLAYER_TURN, PLAYER_HIT, DEALER_TURN, DEALER_HIT, FINAL_SCORE, WIN, TIE, LOSE);
     signal state, next_state : state_type := START;  
-	signal score_player, score_dealer: integer range 0 to 31 := 0;
+	signal score_dealer, score_player: integer range 0 to 31 := 0;
 
     -- display valor da carta
     signal card_to_display: std_logic_vector(3 downto 0);
-    signal card_score: integer range 0 to 31 := 0; 
-
+    signal card_score: integer range 0 to 31 := 0;
 
     -- declaração componentes externos 
     component cardDisplay is 
@@ -52,6 +44,14 @@ architecture behavblackJack of blackJack is
         output_score: out integer range 0 to 31
     ); 
     end component; 
+	 
+	 component Adder8Bit is
+    Port (
+        A : in std_logic_vector(7 downto 0);
+        B : in std_logic_vector(7 downto 0);
+        Sum : out std_logic_vector(7 downto 0)
+    );
+	end component;
 
 begin
 
@@ -93,21 +93,23 @@ begin
 	-- controle de transição de estados
 	-- process(state, hit, stay, key(1), key(2))
 	process(state, key(2), key(3))
+		--variable score : integer range 0 to 31 := 0;
 	begin
 	  case state is 
 		when START =>	
 			next_state <= DEAL_CARDS_P1;
 			score_dealer <= 0; 
-			-- score_player <= 0;
+			score_player <= 0;
 			
 		when DEAL_CARDS_P1 =>	
-			 
-         score_player <= score_player + card_score;
+			-- score := score_player + card_score;
+         score_player <= (score_player + card_score);
 			next_state <= DEAL_CARDS_P2;
 			
 		when DEAL_CARDS_P2 =>	
 			-- se ganhar um A como segunda carta, valerá 11 se a pontuação atual for 10 ou menos 
-            score_player <= score_player + card_score;
+			-- score := score_player + card_score;
+         score_player <= (score_player + card_score);
 
 			next_state <= DEAL_CARDS_D1;
 
@@ -199,14 +201,16 @@ begin
 			ledR <= "1000000000"; 
 			ledG <= "0000000000"; 
 			
+			
+			
 		when DEAL_CARDS_P1 =>
 			ledR <= "0100000000";
 			
-				if (card_score = 3) then 
-                ledG <= "1111111111"; 
-				else 
-					ledG <= "0000000000";
-            end if; 
+				--if (card_score = 3) then 
+                --ledG <= "1111111111"; 
+				--else 
+					--ledG <= "0000000000";
+            --end if; 
 			
 		when DEAL_CARDS_P2 =>
 
@@ -353,3 +357,57 @@ begin
                     0;
 
 end architecture behavCardScore; 
+
+
+-- calcula pontuação da carta atual ---------------------------------------------------------------------------------------------
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+USE ieee.numeric_std.all;
+
+entity sum8bits is 
+port (
+	input_card: in std_logic_vector(3 downto 0);
+	output_score: out integer range 0 to 31
+);
+end cardScore; 
+
+architecture behavCardScore of cardScore is 
+begin
+    output_score <= 1 when input_card = "0001" else
+                    2 when input_card = "0010" else
+                    3 when input_card = "0011" else
+                    4 when input_card = "0100" else
+                    5 when input_card = "0101" else
+                    6 when input_card = "0110" else
+                    7 when input_card = "0111" else
+                    8 when input_card = "1000" else
+                    9 when input_card = "1001" else
+                    10 when input_card = "1010" else
+                    10 when input_card = "1011" else
+                    10 when input_card = "1100" else
+                    10 when input_card = "1101" else 
+                    0;
+
+end architecture behavCardScore; 
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity Adder8Bit is
+    Port (
+        A : in std_logic_vector(7 downto 0);
+        B : in std_logic_vector(7 downto 0);
+        Sum : out std_logic_vector(7 downto 0)
+    );
+end Adder8Bit;
+
+architecture Behavioral of Adder8Bit is
+begin
+    process(A, B)
+    begin
+        Sum <= std_logic_vector(unsigned(A) + unsigned(B));
+    end process;
+end Behavioral;
