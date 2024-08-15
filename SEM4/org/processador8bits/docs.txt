@@ -1,0 +1,7 @@
+Tamanhos: 
+	Dados no banco de registradores: 8 bits
+	Seleção do endereço BR: 3 bits
+
+	RAM - tamanho dos dados: 8 bits
+	      tamanho do endereço: 4 bits
+

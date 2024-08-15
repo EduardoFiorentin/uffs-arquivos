@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<circuit>
+  <version>2</version>
+  <attributes/>
+  <visualElements>
+    <visualElement>
+      <elementName>RegisterFile</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>BANCO</string>
+        </entry>
+        <entry>
+          <string>AddrBits</string>
+          <int>3</int>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="820" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>dado a ser armazenado</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="480" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>1 - dado é armazenado</string>
+        </entry>
+      </elementAttributes>
+      <pos x="560" y="160"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>seleciona registrador</string>
+        </entry>
+        <entry>
+          <string>intFormat</string>
+          <intFormat>bin</intFormat>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
+      <pos x="640" y="180"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="720" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
+      <pos x="480" y="220"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>3</int>
+        </entry>
+      </elementAttributes>
+      <pos x="580" y="240"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="960" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="960" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>RAMDualPort</elementName>
+      <elementAttributes>
+        <entry>
+          <string>AddrBits</string>
+          <int>4</int>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="1740" y="120"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Out</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="1880" y="160"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>endereço onde pegar / armazenar</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>4</int>
+        </entry>
+      </elementAttributes>
+      <pos x="1460" y="120"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>dado a ser armazenado</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="1560" y="140"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>1 - dado armazenado no clock</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1660" y="160"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="1720" y="180"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="1660" y="200"/>
+    </visualElement>
+    <visualElement>
+      <elementName>RAMDualPort</elementName>
+      <elementAttributes>
+        <entry>
+          <string>AddrBits</string>
+          <int>4</int>
+        </entry>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="2"/>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="860" y="840"/>
+    </visualElement>
+    <visualElement>
+      <elementName>RegisterFile</elementName>
+      <elementAttributes>
+        <entry>
+          <string>AddrBits</string>
+          <int>3</int>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>BANCO</string>
+        </entry>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="780" y="380"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Multiplexer</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Bits</string>
+          <int>8</int>
+        </entry>
+        <entry>
+          <string>rotation</string>
+          <rotation rotation="1"/>
+        </entry>
+      </elementAttributes>
+      <pos x="680" y="720"/>
+    </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>ULA</string>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>A:8,B:8,OP:3</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>5</int>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity ULA is 
+    port(
+        A, B        :   in std_logic_vector(7 downto 0);
+	OP	    :   in std_logic_vector(2 downto 0);
+        S           :   out std_logic_vector(7 downto 0)
+
+    );
+end ULA; 
+
+architecture behav_ULA of ULA is
+begin
+    S &lt;=  A and B;
+end behav_ULA;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>S:8</string>
+        </entry>
+      </elementAttributes>
+      <pos x="1080" y="740"/>
+    </visualElement>
+    <visualElement>
+      <elementName>External</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>BR_CONTROLLER</string>
+        </entry>
+        <entry>
+          <string>applicationType</string>
+          <appType>GHDL</appType>
+        </entry>
+        <entry>
+          <string>externalInputs</string>
+          <string>VALUE_IN:8,OP:2</string>
+        </entry>
+        <entry>
+          <string>Code</string>
+          <string>library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity ULA is 
+    port(
+        VALUE_IN : in std_logic_vector(7 downto 0);
+	OP : in std_logic_vector(1 downto 0); -- 0 - gravar no banco / 1 - selecionar no banco
+        RAM, ULA_A, ULA_B : out std_logic_vector(7 downto 0)
+
+    );
+end ULA; 
+
+architecture behav_ULA of ULA is
+begin
+    RAM &lt;=  VALUE_IN and VALUE_IN;
+end behav_ULA;</string>
+        </entry>
+        <entry>
+          <string>externalOutputs</string>
+          <string>RAM:8,ULA_A:8,ULA_B:8</string>
+        </entry>
+        <entry>
+          <string>Width</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="740" y="580"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="540" y="600"/>
+    </visualElement>
+  </visualElements>
+  <wires>
+    <wire>
+      <p1 x="560" y="160"/>
+      <p2 x="820" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="900" y="160"/>
+      <p2 x="940" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="1800" y="160"/>
+      <p2 x="1880" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="1660" y="160"/>
+      <p2 x="1740" y="160"/>
+    </wire>
+    <wire>
+      <p1 x="680" y="800"/>
+      <p2 x="800" y="800"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="580"/>
+      <p2 x="740" y="580"/>
+    </wire>
+    <wire>
+      <p1 x="900" y="580"/>
+      <p2 x="940" y="580"/>
+    </wire>
+    <wire>
+      <p1 x="1020" y="740"/>
+      <p2 x="1080" y="740"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="200"/>
+      <p2 x="820" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="940" y="200"/>
+      <p2 x="960" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="1660" y="200"/>
+      <p2 x="1740" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="480" y="140"/>
+      <p2 x="820" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="900" y="140"/>
+      <p2 x="960" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="1560" y="140"/>
+      <p2 x="1740" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="900" y="620"/>
+      <p2 x="1000" y="620"/>
+    </wire>
+    <wire>
+      <p1 x="580" y="240"/>
+      <p2 x="820" y="240"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="880"/>
+      <p2 x="1220" y="880"/>
+    </wire>
+    <wire>
+      <p1 x="640" y="180"/>
+      <p2 x="820" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="1720" y="180"/>
+      <p2 x="1740" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="860" y="820"/>
+      <p2 x="940" y="820"/>
+    </wire>
+    <wire>
+      <p1 x="1460" y="120"/>
+      <p2 x="1740" y="120"/>
+    </wire>
+    <wire>
+      <p1 x="900" y="600"/>
+      <p2 x="1020" y="600"/>
+    </wire>
+    <wire>
+      <p1 x="540" y="600"/>
+      <p2 x="740" y="600"/>
+    </wire>
+    <wire>
+      <p1 x="1000" y="760"/>
+      <p2 x="1080" y="760"/>
+    </wire>
+    <wire>
+      <p1 x="1180" y="760"/>
+      <p2 x="1220" y="760"/>
+    </wire>
+    <wire>
+      <p1 x="480" y="220"/>
+      <p2 x="820" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="720"/>
+      <p2 x="720" y="880"/>
+    </wire>
+    <wire>
+      <p1 x="1220" y="760"/>
+      <p2 x="1220" y="880"/>
+    </wire>
+    <wire>
+      <p1 x="1000" y="620"/>
+      <p2 x="1000" y="760"/>
+    </wire>
+    <wire>
+      <p1 x="680" y="720"/>
+      <p2 x="680" y="800"/>
+    </wire>
+    <wire>
+      <p1 x="940" y="160"/>
+      <p2 x="940" y="200"/>
+    </wire>
+    <wire>
+      <p1 x="940" y="580"/>
+      <p2 x="940" y="820"/>
+    </wire>
+    <wire>
+      <p1 x="700" y="580"/>
+      <p2 x="700" y="680"/>
+    </wire>
+    <wire>
+      <p1 x="1020" y="600"/>
+      <p2 x="1020" y="740"/>
+    </wire>
+  </wires>
+  <measurementOrdering/>
+</circuit>
