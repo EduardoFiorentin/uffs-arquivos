@@ -1,7 +1,33 @@
 Tamanhos: 
-	Dados no banco de registradores: 8 bits
+	Dados no banco de registradores: 8 registradores de 8 bits
 	Seleção do endereço BR: 3 bits
 
 	RAM - tamanho dos dados: 8 bits
 	      tamanho do endereço: 4 bits
+
+	MEMORIA DE INSTRUÇÃO:
+		16 slots de 12 bits
+			3 bits de codigo da instrução
+			9 bits de endereçamento
+				3 para cada endereço do BR
+
+xxx - don't care 
+
+INSTRUÇÕES
+	puxar da RAM pro banco 		(000)	000-ddd-eee-xxx		rd <- (e)
+	mandar do banco pra RAM 	(001)	001-ddd-eee-xxx		(e) <- rd
+	add				(010)	010-ddd-aaa-bbb		rd <- a + b
+	sub				(011)	011-ddd-aaa-bbb		rd <- a - b
+	mult				(100)	100-ddd-aaa-bbb		rd <- a x b
+	div				(101) 	101-ddd-aaa-bbb		rd <- a % b
+	
+CODIGO de instrução: 
+	cccdddsssggg
+
+	ccc - codigo da instrução 
+	
+	ddd - endereço do registrador de destino do resultado
+	sss - endereço do registrador do a da operação	
+	ggg - endereço do registrador do b da operação	
+
 
