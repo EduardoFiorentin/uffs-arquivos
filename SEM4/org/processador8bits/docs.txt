@@ -3,7 +3,7 @@ Tamanhos:
 	Seleção do endereço BR: 3 bits
 
 	RAM - tamanho dos dados: 8 bits
-	      tamanho do endereço: 4 bits
+	      tamanho do endereço: 3 bits
 
 	MEMORIA DE INSTRUÇÃO:
 		16 slots de 12 bits
@@ -20,7 +20,8 @@ INSTRUÇÕES
 	sub				(011)	011-ddd-aaa-bbb		rd <- a - b
 	mult				(100)	100-ddd-aaa-bbb		rd <- a x b
 	div				(101) 	101-ddd-aaa-bbb		rd <- a % b
-	
+	carregar ct em reg		(110)	110-ddd-cccccc		rd <- c
+
 CODIGO de instrução: 
 	cccdddsssggg
 
@@ -29,5 +30,58 @@ CODIGO de instrução:
 	ddd - endereço do registrador de destino do resultado
 	sss - endereço do registrador do a da operação	
 	ggg - endereço do registrador do b da operação	
+
+
+MANIPULAÇÕES: 
+	BANCO DE REGISTRADORES: 
+		GRAVAR DADO: 
+			din <- dado a ser armazenado
+			rw <- numero do registrador
+			we <- 1
+			CLK
+			
+		LER DADO
+			Ra ou Rb <- endereço do registrador
+	
+
+
+	MEMORIA
+		GRAVAR DADO
+			A <- endereço
+			Din <- dado 
+			str <= 1
+			CLK
+				
+		LER DADO
+			A <- endereço
+			id <- 1
+			
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
