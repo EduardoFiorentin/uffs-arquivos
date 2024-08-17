@@ -90,7 +90,7 @@ begin
     rw <= reg_dest;
 
     -- libera o banco de registradores para receber dados
-    we <= '0' when inst = "001" or valid_clk = '0' else '1';           -- rd <- (e)
+    we <= '0' when inst = "001" or valid_clk = '0' or inst = "111" else '1';           -- rd <- (e)
 
     -- ajusta saída que vai pra entrada de dados do banco 
     din <= value_in when inst = "000" else          -- rd <- (e)
