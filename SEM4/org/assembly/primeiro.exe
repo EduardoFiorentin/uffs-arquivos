@@ -1,0 +1,18 @@
+.data
+A: .word 4
+B: .word 6
+C: .word 8
+D: .word 5
+S: .word 0
+
+.text
+# carregar addrs A em a0,
+la a1, A
+lw s0, 0(a1) # acessa o valor do endereço de a0 (deslocamento 0)
+add s1, s0, s0
+sw s1, 0(a1)
+
+# Impressão no console
+li a7, 1
+mv a0, s1
+ecall 
