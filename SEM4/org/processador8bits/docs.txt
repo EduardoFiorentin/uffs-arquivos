@@ -13,14 +13,22 @@ Tamanhos:
 
 xxx - don't care 
 
-INSTRUÇÕES
-	puxar da RAM pro banco 		(000)	000-ddd-eee-xxx		rd <- (e)
-	mandar do banco pra RAM 	(001)	001-ddd-eee-xxx		(e) <- rd
-	add				(010)	010-ddd-aaa-bbb		rd <- a + b
-	sub				(011)	011-ddd-aaa-bbb		rd <- a - b
-	mult				(100)	100-ddd-aaa-bbb		rd <- a x b
-	div				(101) 	101-ddd-aaa-bbb		rd <- a % b
-	carregar ct em reg		(110)	110-ddd-cccccc		rd <- c
+	INSTRUÇÕES					CODIGO	ORG. DA INSTRUÇÃO	SEMANTICA		SINTAXE					OBJETIVO
+	puxar da RAM pro banco 		(000)	000-ddd-eee-xxx		rd <- (e)		ldrm ro, md;			salva dado do registrador pra memoria
+	mandar do banco pra RAM 	(001)	001-ddd-eee-xxx		(e) <- rd		ldmr rd, mo;			carrega da memoria pro registrador 
+	soma						(010)	010-ddd-aaa-bbb		rd <- a + b		add	rd, ra, rb;			soma ra e rb e manda pra rd
+	subtraçãp					(011)	011-ddd-aaa-bbb		rd <- a - b		sub	rd, ra, rb;			subtrai ra e rb e manda pra rd
+	multiplicação				(100)	100-ddd-aaa-bbb		rd <- a x b		mul	rd, ra, rb;			multiplica ra e rb e manda pra rd
+	divisão						(101) 	101-ddd-aaa-bbb		rd <- a % b		div	rd, ra, rb;			divide ra e rb e manda pra rd
+	carregar ct em reg			(110)	110-ddd-cccccc		rd <- const		lct rd, const;			carrega constante no registrador 
+
+	lct rd, const;		carrega constante no registrador 
+	add	rd, ra, rb;		soma ra e rb e manda pra rd
+	sub	rd, ra, rb;		subtrai ra e rb e manda pra rd
+	mul	rd, ra, rb;		multiplica ra e rb e manda pra rd
+	div	rd, ra, rb;		divide ra e rb e manda pra rd
+	ldrm ro, md;		salva dado do registrador pra memoria 
+	ldmr rd, mo;		carrega da memoria pro registrador 
 
 CODIGO de instrução: 
 	cccdddsssggg
@@ -30,7 +38,7 @@ CODIGO de instrução:
 	ddd - endereço do registrador de destino do resultado
 	sss - endereço do registrador do a da operação	
 	ggg - endereço do registrador do b da operação	
-
+	cccccc - constante de 6 bits 
 
 MANIPULAÇÕES: 
 	BANCO DE REGISTRADORES: 
@@ -76,8 +84,8 @@ EXEMPLO:
 
 EXEMPLO 2: Teste com todas as operações 
 
-lct r0, 8;		110000001000	0xC08			
-lct r1, 2; 		110001000010    0xC42
+lct r0, 8;			110000001000	0xC08			
+lct r1, 2; 			110001000010    0xC42
 
 ldrm r0, m0;		001000000000	0x200
 ldrm r1, m1;		001001001000	0x248
@@ -101,7 +109,15 @@ ldrm r5, m5;		001101101000	0x368
 0xC08	0xC08	0xC08	0xC08	0xC08			
 
 
+CONJUNTO DE INSTRUÇÕES 
 
+	lct rd, const;		carrega constante no registrador 
+	add	rd, ra, rb;		soma ra e rb e manda pra rd
+	sub	rd, ra, rb;		subtrai ra e rb e manda pra rd
+	mul	rd, ra, rb;		multiplica ra e rb e manda pra rd
+	div	rd, ra, rb;		divide ra e rb e manda pra rd
+	ldrm ro, md;		salva dado do registrador pra memoria 
+	ldmr rd, mo;		carrega da memoria pro registrador 
 
 
 

@@ -1,13 +1,16 @@
 import re
 
-def carregar_arquivo(nome_arquivo):
-    with open(nome_arquivo, 'r') as file:
-        conteudo = file.read()
-    return conteudo
+SOURCE_FILE = "main.horn"
+TARGET_FILE = "instruction.hornExe"
 
-def substituir_termos(conteudo):
+def load_file(input_file_name):
+    with open(input_file_name, 'r') as file:
+        content = file.read()
+    return content
+
+def replace_expressions(content):
     # Substitua os termos da linguagem usando regex
-    substituicoes = {
+    changes = {
         r'\bldmr\b': '000',
         r'\bldrm\b': '001',
         r'\badd\b': '010',
@@ -18,68 +21,69 @@ def substituir_termos(conteudo):
         r',': ' ',
     }
     
-    conteudo = conteudo.split("\n")  # Divide o conteúdo em linhas
+    content = content.split("\n") # Separa o conteúdo em uma lista com cada item sendo uma linha 
     
-    for i in range(len(conteudo)):
-        linha = conteudo[i]
-        for padrao, substituto in substituicoes.items():
-            linha = re.sub(padrao, substituto, linha)
+    for i in range(len(content)):
+        row = content[i]
+        for pattern, substitute in changes.items():
+            row = re.sub(pattern, substitute, row)
         
-        # Completar o ldmr e ldrm
-        linha = re.sub(r'(^00[01][\w\s]+;$)', lambda match: f"{match.group(1)}000", linha)
+        # Completar o ldmr e ldrm com zeros no final
+        row = re.sub(r'(^00[01][\w\s]+;$)', lambda match: f"{match.group(1)}000", row)
         
-        # Substitui números não cercados por letras pelo seu equivalente em 6 bits binários
-        linha = re.sub(r'(^110\s[rd]\d+[\s]?)[\s]?+(\d+);', lambda match: f"{match.group(1)}{format(int(match.group(2)), '06b')}", linha)
+        # Substitui numero da instrução lct pelo equivalente em binário formatado para 6 digitos
+        row = re.sub(r'(^110\s[rd]\d+[\s]?)[\s]?+(\d+);', lambda match: f"{match.group(1)}{format(int(match.group(2)), '06b')}", row)
         
-        # Substitui 'rX' ou 'mX' por 'X' em binário de 3 bits
-        linha = re.sub(r'([\w\s]?+)([rm])(\d+)([\w\s]?+)', lambda match: f"{match.group(1)}{format(int(match.group(3)), '03b')}{match.group(4)}", linha)
+        # Substitui valores vindos com letras 'r' ou 'm' para o equivalente binário do número
+        # Substitui a notação de registrador e memória por seu endereço equivalente
+        row = re.sub(r'([\w\s]?+)([rm])(\d+)([\w\s]?+)', lambda match: f"{match.group(1)}{format(int(match.group(3)), '03b')}{match.group(4)}", row)
         
-        # Remover espaços e ;
-        linha = re.sub(r'[\s]+', "", linha)
-        linha = re.sub(r'[;]', "", linha)
+        # Remover espaços e ';'
+        row = re.sub(r'[\s]+', "", row)
+        row = re.sub(r'[;]', "", row)
 
-        conteudo[i] = linha  # Atualiza a linha na lista de conteúdo
+        content[i] = row 
     
-    conteudo = '\n'.join(conteudo)  # Junta todas as linhas com quebras de linha
-    return conteudo
+    content = '\n'.join(content)  # Junta todas as linhas com quebras de linha
+    return content
 
-def formatar_instrucoes(conteudo):
-    instrucoes = conteudo.split()  # Divide o conteúdo em instruções
-    # print("Aqui:", instrucoes)
+def format_instructions(content):
+    instructions = content.split()  # Divide o conteúdo em instruções
+    # print(instrucoes)
     
-    inst_formatadas = []
+    formated_instructions = []
     
-    for inst in instrucoes:
-        inst_formatadas.append((hex(int(inst, 2))))
+    for inst in instructions:
+        formated_instructions.append((hex(int(inst, 2))))
         
-    if len(inst_formatadas) < 32: 
-        inst_formatadas.append("0xe00")
+    if len(formated_instructions) < 32: 
+        formated_instructions.append("0xe00") # instrução que define o ponto de parada da execução no circuito 
         
     # print(inst_formatadas)
     
-    linhas_formatadas = []
+    formatted_rows = []
     
-    for i in range(0, len(inst_formatadas), 4):
-        linha = '\t'.join(inst_formatadas[i:i+4])  # Junta 5 instruções por linha com tabulação
-        linhas_formatadas.append(linha)
+    for i in range(0, len(formated_instructions), 4):
+        row = '\t'.join(formated_instructions[i:i+4])  # Junta 5 instruções por linha com tabulação
+        formatted_rows.append(row)
     
-    return '\n'.join(linhas_formatadas)  # Junta todas as linhas com quebra de linha
+    return '\n'.join(formatted_rows)  # Junta todas as linhas com quebra de linha
 
 
-def salvar_arquivo(conteudo, nome_arquivo_saida):
-    with open(nome_arquivo_saida, 'w') as file:
-        file.write(conteudo)
+def save_file(content, file_name):
+    with open(file_name, 'w') as file:
+        file.write(content)
 
 if __name__ == '__main__':
     # Carregue o conteúdo do arquivo .horn
-    conteudo = carregar_arquivo('main.horn')
+    content = load_file(SOURCE_FILE)
 
-    # Substitua os termos da linguagem
-    conteudo_modificado = substituir_termos(conteudo)
+    # Substitui os termos da sintaxe pelos codigos binários correspondentes 
+    modified_content = replace_expressions(content)
     
-    # Formate as instruções conforme solicitado
-    conteudo_formatado = formatar_instrucoes(conteudo_modificado)
+    # Transforma as instruções de binário para exadecimal
+    formated_content = format_instructions(modified_content)
     
 
     # Salve o conteúdo formatado no arquivo .hornExe
-    salvar_arquivo(conteudo_formatado, 'instruction.hornExe')
+    save_file(formated_content, TARGET_FILE)
