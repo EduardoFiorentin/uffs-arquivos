@@ -73,3 +73,14 @@ void Graph::print_graph() {
     std::cout << std::endl; 
 
 }
+
+int Graph::vertice_deg(int v) {
+    if (v < 0 || v >= num_vertices_) return -1; 
+
+    int deg = 0; 
+    for (int edge: adjacency_matrix_[v]) {
+        if ( edge != 0 ) deg++;
+    }
+
+    return deg; 
+}; 

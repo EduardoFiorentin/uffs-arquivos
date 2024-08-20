@@ -16,6 +16,7 @@ public:
     void insert_edge(Edge e);
     void remove_edge(Edge e);
     void print_graph();
+    int vertice_deg(int v); 
 
 private: 
     int num_edges_;

@@ -13,12 +13,23 @@
 	li a1, 1 
 	li a2, 5
 	
-	la vec, a3
+	la a3, vec
 	
+	# Definir primeiro elemento como maior 
+	lw t0, 0(a3)
+	li t1, 0
+	
+			
 LACO: 	beq a1, a2, FIM_LACO
 	
 	
 	
+	addi a1, a1, 1		# incremento do laço 
+	j LACO 
+	
 FIM_LACO:
-	nop 
+
+	li a7, 1
+	mv a0, a1
+	ecall 
 	
