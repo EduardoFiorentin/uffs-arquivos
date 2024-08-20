@@ -1,4 +1,5 @@
 #include "./Graph.h"
+#include "./Edge.h"
 #include <iostream>
 
 using namespace std;
@@ -29,33 +30,38 @@ int Graph::get_edges_num() {
     return num_edges_; 
 }
 
-bool Graph::find_edge(int a, int b) {
-    if (a < 0 || a >= num_vertices_) throw(invalid_argument("Valor de a é inválido!"));
-    if (b < 0 || b >= num_vertices_) throw(invalid_argument("Valor de b é inválido!"));
-
-    if (adjacency_matrix_[a][b] == 1 || adjacency_matrix_[b][a] == 1) return true;
-    else return false;
+bool Graph::find_edge(Edge e) {
+    if (adjacency_matrix_[e.v1][e.v2] != 0) return true;
+    return false; 
 }; 
 
-void Graph::insert_edge(int a, int b) {
-    if (a < 0 || a >= num_vertices_) throw(invalid_argument("Valor de a é inválido!"));
-    if (b < 0 || b >= num_vertices_) throw(invalid_argument("Valor de b é inválido!"));
+void Graph::insert_edge(Edge e) {
+    if (this->find_edge(e)) return;     // Se a aresta já existe 
+    if (e.v1 == e.v2) return;           // Se a aresta for um laço 
 
-    adjacency_matrix_[a][b] = 1; 
-    adjacency_matrix_[b][a] = 1; 
+    adjacency_matrix_[e.v1][e.v2] = 1;
+    adjacency_matrix_[e.v2][e.v1] = 1;
+
+    num_edges_++; 
 }; 
 
-void Graph::remove_edge(int a, int b) {
-    if (a < 0 || a >= num_vertices_) throw(invalid_argument("Valor de a é inválido!"));
-    if (b < 0 || b >= num_vertices_) throw(invalid_argument("Valor de b é inválido!"));
+void Graph::remove_edge(Edge e) {
+    if (!find_edge(e)) return;          // se a aresta não existe 
+    if (e.v1 == e.v2) return;           // Se a aresta for um laço 
 
-    adjacency_matrix_[a][b] = 0; 
-    adjacency_matrix_[b][a] = 0; 
+    adjacency_matrix_[e.v1][e.v2] = 0;
+    adjacency_matrix_[e.v2][e.v1] = 0;
+
+    num_edges_--; 
+
 }; 
 
 void Graph::print_graph() {
-    int i = 0; 
-    for (vector<int> element : adjacency_matrix_) {
-        cout << "linha " << i;
+    for (int i = 0; i < num_vertices_; i++) {
+        cout << i << ": ";
+        for (int j = 0; j < num_vertices_; j++) {
+            if (adjacency_matrix_[i][j] != 0) cout << j << " "; 
+        }
+        cout << endl; 
     }
 }; 

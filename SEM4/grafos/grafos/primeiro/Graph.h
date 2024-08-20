@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 #include <vector>
+#include "Edge.h"
 
 class Graph {
 public:
@@ -8,9 +9,10 @@ public:
 
     int get_vertices_num();
     int get_edges_num(); 
-    bool find_edge(int a, int b); 
-    void insert_edge(int a, int b); 
-    void remove_edge(int a, int b); 
+    // bool find_edge(int a, int b); 
+    bool find_edge(Edge e);
+    void insert_edge(Edge e); 
+    void remove_edge(Edge e); 
     void print_graph(); 
 
 private:
