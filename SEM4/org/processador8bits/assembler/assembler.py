@@ -45,19 +45,21 @@ def replace_expressions(content):
         content[i] = row 
     
     content = '\n'.join(content)  # Junta todas as linhas com quebras de linha
+    print(content)
     return content
 
 def format_instructions(content):
     instructions = content.split()  # Divide o conteúdo em instruções
     # print(instrucoes)
     
-    formated_instructions = []
+    # formated_instructions = []
+    formated_instructions = instructions
     
-    for inst in instructions:
-        formated_instructions.append((hex(int(inst, 2))))
+    # for inst in instructions:
+    #     formated_instructions.append((hex(int(inst, 2))))
         
     if len(formated_instructions) < 32: 
-        formated_instructions.append("0xe00") # instrução que define o ponto de parada da execução no circuito 
+        formated_instructions.append("111000000000") # instrução que define o ponto de parada da execução no circuito 
         
     # print(inst_formatadas)
     

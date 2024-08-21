@@ -4,15 +4,17 @@
 
 using namespace std;
 
-int mochila(int i, int c, vector<int> p, vector<int> v, int n) {
+int mochila(int i, int c, vector<int> p, vector<int> v, int n, vector<vector<int>> mem) {
     if (i >= n || c == 0) return 0; 
-    if (p[i] > c) return mochila(i+1, c, p, v, n);
+    if (mem[i][c] != -1) return mem[i][c]; 
 
-    // if (p[i] > c) {
-    //     return mochila(i+1, c, p, v, n);
-    // }
+    // capacidade menor do que peso do item atual - apenas testa com o proximo 
+    if (p[i] > c) mem[i][c] = mochila(i+1, c, p, v, n, mem);
 
-    return max(v[i] + mochila(i+1, c - p[i], p, v, n), mochila(i+1, c, p, v, n));
+    // caso seja possível pegar item atual - escolhe o máximo entre incluir e não incluir o item atual 
+    else mem[i][c] = max(v[i] + mochila(i+1, c - p[i], p, v, n, mem), mochila(i+1, c, p, v, n, mem));
+
+    return mem[i][c]; 
 }
 
 int main() {
@@ -23,7 +25,7 @@ int main() {
 
     // int p[] = malloc(sizeof(int) * n); 
     vector<int> p(n), v(n); 
-
+    vector<vector<int>> mem ( n+1, vector<int>( c+1, -1 )); 
 
     for (int i = 0; i < n; i++) {
         cin >> v[i];
@@ -32,6 +34,6 @@ int main() {
 
     cout << endl << "rodando" << endl;
 
-    cout << mochila(0, c, p, v, n) << endl; 
+    cout << mochila(0, c, p, v, n, mem) << endl; 
 
 }
