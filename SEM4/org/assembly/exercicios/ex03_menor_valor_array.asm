@@ -7,8 +7,8 @@
 	# t1 - indice do menor valor 
 	# t2 - elemento atual sendo comparado 
 	
-	# a1 - variavel de controle do laço 
-	# a2 - aux (determina parada do laço) 
+	# a1 - variavel de controle do laï¿½o 
+	# a2 - aux (determina parada do laï¿½o) 
 	# a3 - posicao inicial do vetor 
 	
 	li a1, 1 
@@ -24,8 +24,8 @@
 			
 LACO: 	beq a1, a2, FIM_LACO
 	
-	# Acessar posição no vetor
-	addi a3, a3, 4		# Como o primeiro elemento já foi conciderado, partimos pro segundo
+	# Acessar posiï¿½ï¿½o no vetor
+	addi a3, a3, 4		# Como o primeiro elemento jï¿½ foi conciderado, partimos pro segundo
 	lw t2, 0(a3) 
 	
 	bge t2, t0, ELEMENTO_MAIOR # if (novo elemento < menor_atual)
@@ -36,13 +36,15 @@ LACO: 	beq a1, a2, FIM_LACO
 	
 ELEMENTO_MAIOR: 
 	
-	addi a4, a4, 4
-	addi a1, a1, 1		# incremento do laço 
+	addi a4, a4, 4S
+	addi a1, a1, 1		# incremento do laï¿½o 
 	j LACO 
 	
 FIM_LACO:
 
 	li a7, 1
 	mv a0, t0
-	ecall 
+	ecall
+	mv a0, t1
+	ecall  
 	
