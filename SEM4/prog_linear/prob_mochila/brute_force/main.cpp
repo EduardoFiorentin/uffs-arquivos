@@ -8,9 +8,9 @@ int mochila(int i, int c, vector<int> p, vector<int> v, int n) {
     if (i >= n || c == 0) return 0; 
     if (p[i] > c) return mochila(i+1, c, p, v, n);
 
-    if (p[i] > c) {
-        return mochila(i+1, c, p, v, n);
-    }
+    // if (p[i] > c) {
+    //     return mochila(i+1, c, p, v, n);
+    // }
 
     return max(v[i] + mochila(i+1, c - p[i], p, v, n), mochila(i+1, c, p, v, n));
 }
