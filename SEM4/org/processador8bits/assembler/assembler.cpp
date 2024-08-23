@@ -2,8 +2,14 @@
 #include <string>
 #include <regex>
 #include <iterator>
+#include <bitset>
 
 using namespace std;
+
+string gerenate_bitset(int value) {
+    return bitset<6>{value}.to_string();
+}
+
 
 vector<string> substitute(vector<string> instructions) {
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let num = prompt("Numero: ")
+
+        let divs = []
+        let sum = 0
+        for (let i = num - 1; i >= 1; i--) {
+            if (num % i == 0) divs.push(i)
+        }
+        divs.map(item => sum += item)
+        
+        if (sum == num) console.log(`${num} é um número perfeito.`)
+        else console.log(`${num} não é um número perfeito.`)
+
+    </script>
+</body>
+</html>

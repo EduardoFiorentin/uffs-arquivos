@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        let days_total_age = prompt("Idade em dias: ")
+
+        let y_age = 0
+        let m_age = 0
+        let d_age = 0
+        days_total_age = parseInt(days_total_age)
+
+        console.log()
+        y_age = parseInt((days_total_age / 365).toFixed(0))
+        days_total_age = days_total_age - (365 * y_age)
+        console.log(days_total_age)
+        
+        m_age = parseInt(days_total_age / 30)
+        days_total_age = days_total_age - (m_age * 30)
+        console.log(days_total_age)
+
+        d_age = days_total_age
+        console.log(`Idade:\n${y_age} ano(s)\n${m_age} mes(es)\n${d_age} dia(s)`)
+
+    </script>
+</body>
+</html>
