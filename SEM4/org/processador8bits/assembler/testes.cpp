@@ -2,6 +2,11 @@
 #include <bitset>
 using namespace std;
 
+std::string toBinary(int number) {
+    // Convertendo para binário usando bitset de 6 bits e conversão explícita
+    return std::bitset<6>(static_cast<unsigned long long>(number)).to_string();
+}
+
 int main() {
     int num;
     cout << "Digite o número a converter e pressione ENTER: ";
@@ -9,7 +14,7 @@ int main() {
 
     cout << "Número a converter: " << num << endl;
 
-    bitset<6> binario(num); // 32 é o tamanho máximo do número
+    string binario = toBinary(num);
 
     cout << "Número convertido em binário: " << binario << endl;
 
