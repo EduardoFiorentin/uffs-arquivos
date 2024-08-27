@@ -15,11 +15,13 @@ public:
     void remove_edge(Edge e); 
     void print_graph(); 
     bool print_graph_path(int v, int w, int marcado[], int depth);
+    bool have_path(int v, int w, vector<int> &visited);
+    bool is_connected();
 
 private:
     int num_vertices_;
     int num_edges_; 
-    std::vector<std::vector<int>> adjacency_matrix_; 
+    std::vector<std::vector<int>> adjacency_list_; 
 };
 
 #endif

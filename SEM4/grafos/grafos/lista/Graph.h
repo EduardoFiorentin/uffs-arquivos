@@ -21,7 +21,7 @@ public:
 private: 
     int num_edges_;
     int num_vertices_;
-    std::vector<std::list<int>> adjacency_matrix_;
+    std::vector<std::list<int>> adjacency_list_;
 };
 
 #endif
