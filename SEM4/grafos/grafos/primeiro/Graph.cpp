@@ -65,3 +65,49 @@ void Graph::print_graph() {
         cout << endl; 
     }
 }; 
+
+// bool Graph::print_graph_path(int v, int w, int marcado[]) {
+    
+//     printf("Caminho(%d, %d)\n", v, w);
+//     if (v == w) {
+//         // printf("%d-", v);
+//         return true;
+//     }
+//     marcado[v] = 1;
+//     for (int u = 0; u < num_vertices_; u++)
+//         if (adjacency_matrix_[v][u] != 0) {
+//             if (marcado[u] == 0) {
+//              if (print_graph_path(u, w, marcado)) {
+//                 // printf("%d-", v);
+//                 return true;
+
+//             }
+
+//         }
+//     }
+//     return false;
+// }
+
+bool Graph::print_graph_path(int v, int w, int marcado[], int depth) {
+    for (int i = 0; i < depth; ++i) {
+        printf("   ");
+    }
+
+    printf("caminho(%d, %d)\n", v, w);
+
+    if (v == w) {
+        return true;
+    }
+
+    marcado[v] = 1;
+
+    for (int u = 0; u < num_vertices_; ++u) {
+        if (adjacency_matrix_[v][u] != 0 && marcado[u] == 0) {
+            if (print_graph_path(u, w, marcado, depth + 1)) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+}

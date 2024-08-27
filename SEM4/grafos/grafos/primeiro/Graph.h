@@ -14,6 +14,7 @@ public:
     void insert_edge(Edge e); 
     void remove_edge(Edge e); 
     void print_graph(); 
+    bool print_graph_path(int v, int w, int marcado[], int depth);
 
 private:
     int num_vertices_;
