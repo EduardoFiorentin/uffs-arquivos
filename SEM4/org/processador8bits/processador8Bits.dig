@@ -231,6 +231,10 @@
           <string>rotation</string>
           <rotation rotation="1"/>
         </entry>
+        <entry>
+          <string>Label</string>
+          <string>START</string>
+        </entry>
       </elementAttributes>
       <pos x="0" y="860"/>
     </visualElement>
