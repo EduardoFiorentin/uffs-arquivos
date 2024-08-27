@@ -1,4 +1,4 @@
-# implementar um menú para operações em um vetor: 
+# implementar um menu para operacoes em um vetor: 
 # 1 - Imprime vetor ()
 # 2 - mostra menor valor e mostra sua posição 
 # 3 - Mostra maior valor e sua posição 
@@ -16,7 +16,7 @@
  # func 1 - nenhum
  # func 2 - a0 <- menor, a1 <- indice 
  # func 3 - a0 <- maior, a1 <- indice 
- # func 4 - a0 <- 1 se der certo, a0 <- 0 se não
+ # func 4 - a0 <- 1 se der certo, a0 <- 0 se nao
  # func 5 - sem retorno 
  
  .data 
@@ -58,7 +58,7 @@
 		la a0, txt_chose
 		ecall
 		
-		# Pegar opção do usuário -> s0 
+		# Pegar opcao do usuario -> s0 
 		li a7, 5
 		ecall
 		
@@ -69,7 +69,7 @@
 		#li a1, 5
 		lw a1, vec_size
 		
-		# Chamadas de função 
+		# Chamadas de funcao
 		li s1, 1
 		beq s0, s1, IMPRIME_VETOR	# se s0 = 1 -> imprime vetor 
 		
@@ -239,7 +239,7 @@
 
 # Função encontrar menor valor 
 	ENCONTRA_MENOR_VALOR: 
-		li t0, 1		# iterator = 1
+		li t0, 1	# iterator = 1
 		mv t1, a0 	# Cópia do inicio do vetor 
 		
 		 
@@ -276,7 +276,7 @@
 			
 # Encontrar maior valor 
 	ENCONTRA_MAIOR_VALOR: 
-		li t0, 1		# iterator = 1
+		li t0, 1	# iterator = 1
 		mv t1, a0 	# Cópia do inicio do vetor 
 		
 		 
@@ -313,7 +313,6 @@
 	
 	
 	SWAP: 
-		
 		blt a2, zero, NO_SWAP
 		bge a2, a1, NO_SWAP
 		blt a3, zero, NO_SWAP
