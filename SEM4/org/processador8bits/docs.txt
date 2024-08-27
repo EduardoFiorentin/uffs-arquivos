@@ -1,3 +1,31 @@
+USO: 
+	CIRCUITO: 
+		Abrir o arquivo "processador8Bits" com o programa "Digital"
+		Para usar: 
+			copie as instruções do arquivo "instructions" gerado pelo montador na pasta "assembler_cpp"
+			Inicie a simulação do digital e clique na memoria de instrução com o botão direito
+			Selecione todos os slots de memória e, com as instruções do arquivo "instructions" copiadas, cole as instruções na memória
+			Para iniciar a execução das instruções, defina a entrada start do circuito como alta
+			
+			É possível ver os valores gravados clicando com o botão direito no banco de registradores ou memórias.
+
+
+	MONTADOR: 
+		Usar o implementado em cpp 
+
+		arquivo de entrada: Index 			- recebe instruções com a codificação especificada abaixo
+		arquivo de saida: 	instructions 	- onde são gravadas as instruções decodificadas, já na formatação correta para colar no componente de memória de instrução
+
+		caso seja necessário usar outros nomes, estes podem ser passados como parâmetros na execução do script
+		EX: 	assembler nome_arquivo_entrada nome_arquivo_saida
+
+		OBS: Erros de sintaxe não são tradados, então se o código não sair formatado ou com letras no meio provavelmente é um erro na sintaxe
+		OBS: Não usar enter entre comandos ou espaços adicionais 
+		OBS: Não existe comentario - se vira ai pra entender 
+
+
+
+
 Tamanhos: 
 	Dados no banco de registradores: 8 registradores de 8 bits
 	Seleção do endereço BR: 3 bits
@@ -9,9 +37,9 @@ Tamanhos:
 		16 slots de 12 bits
 			3 bits de codigo da instrução
 			9 bits de endereçamento
-				3 para cada endereço do BR
+				3 para cada endereço do BR/Memoria
 
-xxx - don't care 
+
 
 	INSTRUÇÕES					CODIGO	ORG. DA INSTRUÇÃO	SEMANTICA		SINTAXE					OBJETIVO
 	puxar da RAM pro banco 		(000)	000-ddd-eee-xxx		rd <- (e)		ldrm ro, md;			salva dado do registrador pra memoria
@@ -33,8 +61,8 @@ xxx - don't care
 CODIGO de instrução: 
 	cccdddsssggg
 
+	xxx - don't care 
 	ccc - codigo da instrução 
-	
 	ddd - endereço do registrador de destino do resultado
 	sss - endereço do registrador do a da operação	
 	ggg - endereço do registrador do b da operação	
@@ -100,13 +128,7 @@ ldrm r3, m3;		001011011000	0x2D8
 ldrm r4, m4;		001100100000	0x320
 ldrm r5, m5;		001101101000	0x368
 
-111000000000		                0xe00
-
-
-0xC08	0xC08	0xC08	0xC08	0xC08
-0xC08	0xC08	0xC08	0xC08	0xC08
-0xC08	0xC08	0xC08	0xC08	0xC08
-0xC08	0xC08	0xC08	0xC08	0xC08			
+111000000000		                0xe00	
 
 
 CONJUNTO DE INSTRUÇÕES 

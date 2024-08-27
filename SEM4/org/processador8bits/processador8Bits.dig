@@ -215,7 +215,7 @@
         </entry>
         <entry>
           <string>intFormat</string>
-          <intFormat>hex</intFormat>
+          <intFormat>bin</intFormat>
         </entry>
       </elementAttributes>
       <pos x="340" y="720"/>
@@ -238,12 +238,12 @@
       <elementName>Clock</elementName>
       <elementAttributes>
         <entry>
-          <string>Frequency</string>
-          <int>5</int>
-        </entry>
-        <entry>
           <string>runRealTime</string>
           <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Frequency</string>
+          <int>5</int>
         </entry>
       </elementAttributes>
       <pos x="800" y="1120"/>
