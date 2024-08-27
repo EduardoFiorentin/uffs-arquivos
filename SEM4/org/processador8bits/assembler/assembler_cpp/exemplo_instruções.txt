@@ -1,0 +1,9 @@
+carrega valores e faz algumas operações 
+
+lct r0, 50;
+lct r1, 10;
+add r2, r0, r1;
+ldrm r2, m0;
+ldmr r3, m0; 
+sub r4, r3, r1; 
+ldrm r4, m1;

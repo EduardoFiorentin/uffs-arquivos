@@ -22,6 +22,7 @@ USO:
 		OBS: Erros de sintaxe não são tradados, então se o código não sair formatado ou com letras no meio provavelmente é um erro na sintaxe
 		OBS: Não usar enter entre comandos ou espaços adicionais 
 		OBS: Não existe comentario - se vira ai pra entender 
+		OBS: O montador não funciona com numeros negativos
 
 
 

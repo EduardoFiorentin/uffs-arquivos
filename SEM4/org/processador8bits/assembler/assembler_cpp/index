@@ -1,7 +1,10 @@
-lct r0, 50;
-lct r1, 10;
+lct r0, 10;
+lct r1, 5;
 add r2, r0, r1;
+sub r3, r0, r1;
+mul r4, r0, r1;
+div r5, r0, r1;
 ldrm r2, m0;
-ldmr r3, m0; 
-sub r4, r3, r1; 
-ldrm r4, m1;
+ldrm r3, m1;
+ldrm r4, m2;
+ldrm r5, m3;
