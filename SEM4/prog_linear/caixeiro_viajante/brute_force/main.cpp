@@ -6,7 +6,7 @@
 
 using namespace std;
 
-double distance(pair<int, int> x, pair<int, int> y) {
+double distance(pair<int, int> &x, pair<int, int> &y) {
     int xd = x.first - y.first;
     int yd = x.second - y.second;
     return (int) (sqrt(xd * xd + yd * yd) + 0.5); 
@@ -18,11 +18,11 @@ int main() {
 
     vector<pair<int, int>> locs;
     vector<int> permut; 
-    int x, y;
+    int z, x, y;
     double shortest_dist, total_step_dist; 
 
     // leitura dos dados 
-    while (cin >> x >> y) {
+    while (cin  >> z >> x >> y) {
         locs.push_back(make_pair(x, y));
     }
 
@@ -30,7 +30,7 @@ int main() {
         permut.push_back(i);
     }
 
-    shortest_dist = 99999999.99; 
+    shortest_dist = INFINITY; 
 
     do {
         total_step_dist = 0.0;
