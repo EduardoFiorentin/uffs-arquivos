@@ -1,0 +1,41 @@
+INSTRUÇÕES 
+code    sintaxe                 semantica                           type
+00-     add rd, rs1, rs2        rd <- rs1 + rs2                     1
+01-     
+02-     sub  rd, rs1, rs2       rd <- rs1 - rs2                     1
+03-     mul  rd, rs1, rs2       rd <- rs1 * rs2                     1
+04-     div rd, rs1, rs2        rd <- rs1 / rs2                     1
+05-     lw rd, rs1              rd <- (rs1)                         1
+06-     sw rd, rs2              rd -> (rs2)                         1
+07-     beq rs1, rs2, imm4      se (rs1 == rs2) PC = PC + imm4      2
+08-     bne rs1, rs2, imm4      se (rs1 != rs2) PC = PC + imm4      2
+09-     bge rs1, rs2, imm4      se (rs1 >= ) PC = PC + imm4         2
+10-     blt rs1, rs2, imm4      se (rs1 < rs2) PC = PC + imm4       2
+11-     jal rd, imm4            rd <- PC + 1 | PC <- PC + imm4      2
+12-     jalr rd, imm4(rs1)      rd <- PC + 1 | PC <- PC + imm4      2
+13-     li rd, imm8             rd <- imm8                          3
+14-     mv rd, rs1              rd <- rs1                           1       add rd, rs1, zero
+15-     end                     finaliza programa 
+
+
+FORMATO INSTRUÇÃO 
+
+TIPO 1
+    aaaa-bbbb-cccc-dddd
+    a - codigo da INSTRUÇÃO
+    b - rs1
+    c - rs2 
+    d - rd
+
+TIPO 2
+    aaaa-bbbb-cccc-dddd 
+    a - codigo da instrução
+    b - rs1
+    c - rs2
+    d - imm4
+
+TIPO 3
+    aaaa-ffffffff-dddd 
+    a - codigo da instrução
+    f - imm8
+    d - rd
