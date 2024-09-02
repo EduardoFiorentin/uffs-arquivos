@@ -1,4 +1,5 @@
 #include "Edge.h"
+#include "vector"
 
 using namespace std; 
 

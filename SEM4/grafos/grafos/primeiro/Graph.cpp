@@ -115,8 +115,12 @@ bool Graph::have_path(int v, int w, std::vector<int> &visited) {
 bool Graph::is_connected() {
     vector<int> visited(num_vertices_, 0); 
 
-    for (int i = 0; i < num_vertices_; i++) {
+    for (int i = 0; i < (num_vertices_ - 1); i++) {
         for (int j = (i + 1); j < num_vertices_; j++) {
+            // Reseta os valores do vetor marcado
+            // for (int k = 0; k < num_vertices_; k++) {
+            //     visited[k] = 0;
+            // }
             if (!have_path(i, j, visited)) return false; 
         }
     }

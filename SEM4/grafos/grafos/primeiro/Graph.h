@@ -15,7 +15,7 @@ public:
     void remove_edge(Edge e); 
     void print_graph(); 
     bool print_graph_path(int v, int w, int marcado[], int depth);
-    bool have_path(int v, int w, vector<int> &visited);
+    bool have_path(int v, int w, std::vector<int> &visited);
     bool is_connected();
 
 private:
