@@ -18,6 +18,33 @@ code    sintaxe                 semantica                           type
 15-     end                     finaliza programa 
 
 
+codigo de instrução 
+00-     add     0000
+01-             0001
+02-     sub     0010
+03-     mul     0011
+04-     div     0100
+05-     lw      0101
+06-     sw      0110
+07-     beq     0111
+08-     bne     1000
+09-     bge     1001
+10-     blt     1010
+11-     jal     1011
+12-     jalr    1100
+13-     li      1101
+14-     mv      1110
+15-     end     1111            1111111111111111
+
+
+
+
+
+li r0, 16
+0b1101000100000000
+0b1111111111111111
+
+
 FORMATO INSTRUÇÃO 
 
 TIPO 1
