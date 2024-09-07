@@ -2,12 +2,12 @@
 #define EDGE_H
 #include <vector>
 
-class Edge {
+class Aresta {
 public:
     const int v1;
     const int v2; 
     
-    Edge(int v1, int v2);
+    Aresta(int v1, int v2);
 
 
 private:

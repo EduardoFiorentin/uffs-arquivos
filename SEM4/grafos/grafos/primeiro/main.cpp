@@ -9,7 +9,7 @@ int main() {
         // int vertices_num;
         // cout << "Numero de vertices: "; 
         // cin >> vertices_num;
-        Graph g(3);
+        Grafo g(3);
 
         // cout << "Num vertices: " << g.get_vertices_num() << endl; 
         // cout << "Num arestas: " << g.get_edges_num() << endl; 
@@ -39,12 +39,12 @@ int main() {
         // g.insert_edge(Edge(2, 4));
         // g.insert_edge(Edge(3, 4));
 
-        g.insert_edge(Edge(0, 1));
-        g.insert_edge(Edge(1, 2));
+        g.insere_aresta(Aresta(0, 1));
+        g.insere_aresta(Aresta(1, 2));
         // g.insert_edge(Edge(0, 2));
         // g.print_graph();
 
-        g.print_graph();
+        g.imprime_grafo();
 
         vector<int> visited(8, 0);
 
