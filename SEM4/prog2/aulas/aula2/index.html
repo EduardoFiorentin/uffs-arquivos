@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titulo</title>
+
+    <style>
+        .list {
+            height: 300px;
+            width: 300px;
+            overflow: scroll;
+        }
+    </style>
+
+</head>
+<body>
+
+    
+
+    <h1 id="titulo">Titulo</h1>
+    <p id="paragrafo">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facere quae corporis, dolores officia possimus aperiam eos quis, similique, totam nam id eum beatae. Perferendis totam quas voluptatibus. Aut, obcaecati quae.</p>
+    <p id="paragrafo">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facere quae corporis, dolores officia possimus aperiam eos quis, similique, totam nam id eum beatae. Perferendis totam quas voluptatibus. Aut, obcaecati quae.</p>
+
+
+    <h1>Adição de paragrafo com js</h1>
+    <div id="list" class="list">
+
+    </div>
+
+    <button id="button">Adicionar Item</button>
+    <button id="modificar">Apagar 2° item</button>
+
+    <script>
+        let title = document.getElementById("titulo")
+        title.addEventListener("click", () => {
+            title.innerHTML = "Titulo modificado"
+        })
+
+        let paragraph = document.getElementsByTagName("p")
+
+        for (element of paragraph) {
+            console.log(element)
+            element.addEventListener("mouseenter", () => {
+                element.style.color = "red"
+            })
+            element.addEventListener("mouseleave", () => {
+                element.style.color = "black"
+            })            
+        }
+
+
+        let list = document.getElementById("list")
+        let button = document.getElementById("button")
+
+        button.addEventListener("click", () => {
+            let size = document.getElementsByClassName("items_list").length
+            list.innerHTML += `<p class="items_list"> Item ${size}</p>`
+        })
+
+        let button_pop = document.getElementById("modificar")
+        button_pop.addEventListener("click", () => {
+        
+                let list = document.getElementsByClassName("items_list")
+
+                try {
+                    list[1].remove()
+                } 
+                catch(err) {
+                    console.log("Erro")
+                }
+            
+        })
+
+    </script>
+
+</body>
+</html>

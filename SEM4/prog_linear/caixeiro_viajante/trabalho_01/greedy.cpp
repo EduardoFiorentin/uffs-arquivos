@@ -1,4 +1,9 @@
-#include <bits/stdc++.h> 
+// #include <bits/stdc++.h> 
+#include <iostream> 
+#include <vector> 
+#include <algorithm>
+#include <cmath> // para sqrt
+#include <chrono> 
 
 using namespace std;
 
