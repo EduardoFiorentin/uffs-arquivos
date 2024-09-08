@@ -22,7 +22,7 @@ end CONTROLL;
 architecture behav_CONTROLL of CONTROLL is 
 begin
 
-    branch <= '0';
+    branch <= '1' when inst = "1111" else '0';
 
 
     mem_write <= '0'; 
@@ -31,8 +31,8 @@ begin
     mem_read <= '0'; 
 
 
-    mem_to_reg <= '1' when inst = "1101" else
-                '0'; 
+    mem_to_reg <= '0' when inst = "0101" else
+                '1'; 
 
     
     alu_in_src <= '1' when inst = "1101" 
@@ -40,8 +40,8 @@ begin
 
 
 
-    reg_write <= '1' when inst = "1101" else 
-                '0'; 
+    reg_write <= '0' when inst = "0110" or inst = "0111" or  inst = "1000" or  inst = "1001" or  inst = "1010" or  inst = "1011" or  inst = "1100" or  inst = "1111"  else 
+                '1'; 
 
     -- Imutáveis 
     alu_op <= inst; 
