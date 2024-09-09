@@ -33,7 +33,7 @@ codigo de instrução
 11-     jal     1011 n      
 12-     jalr    1100 n      
 13-     li      1101 r      v
-14-     mv      1110 r      v
+14-             1110
 15-     end     1111 n      v    1111000000000000
 
 
