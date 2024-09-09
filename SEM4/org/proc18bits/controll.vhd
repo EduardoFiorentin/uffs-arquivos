@@ -14,7 +14,8 @@ port (
     mem_to_reg: out std_logic; 
     alu_op: out std_logic_vector(3 downto 0);
     alu_in_src: out std_logic;
-    reg_write: out std_logic
+    reg_write: out std_logic;
+    pc_reg_to_ula: out std_logic
 
 );
 end CONTROLL; 
@@ -25,10 +26,10 @@ begin
     branch <= '1' when inst = "1111" else '0';
 
 
-    mem_write <= '0'; 
+    mem_write <= '1' when inst = "0110" else '0'; 
 
 
-    mem_read <= '0'; 
+    mem_read <= '1' when inst = "0101" else '0'; 
 
 
     mem_to_reg <= '0' when inst = "0101" else
@@ -42,6 +43,9 @@ begin
 
     reg_write <= '0' when inst = "0110" or inst = "0111" or  inst = "1000" or  inst = "1001" or  inst = "1010" or  inst = "1011" or  inst = "1100" or  inst = "1111"  else 
                 '1'; 
+
+
+    pc_reg_to_ula <= '1'; 
 
     -- Imutáveis 
     alu_op <= inst; 

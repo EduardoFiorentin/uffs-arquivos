@@ -18,6 +18,7 @@ begin
             std_logic_vector(to_signed(to_integer(signed(a)) - to_integer(signed(b)), s'length)) when op = "0010" else
             std_logic_vector(to_signed(to_integer(signed(a)) * to_integer(signed(b)), s'length)) when op = "0011" else
             std_logic_vector(to_signed(to_integer(signed(a)) / to_integer(signed(b)), s'length)) when op = "0100" and to_integer(signed(b)) /= 0 else
-            b when op = "1101" else 
-            "0000000000000000";
+             b; 
+            -- b when op = "1101" or else 
+            -- "0000000000000000";
 end behav_ULA;
