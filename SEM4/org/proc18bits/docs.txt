@@ -6,17 +6,19 @@ code    sintaxe                 semantica                           type
 03-     mul  rd, rs1, rs2       rd <- rs1 * rs2                     1
 04-     div rd, rs1, rs2        rd <- rs1 / rs2                     1
 05-     lw rd, rs1              rd <- (rs1)                         1
-06-     sw rs1, rs2             rs2 -> (rs1)                         1
-07-     beq rs1, rs2, imm4      se (rs1 == rs2) PC = PC + imm4      2
-08-     bne rs1, rs2, imm4      se (rs1 != rs2) PC = PC + imm4      2
-09-     bge rs1, rs2, imm4      se (rs1 >= ) PC = PC + imm4         2
-10-     blt rs1, rs2, imm4      se (rs1 < rs2) PC = PC + imm4       2
-11-     jal rd, imm4            rd <- PC + 1 | PC <- PC + imm4      2
-12-     jalr rd, imm4(rs1)      rd <- PC + 1 | PC <- PC + imm4      2
+06-     sw rs1, rs2             rs2 -> (rs1)                        1
+07-     beq imm8                se (r0 == r1) PC = PC + imm8        2
+08-     bne imm8                se (r0 != r1) PC = PC + imm8        2
+09-     bge imm8                se (r0 >= r1) PC = PC + imm8        2
+10-     blt imm8                se (r0 < r1)  PC = PC + imm8        2
+11-     jal rd, imm8            rd <- PC + 1 | PC <- PC + imm8      3
+12-     
 13-     li rd, imm8             rd <- imm8                          3
-14-     mv rd, rs1              rd <- rs1                           1       add rd, rs1, 0000
+14-     
 15-     end                     finaliza programa 
 
+? jalr rd, imm4(rs1)      rd <- PC + 1 | PC <- PC + imm4      2
+? mv rd, rs1              rd <- rs1                           1       add rd, rs1, 0000
 
 codigo de instrução 
 00-     add     0000 r      v
@@ -31,7 +33,7 @@ codigo de instrução
 09-     bge     1001 n
 10-     blt     1010 n
 11-     jal     1011 n      
-12-     jalr    1100 n      
+12-        
 13-     li      1101 r      v
 14-             1110
 15-     end     1111 n      v    1111000000000000
@@ -40,12 +42,12 @@ codigo de instrução
 
 
 li r0, 16
-0b1101000100000000
+0b1101-00010000-0000
 0b1111111111111111
 
 
 add r1, r0, r0
-0b0000000000000001
+0b0000-0000-0000-0001
 0b1111000000000000
 
 
@@ -90,9 +92,43 @@ mv rd, rs1 => add rd, rs1, 0000
 0b0000000000010000
 0b1111000000000000
 
+jal x15, 8
+0b1011000001001111
+
+pc entra em A 
+imm8 entra em B
 
 jal rd, imm4   rd <- PC + 1 | PC <- PC + imm4
 0b1011
+
+07-     beq     0111 n      
+08-     bne     1000 n
+09-     bge     1001 n
+10-     blt     1010 n
+11-     jal     1011 n    
+
+
+
+li r2, 8
+li r3, 4
+beq 2
+mul r4, r2, r3
+
+0b0000000000000000
+0b1101000010000010
+0b1101000001000011
+
+0b1000000000100000
+
+0b0011001000110100
+
+0b0000001000100101
+0b0000001000100110
+0b0000001000100111
+0b1111000000000000
+
+
+
 
 FORMATO INSTRUÇÃO 
 

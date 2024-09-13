@@ -5,7 +5,7 @@ use IEEE.numeric_std.all;
 entity ULA is 
     port(
 
-        z: out std_logic;   
+        z, bge, blt: out std_logic;   
         s : out std_logic_vector(15 downto 0);
 	    op : in std_logic_vector(3 downto 0);
         a, b : in std_logic_vector(15 downto 0)
@@ -21,4 +21,9 @@ begin
              b; 
             -- b when op = "1101" or else 
             -- "0000000000000000";
+    
+    
+    z <= '1' when to_integer(signed(a)) - to_integer(signed(b)) = 0 else '0';
+    bge <= '1' when to_integer(signed(a)) >= to_integer(signed(b)) else '0';
+    blt <= '1' when to_integer(signed(a)) < to_integer(signed(b)) else '0';
 end behav_ULA;
