@@ -1,0 +1,36 @@
+<!-- 
+    Adicione um botão à sua página com o texto “Destacar parágrafo”. Quando esse
+    botão for clicado, destaque com uma borda de "2px solid red" o parágrafo
+    imediatamente após o parágrafo que tem o id="chave".
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1 id="title">Titulo</h1>
+    <p id="chave">Paragrafo</p>
+    <p>Destacado</p>
+
+    <button id="botao">Botao</button>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+
+        paragrafo = $("#chave")
+        botao = $("#botao").click(element => {
+            // botao.css("border", "2px solid red")
+            paragrafo.next().css("border", "2px solid red")
+        })
+
+        botao
+
+    </script>
+</body>
+</html>

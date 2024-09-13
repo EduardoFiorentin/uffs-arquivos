@@ -1,0 +1,38 @@
+<!-- 
+    Adicione dois botões: um “Aumentar” e outro “Diminuir”. Usando jQuery, adicione
+    funções que, ao serem clicadas, aumentem ou diminuam em 2 pixels o tamanho da
+    fonte dos parágrafos com a tag <p>.
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1 id="title">Titulo</h1>
+    <p id="chave">Paragrafo</p>
+
+    <button id="botao_aumenta">Aumenta</button>
+    <button id="botao_diminui">Diminui</button>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+
+        paragrafo = $("#chave")
+
+        let tam = parseInt(paragrafo.css("font-size").replace("px", ""))
+
+        aumenta = $("#botao_aumenta").click(() => {
+            tam = tam + 2
+            paragrafo.css("font-size", `${tam}px`)
+        })
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!-- 
+    Adicione ao seu código jQuery uma alteração que, através do uso de um seletor de
+    classe, modifique o conteúdo de um elemento do tipo <p>.
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1 class="title">Titulo</h1>
+    <p class="parag">Paragrafo</p>
+    <p class="parag">Paragrafo</p>
+    
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+
+        $(".title").html("Titulo alterado")
+        $(".parag").html("paragrafo alterado")
+
+    </script>
+</body>
+</html>
