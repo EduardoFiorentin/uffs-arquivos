@@ -2,8 +2,6 @@
 # Nome: Eduardo Fiorentin
 # Matricula: 2211100002
 # -----------------------
-
-
 .data 
 	
 	# integers
