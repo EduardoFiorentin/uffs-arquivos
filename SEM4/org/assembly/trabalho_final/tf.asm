@@ -403,7 +403,7 @@ board_begin:
 # Print do tabuleiro 
 # Parametros: 
 #	a0 - endereco primeiro elemento 
-#	a1 - num colunas 
+#	a1 - num linhas 
 # Retorno: Nao
 board_print: 
 
@@ -476,31 +476,116 @@ board_print:
 	
 	ret 
 	
-	
+
+# Loop de jogo 
+# 
 play: 
 	# s10 - retorno da chamada de play
 	mv s10, ra
 	
-	la a0, board	# carrega prim elemento tabuleiro
+	# configuracao flags de controle 
+	# t0 - jogador atual 
+	# t1 - numero de colunas 
+	# t2 - coluna escolhida pelo jogador
+	# t3 - variavel de referencia na verificacao de validade da jogada
+	# t4 - posicao da escolha do jogador na primeira linha do vetor
 	
+	li t0, 1
 	lw t1, config_board_size
+	
+	# Pegar numero de colunas
+	# 1 - 7 linhas 
+	# 2 - 9 linhas
 	li t2, 1
-	# 1 - 7 colunas 
-	# 2 - 9 colunas
 	bne t1, t2, nine_cols
 		li a1, 7
 		j end_num_cols
-	
 	nine_cols: 
 		li a1, 9
-	
+	mv t1, a1
 	end_num_cols: 
 	
+	# inicializacao do tabuleiro
+	la a0, board	# carrega prim elemento tabuleiro
 	call board_begin
+	#call board_print
+	#j end_program
+
+	
+	gameloop: 
+		# pega opcao do jogador 
+		# Se a jogada eh valida: insere no tabuleiro 
+		# escolha: [1 -> 6] && primeiro elemento da coluna vazio 
+		chooseplayer_loop: 
+			
+			mv a0, t1
+			# Funcao ja garante valores de 1 a t1
+			# a0 <- opcao escolhida
+			call get_user_option_range
+			mv t2, a0
+			
+			
+			# Tentar insercao no tabuleiro 
+			# a0 - coluna 
+			# a1 - player (1 ou 2)
+			mv a0, t2
+			mv a1, t0
+			call board_insert
+			# a0 <- 0 (jogada invalida) ou 1 (jogada valida)
+			
+			bne a0, zero, end_chooseplayer_loop
+			
+			# Print de jogada invalida
+			
+			j chooseplayer_loop
+			
+		end_chooseplayer_loop: 
+		
+		# Verifica vitória 
+		call win_check:
+		
+		
+		# alterna jogador 
+		
+		
+		j gameloop
+	end_gameloop: 
+	
+	
 	
 	call board_print
 	
-	j end_program 
+	mv ra, s10
+	ret
+	#j end_program 
+	
+	
+
+
+# Funcao de verificacao de vitoria de um jogador
+# Parametros	: a0 - coluna jogada 
+#		  a1 - linha jogada 
+# Retorno 	: a0 - 1 -> jogador ganhou
+# 		       0 -> jogador nao ganhou
+# 		       2 -> empate 
+win_check: 
+
+
+
+# Funcao de insercao de jogada no tabuleiro
+# Parametros	 : a0 - coluna inserida
+#		   a1 - player (1 ou 2)
+#		   a2 - endereco vetor 
+# retorno: 	 : a0 - 1 -> Inserido
+#	              - 0 -> Jogada inválida	
+board_insert: 
+
+	
+	
+	
+	
+	
+	
 	
 end_program: 
 	li a7, 10

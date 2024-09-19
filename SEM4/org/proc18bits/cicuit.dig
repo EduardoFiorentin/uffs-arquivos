@@ -69,11 +69,6 @@
       <pos x="240" y="360"/>
     </visualElement>
     <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes/>
-      <pos x="200" y="500"/>
-    </visualElement>
-    <visualElement>
       <elementName>Const</elementName>
       <elementAttributes>
         <entry>
@@ -481,12 +476,12 @@
       <elementName>Multiplexer</elementName>
       <elementAttributes>
         <entry>
-          <string>flipSelPos</string>
-          <boolean>true</boolean>
-        </entry>
-        <entry>
           <string>Bits</string>
           <int>4</int>
+        </entry>
+        <entry>
+          <string>flipSelPos</string>
+          <boolean>true</boolean>
         </entry>
       </elementAttributes>
       <pos x="840" y="620"/>
@@ -529,6 +524,35 @@
       </elementAttributes>
       <pos x="800" y="760"/>
     </visualElement>
+    <visualElement>
+      <elementName>Clock</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Frequency</string>
+          <int>2</int>
+        </entry>
+        <entry>
+          <string>runRealTime</string>
+          <boolean>true</boolean>
+        </entry>
+      </elementAttributes>
+      <pos x="20" y="500"/>
+    </visualElement>
+    <visualElement>
+      <elementName>And</elementName>
+      <elementAttributes>
+        <entry>
+          <string>wideShape</string>
+          <boolean>true</boolean>
+        </entry>
+      </elementAttributes>
+      <pos x="60" y="500"/>
+    </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes/>
+      <pos x="20" y="540"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -562,6 +586,10 @@
     <wire>
       <p1 x="1260" y="520"/>
       <p2 x="1320" y="520"/>
+    </wire>
+    <wire>
+      <p1 x="140" y="520"/>
+      <p2 x="220" y="520"/>
     </wire>
     <wire>
       <p1 x="600" y="-400"/>
@@ -630,6 +658,10 @@
     <wire>
       <p1 x="1500" y="540"/>
       <p2 x="1860" y="540"/>
+    </wire>
+    <wire>
+      <p1 x="20" y="540"/>
+      <p2 x="60" y="540"/>
     </wire>
     <wire>
       <p1 x="600" y="-420"/>
@@ -904,12 +936,12 @@
       <p2 x="1020" y="240"/>
     </wire>
     <wire>
-      <p1 x="200" y="500"/>
-      <p2 x="220" y="500"/>
-    </wire>
-    <wire>
       <p1 x="1480" y="500"/>
       <p2 x="1660" y="500"/>
+    </wire>
+    <wire>
+      <p1 x="20" y="500"/>
+      <p2 x="60" y="500"/>
     </wire>
     <wire>
       <p1 x="980" y="-120"/>
@@ -1081,14 +1113,14 @@
     </wire>
     <wire>
       <p1 x="220" y="340"/>
-      <p2 x="220" y="500"/>
+      <p2 x="220" y="520"/>
     </wire>
     <wire>
       <p1 x="220" y="-440"/>
       <p2 x="220" y="-220"/>
     </wire>
     <wire>
-      <p1 x="220" y="500"/>
+      <p1 x="220" y="520"/>
       <p2 x="220" y="560"/>
     </wire>
     <wire>

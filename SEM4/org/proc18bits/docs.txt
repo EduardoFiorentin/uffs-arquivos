@@ -6,7 +6,7 @@ code    sintaxe                 semantica                           type
 03-     mul  rd, rs1, rs2       rd <- rs1 * rs2                     1
 04-     div rd, rs1, rs2        rd <- rs1 / rs2                     1
 05-     lw rd, rs1              rd <- (rs1)                         1
-06-     sw rs1, rs2             rs2 -> (rs1)                        1
+06-     sw rd, rs1              rd -> (rs1)                        1
 07-     beq imm8                se (r0 == r1) PC = PC + imm8        2
 08-     bne imm8                se (r0 != r1) PC = PC + imm8        2
 09-     bge imm8                se (r0 >= r1) PC = PC + imm8        2
@@ -152,10 +152,12 @@ TIPO 3
     f - imm8
     d - rd
 
+lw/sw       
+branch
+li
 
-
-
-li r0, 16           
+EXEMPLO 
+li r0, 16
 li r1, 8
 add r2, r0, r1
 sub r3, r0, r1
@@ -168,3 +170,19 @@ li r10, 1
 sw r3, r10
 li r10, 1
 sw r4, r10
+
+li r1, 1;
+li r2, 2;
+li r3, 3;
+li r4, 4;
+li r5, 5;
+li r6, 6;
+li r7, 7;
+li r8, 8;
+li r9, 9;
+li r10, 10;
+li r11, 11;
+li r12, 12;
+li r13, 13;
+li r14, 14;
+li r15, 15;
