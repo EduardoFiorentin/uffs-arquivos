@@ -48,7 +48,7 @@ void print_string_vector(vector<string> &vector) {
 
 void replace_instructions(vector<string> &instructions) {
 
-    // print_string_vector(instructions); 
+    print_string_vector(instructions); 
 
     // main rules
     vector<pair<regex, string>> main_rules = {
@@ -56,7 +56,7 @@ void replace_instructions(vector<string> &instructions) {
         pair<regex, string> {regex{"sub"}, "0010"},
         pair<regex, string> {regex{"mul"}, "0011"},
         pair<regex, string> {regex{"div"}, "0100"},
-        pair<regex, string> {regex{"lw"}, "0101"},
+        pair<regex, string> {regex{"lw"}, "01010000"},
         pair<regex, string> {regex{"sw"}, "0110"},
         pair<regex, string> {regex{"beq"}, "0111"},
         pair<regex, string> {regex{"bne"}, "1000"},
@@ -77,7 +77,7 @@ void replace_instructions(vector<string> &instructions) {
     // group rules 
 
     // constants 
-    regex const_pattern("\\s([-]?\\d+);");
+    regex const_pattern("\\s([-]?\\d+)");
     int num;
     for (auto &instruction: instructions) {
         smatch matches;

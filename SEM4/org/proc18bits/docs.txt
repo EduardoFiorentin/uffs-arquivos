@@ -1,17 +1,17 @@
 INSTRUÇÕES 
 code    sintaxe                 semantica                           type
-00-     add rd, rs1, rs2        rd <- rs1 + rs2                     1
+00-     add rs1, rs2, rd        rd <- rs1 + rs2                     1
 01-     
-02-     sub  rd, rs1, rs2       rd <- rs1 - rs2                     1
-03-     mul  rd, rs1, rs2       rd <- rs1 * rs2                     1
-04-     div rd, rs1, rs2        rd <- rs1 / rs2                     1
-05-     lw rd, rs1              rd <- (rs1)                         1
-06-     sw rd, rs1              rd -> (rs1)                        1
+02-     sub  rs1, rs2, rd       rd <- rs1 - rs2                     1
+03-     mul  rs1, rs2, rd       rd <- rs1 * rs2                     1
+04-     div rs1, rs2, rd        rd <- rs1 / rs2                     1
+05-     lw r_addr, rd           rd <- (rs1)                         1
+06-     sw ro, r_addr           rd -> (rs1)                        1
 07-     beq imm8                se (r0 == r1) PC = PC + imm8        2
 08-     bne imm8                se (r0 != r1) PC = PC + imm8        2
 09-     bge imm8                se (r0 >= r1) PC = PC + imm8        2
 10-     blt imm8                se (r0 < r1)  PC = PC + imm8        2
-11-     jal rd, imm8            rd <- PC + 1 | PC <- PC + imm8      3
+11-     jal imm8                PC <- PC + imm8      3
 12-     
 13-     li rd, imm8             rd <- imm8                          3
 14-     
@@ -40,44 +40,6 @@ codigo de instrução
 
 
 
-
-li r0, 16
-0b1101-00010000-0000
-0b1111111111111111
-
-
-add r1, r0, r0
-0b0000-0000-0000-0001
-0b1111000000000000
-
-
-sub r2, r1, r0
-0b0010000100000010
-0b1111000000000000
-
-mul r3, r1, r1
-0b0011000100010011
-
-mul r1, r0, r0
-0b0011000000000001
-
-div r4, r1, r0
-0b0011000100000100
-
-li r0, 16
-mul r1, r0, r0
-0b1101000100000000
-0b0011000000000001
-
-li r0, 16
-mul r1, r0, r0
-div r2, r1, r0
-0b1101000100000000
-0b0011000000000001
-0b0100000100000010
-0b1111000000000000
-
-
 lw r0, m0(campo rs1)
 0b0101000000000000
 0b1111000000000000
@@ -94,19 +56,6 @@ mv rd, rs1 => add rd, rs1, 0000
 
 jal x15, 8
 0b1011000001001111
-
-pc entra em A 
-imm8 entra em B
-
-jal rd, imm4   rd <- PC + 1 | PC <- PC + imm4
-0b1011
-
-07-     beq     0111 n      
-08-     bne     1000 n
-09-     bge     1001 n
-10-     blt     1010 n
-11-     jal     1011 n    
-
 
 
 li r2, 8
@@ -139,12 +88,6 @@ TIPO 1
     c - rs2 
     d - rd
 
-TIPO 2
-    aaaa-bbbb-cccc-dddd 
-    a - codigo da instrução
-    b - rs1
-    c - rs2
-    d - imm4
 
 TIPO 3
     aaaa-ffffffff-dddd 
@@ -186,3 +129,8 @@ li r12, 12;
 li r13, 13;
 li r14, 14;
 li r15, 15;
+
+
+
+# ANOTAÇÕES 
+Concertar instrução de lw no montador (registrador com endereço no campo rs2 e registrador destino no rd)
