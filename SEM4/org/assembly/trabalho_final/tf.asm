@@ -46,6 +46,9 @@
 	debug: 			.asciz  "Debug\n" 
 .text 
 
+# Registradores salvos
+# s0 - numero de colunas do modo de jogo atual 
+
 
 main: 
 	
@@ -403,7 +406,7 @@ board_begin:
 # Print do tabuleiro 
 # Parametros: 
 #	a0 - endereco primeiro elemento 
-#	a1 - num linhas 
+#	a1 - num colunas 
 # Retorno: Nao
 board_print: 
 
@@ -483,14 +486,16 @@ play:
 	# s10 - retorno da chamada de play
 	mv s10, ra
 	
-	# configuracao flags de controle 
-	# t0 - jogador atual 
-	# t1 - numero de colunas 
-	# t2 - coluna escolhida pelo jogador
-	# t3 - variavel de referencia na verificacao de validade da jogada
-	# t4 - posicao da escolha do jogador na primeira linha do vetor
+	# inicializacao do tabuleiro
+	la a0, board	# carrega end prim elemento tabuleiro
+	call board_begin
 	
-	li t0, 1
+	# configuracao flags de controle 
+	# s1 - jogador atual 
+	# s0 - numero de colunas 
+	# s2 - coluna escolhida pelo jogador
+	
+	li s1, 1
 	lw t1, config_board_size
 	
 	# Pegar numero de colunas
@@ -502,12 +507,11 @@ play:
 		j end_num_cols
 	nine_cols: 
 		li a1, 9
-	mv t1, a1
-	end_num_cols: 
 	
-	# inicializacao do tabuleiro
-	la a0, board	# carrega prim elemento tabuleiro
-	call board_begin
+	end_num_cols: 
+	mv s0, a1
+	
+	
 	#call board_print
 	#j end_program
 
@@ -518,18 +522,22 @@ play:
 		# escolha: [1 -> 6] && primeiro elemento da coluna vazio 
 		chooseplayer_loop: 
 			
-			mv a0, t1
+			mv a0, s0
 			# Funcao ja garante valores de 1 a t1
 			# a0 <- opcao escolhida
 			call get_user_option_range
-			mv t2, a0
+			mv s2, a0
 			
 			
 			# Tentar insercao no tabuleiro 
-			# a0 - coluna 
+			# a0 - coluna escolhida
 			# a1 - player (1 ou 2)
-			mv a0, t2
-			mv a1, t0
+			# a2 - numero de colunas
+			# a3 - endereco primeiro elemento do vetor
+			mv a0, s2
+			mv a1, s1
+			mv a2, s0
+			la a3, board
 			call board_insert
 			# a0 <- 0 (jogada invalida) ou 1 (jogada valida)
 			
@@ -537,18 +545,34 @@ play:
 			
 			# Print de jogada invalida
 			
+			li a7, 4
+			la a0, log_invalid_input
+			ecall
+			
 			j chooseplayer_loop
 			
 		end_chooseplayer_loop: 
 		
+		# Printa tabuleiro
+		la a0, board
+		mv a1, s0
+		call board_print
+		
 		# Verifica vitória 
-		call win_check:
+		# call win_check
 		
 		
 		# alterna jogador 
-		
+		li t1, 1
+		beq s1, t1, player_two 
+			li s1, 1
+			j player_selected
+		player_two: 
+			li s1, 2
+		player_selected:
 		
 		j gameloop
+		
 	end_gameloop: 
 	
 	
@@ -573,17 +597,67 @@ win_check:
 
 
 # Funcao de insercao de jogada no tabuleiro
-# Parametros	 : a0 - coluna inserida
+# Parametros	 : a0 - coluna escolhida pelo player para inserção
 #		   a1 - player (1 ou 2)
-#		   a2 - endereco vetor 
+#		   a2 - numero de colunas usadas
+# 		   a3 - endereco primeiro elemento vetor 
+
 # retorno: 	 : a0 - 1 -> Inserido
 #	              - 0 -> Jogada inválida	
 board_insert: 
+	
+	# Variaveis: 
+	# t0
 
+	# Logica: 
+	# k - coluna escolhida pelo player 
+	# L - linha atual 
+	# Acesso a coluna escolhida(valor da primeira linha): 	K - 1
+	# Acesso por linha (K - 1) + ()
 	
+	# verifica se jogada eh invalida 
+	mv t0, a0
+	addi t0, t0, -1		# t0 <= k-1
+	li t2, 4
+	mul t0, t0, t2		# Vetor de inteiros - cada um com 4 bytes
+	mv t1, a3		
+	add t1, t1, t0 
+	lw t1, 0(t1)
+	beq t1, zero, valid_play
 	
+	li a0, 0
+	ret
 	
+	# Se a jogada for valida: 
+	valid_play:
+
+	li t0, 5 # linha atual 
 	
+	insertion_loop:
+		# Acesso da coluna escolhida na linha L : K + (7|9 * L) - (num_cols - 1)
+		mv t1, a0 		# Pega coluna escolhida (K)
+		mul t2, t0, a2		# t2 <= K * 7|9
+		addi t3, a2, -1		# t3 <= num_cols - 1
+		
+		add t1, t1, t2
+		add t1, t1, t3
+		li t2, 4
+		mul t1, t1, t2		# t1 <= Endereco do elemento da coluna escolhida e linha t0
+		
+		add t1, a3, t1
+		lw t2, 0(t1) 
+		beq t2, zero, end_insertion_loop
+		
+		addi t0, t0, -1
+		j insertion_loop
+	
+	end_insertion_loop:
+	
+	# t1 <- endereço da inserção da jogada 
+	sw a1, 0(t1)
+
+	li a0, 1
+	ret
 	
 	
 	
