@@ -43,6 +43,11 @@
 	log_play_player1: 	.asciz	"&"
 	log_play_player2: 	.asciz 	"#"
 	
+	log_endgame: 		.asciz 	"\nJogo Finalizado!\n"
+	log_win_player1: 	.asciz 	"Jogador 1 venceu\n"
+	log_win_player2: 	.asciz	"Jogador 2 venceu\n"
+	log_tie: 		.asciz	"Empate\n"
+	
 	debug: 			.asciz  "Debug\n" 
 .text 
 
@@ -494,6 +499,7 @@ play:
 	# s1 - jogador atual 
 	# s0 - numero de colunas 
 	# s2 - coluna escolhida pelo jogador
+	# s3 - linha em que a última jogada foi inserida
 	
 	li s1, 1
 	lw t1, config_board_size
@@ -539,7 +545,14 @@ play:
 			mv a2, s0
 			la a3, board
 			call board_insert
-			# a0 <- 0 (jogada invalida) ou 1 (jogada valida)
+			# a0 <- 0 (jogada invalida) ou 1 (jogada valida)]
+			# a1 <- linha em que a inserção ocorreu (caso ocorreu) 
+			beq a0, zero, insertion_not_accur
+			mv s3, a1
+			li t6, 7
+			beq s0, t6, insertion_not_accur
+			#addi s3, s3, 1
+			insertion_not_accur:
 			
 			bne a0, zero, end_chooseplayer_loop
 			
@@ -553,14 +566,33 @@ play:
 			
 		end_chooseplayer_loop: 
 		
+		#mv s3, a1	# Salva em qual linha ocorreu a insercao
+		
 		# Printa tabuleiro
 		la a0, board
 		mv a1, s0
 		call board_print
 		
-		# Verifica vitória 
-		# call win_check
 		
+		
+		# Verifica vitória 
+		# a0 <- coluna jogada 
+		# a1 <- linha jogada 
+		# a2 <- numero de colunas
+		# a3 <- addrs primeiro elemento do vetor 
+		# a4 <- player jogando 
+		mv a0, s2
+		mv a1, s3
+		mv a2, s0
+		la a3, board
+		mv a4, s1
+		call win_check
+		#li a1, 0
+		# a0 <- 0 <- continuar jogo
+		# 	1 <- player atual venceu
+		
+		
+		bne a0, zero, end_gameloop
 		
 		# alterna jogador 
 		li t1, 1
@@ -575,27 +607,107 @@ play:
 		
 	end_gameloop: 
 	
+	li a7, 4
+	la a0, log_endgame
+	ecall
 	
 	
+	la a0, board
+	mv a1, s0
 	call board_print
-	
 	mv ra, s10
+	
+	# s1 <- jogador atual
+	# 0 - empate
+	# 1 - jogador 1
+	# 2 - jogador 2
+	
+	li a7, 4
+	
+	tie: 
+	bne s1, zero, player1_wins
+	la a0, log_tie
+	ecall
 	ret
-	#j end_program 
 	
+	player1_wins: 
+	li t0, 1
+	bne s1, t0, player2_wins
+	la a0, log_win_player1
+	ecall
+	ret
 	
+	player2_wins: 
+	la a0, log_win_player2
+	ecall
+	ret
 
 
 # Funcao de verificacao de vitoria de um jogador
 # Parametros	: a0 - coluna jogada 
 #		  a1 - linha jogada 
+# 		  a2 - numero de colunas 
+# 		  a3 - endereco primeiro elemento vetor 
+# 		  a4 - player jogando 
 # Retorno 	: a0 - 1 -> jogador ganhou
 # 		       0 -> jogador nao ganhou
 # 		       2 -> empate 
 win_check: 
-
-
-
+	
+	mv t0, a2
+	
+	# linha constante 
+	# coluna - 0 a t0
+	
+	# pega primeiro elemento da linha (a2 * L) - L - linha da jogada (a1) 
+	# t1 <- endereco primeiro elemento da linha jogada 
+	# t2 <- controle do loop
+	# t3 <- numero de jogadas consecutivas para vitoria 
+	# t4 <- numero de jogadas do player encontradas consecutivas em linha
+	mul t1, a2, a1
+	li t3, 4
+	mul t1, t1, t3
+	add t1, t1, a3
+	li t2, 0
+	
+	# compara com o player jogando e add + 4
+	# vai ate t2 == a2
+	
+	li t3, 4
+	li t4, 0
+	horizontal_check_loop:
+		beq t4, t3, win
+		beq t2, a2, end_horizontal_check_loop
+		
+		lw t5, 0(t1) 		# carrega elemento atual do vetor
+		bne t5, a4, horizontal_check_loop_current_play_not_player		# se o elemento atual nao eh igual ao do player 
+		
+		# se o elemento atual do vetor eh do player 
+		addi t4, t4, 1
+		j horizontal_check_loop_next 
+		
+		# se o elemento atual do vetor nao eh do player
+		horizontal_check_loop_current_play_not_player: 
+		li t4, 0
+		
+		horizontal_check_loop_next: 
+		addi t1, t1, 4
+		addi t2, t2, 1
+		j horizontal_check_loop
+	end_horizontal_check_loop:
+	
+	
+	continue: 
+		li a0, 0
+		ret
+	
+	win: 
+		li a0, 1
+		ret 
+	
+	
+	
+	
 # Funcao de insercao de jogada no tabuleiro
 # Parametros	 : a0 - coluna escolhida pelo player para inserção
 #		   a1 - player (1 ou 2)
@@ -603,7 +715,8 @@ win_check:
 # 		   a3 - endereco primeiro elemento vetor 
 
 # retorno: 	 : a0 - 1 -> Inserido
-#	              - 0 -> Jogada inválida	
+#	              - 0 -> Jogada inválida
+# 		:  a1 - linha em que a jogada foi inserida
 board_insert: 
 	
 	# Variaveis: 
@@ -635,12 +748,21 @@ board_insert:
 	
 	insertion_loop:
 		# Acesso da coluna escolhida na linha L : K + (7|9 * L) - (num_cols - 1)
-		mv t1, a0 		# Pega coluna escolhida (K)
-		mul t2, t0, a2		# t2 <= K * 7|9
-		addi t3, a2, -1		# t3 <= num_cols - 1
+		#mv t1, a0 		# Pega coluna escolhida (K)
+		#mul t2, t0, a2
+		#mul t2, a2, a2		# t2 <= K * 7|9
+		#addi t3, a2, -1		# t3 <= num_cols - 1
 		
-		add t1, t1, t2
-		add t1, t1, t3
+		#add t1, t1, t2
+		#add t1, t1, t3
+		
+		# Formula: (K - 1) + 7|9*L
+		addi t1, a0, -1		# K - 1
+		mul t2, a2, t0		# 7\9 * L
+		
+		add t1, t1 ,t2
+		
+		
 		li t2, 4
 		mul t1, t1, t2		# t1 <= Endereco do elemento da coluna escolhida e linha t0
 		
@@ -654,9 +776,11 @@ board_insert:
 	end_insertion_loop:
 	
 	# t1 <- endereço da inserção da jogada 
+	# t0 <- linha em que a inserção ocorre 
 	sw a1, 0(t1)
 
 	li a0, 1
+	mv a1, t0
 	ret
 	
 	
