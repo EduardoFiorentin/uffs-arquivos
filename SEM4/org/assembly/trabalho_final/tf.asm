@@ -697,6 +697,110 @@ win_check:
 	end_horizontal_check_loop:
 	
 	
+	# Checagem vertical na coluna em que ocorreu a jogada 
+	li t3, 4	# numero de jogadas consecutivas para ganhar 
+	li t4, 0	# numero de jogadas consecutivas do player encontradas 
+	li t2, 5	# Iteracao atual do loop (linha sendo verificada) 
+	li t5, 0	# Elemento atual da matriz sendo verificado 
+	# t1 - endereço dos elementos no vetor 
+	# a3 - addrs prim elemento vetor 
+	# a0 - coluna jogada
+	# a2 - numero de colunas 
+	# a4 - player jogando 
+	vertical_check: 
+		beq t4, t3, win
+		blt t2, zero, end_vertical_check
+		
+		# carregar elemento 
+		mv t1, a0
+		addi t1, t1, -1
+		mv t0, a2
+		mul t0, t0, t2
+		add t1, t1, t0
+		li t0, 4
+		mul t1, t1, t0	# t1 <- endereço do elemento
+		add t1, t1, a3
+		
+		lw t5, 0(t1) 
+		
+		# Se igual ao player: incrementa
+		bne t5, a4, vertical_check_loop_current_play_not_player 
+		addi t4, t4, 1
+		j vertical_check_loop_next
+		
+		vertical_check_loop_current_play_not_player: 
+		li t4, 0
+		# Incrementos do loop 
+		
+		vertical_check_loop_next: 
+		
+		addi t2, t2, -1
+		j vertical_check
+	
+	end_vertical_check: 
+	
+	# Verificacao das diagonais no sentido da secundaria 
+	li t3, 4	# numero de jogadas consecutivas para ganhar 
+	li t4, 0	# numero de jogadas consecutivas do player encontradas 
+	mv t2, a1	# Linha atual 
+	mv t6, a0	# Coluna atual 
+	li t5, 0	# Elemento atual da matriz sendo verificado 
+	# t1 - endereço dos elementos no vetor 
+	# a3 - addrs prim elemento vetor 
+	# a0 - coluna jogada
+	# a1 - linha jogada 
+	# a2 - numero de colunas 
+	# a4 - player jogando 
+	li t1, 5
+	sec_diagonal_prepare: 
+		beq t2, t1, end_sec_diagonal_prepare
+		beq t6, zero, end_sec_diagonal_prepare
+		
+		addi t2, t2, 1
+		addi t6, t6, -1
+		
+		j sec_diagonal_prepare
+	end_sec_diagonal_prepare: 
+	
+	# t2 - Linha atual 
+	# t6 - Coluna atual 
+	sec_diagonal_check: 
+	
+		# carregar elemento 
+		mv t1, t6
+		addi t1, t1, -1
+		mv t0, a2
+		mul t0, t0, t2
+		add t1, t1, t0
+		li t0, 4
+		mul t1, t1, t0	# t1 <- endereço do elemento
+		add t1, t1, a3
+		
+		lw t5, 0(t1) 
+		
+		# Se igual ao player: incrementa
+		bne t5, a4, sec_check_loop_current_play_not_player 
+		addi t4, t4, 1
+		beq t4, t3, win		# Se a soma fecha 4 - jogador ganhou 
+		j sec_check_loop_next
+		
+		sec_check_loop_current_play_not_player: 
+		li t4, 0
+		
+		sec_check_loop_next: 
+		
+		# Verificacoes de finalizacao da procura 
+		beq t2, zero, end_sec_diagonal_check
+		beq t6, a2, end_sec_diagonal_check
+		
+		# Incrementos do loop 
+		addi t2, t2, -1
+		addi t6, t6, 1
+		
+		j sec_diagonal_check
+	
+	end_sec_diagonal_check: 
+	
 	continue: 
 		li a0, 0
 		ret
@@ -788,3 +892,4 @@ board_insert:
 end_program: 
 	li a7, 10
 	ecall
+
