@@ -8,9 +8,9 @@
 	config_num_players: 	.word 	2
 	config_board_size: 	.word 	2
 	config_difficulty: 	.word 	1
-	count_player_a: 	.word 	4
-	count_player_b: 	.word 	4
-	count_machine: 		.word 	4
+	count_player_a: 	.word 	0
+	count_player_b: 	.word 	0
+	count_machine: 		.word 	0
 	
 	board: 			.space 216	# maximo: Tabuleiro 9x6 - 4 bytes cada valor
 	
@@ -48,6 +48,10 @@
 	log_win_player2: 	.asciz	"Jogador 2 venceu\n"
 	log_tie: 		.asciz	"Empate\n"
 	
+	log_time_player1: 	.asciz "\nJogada do player 1\n"
+	log_time_player2: 	.asciz "\nJogada do player 2\n" 
+	log_time_machine:  	.asciz "\nJogada do bot AC3000\n"
+		
 	debug: 			.asciz  "Debug\n" 
 .text 
 
@@ -488,7 +492,7 @@ board_print:
 # Loop de jogo 
 # 
 play: 
-	# s10 - retorno da chamada de play
+	
 	mv s10, ra
 	
 	# inicializacao do tabuleiro
@@ -500,6 +504,11 @@ play:
 	# s0 - numero de colunas 
 	# s2 - coluna escolhida pelo jogador
 	# s3 - linha em que a última jogada foi inserida
+	# s4 - modo de jogo (1 ou 2 players) 
+	# s10 - retorno da chamada de play
+	
+	la s4, config_num_players
+	lw s4, 0(s4)
 	
 	li s1, 1
 	lw t1, config_board_size
@@ -516,13 +525,49 @@ play:
 	
 	end_num_cols: 
 	mv s0, a1
-	
-	
-	#call board_print
-	#j end_program
 
 	
 	gameloop: 
+	
+		# Se nao eh o modo de jogo player x maquina (1)
+		li t0, 2
+		beq s4, t0, chooseplayer_loop
+		
+		# Se eh a vez do player escolher - passa pelo loop 
+		li t0, 1
+		beq t0, s1, chooseplayer_loop
+		
+		# Logica da escolha 
+		#li s2, 1	# coluna escolhida 
+		
+			# Pega numero aleatorio de 0 a cols-1 
+		li a7, 42
+		mv t1, s0
+		addi t1, t1, -1
+		mv a0, t1
+		ecall
+		
+			# Coloca no intervalo [1, cols]
+		addi a0, a0, 1
+		mv s2, a0
+		
+		# Insercao no tabuleiro 
+		# a0 - coluna escolhida
+		# a1 - player (1 ou 2)
+		# a2 - numero de colunas
+		# a3 - endereco primeiro elemento do vetor
+		mv a0, s2
+		mv a1, s1
+		mv a2, s0
+		la a3, board
+		call board_insert
+		
+		# Atualizacao de variaveis de controle
+		mv s3, a1	# salva linha de insercao
+		
+		j end_chooseplayer_loop
+		
+		# Se for o modo de jogo de dois players 
 		# pega opcao do jogador 
 		# Se a jogada eh valida: insere no tabuleiro 
 		# escolha: [1 -> 6] && primeiro elemento da coluna vazio 
@@ -549,10 +594,14 @@ play:
 			# a1 <- linha em que a inserção ocorreu (caso ocorreu) 
 			beq a0, zero, insertion_not_accur
 			mv s3, a1
+			
+			# Remover -------------------------
 			li t6, 7
 			beq s0, t6, insertion_not_accur
 			#addi s3, s3, 1
 			insertion_not_accur:
+			# Remover -------------------------
+			
 			
 			bne a0, zero, end_chooseplayer_loop
 			
@@ -567,6 +616,29 @@ play:
 		end_chooseplayer_loop: 
 		
 		#mv s3, a1	# Salva em qual linha ocorreu a insercao
+		
+		# Printa o rotulo do tabuleiro
+		li a7, 4
+		
+		li t0, 2
+		beq s1, t0, player2_log_play
+		la a0, log_time_player1
+		ecall
+		j end_log_play
+		
+		player2_log_play: 
+		li t0, 1
+		beq s4, t0, machine_log_play
+		la a0, log_time_player2
+		ecall
+		j end_log_play
+		
+		machine_log_play:
+		la a0, log_time_machine
+		ecall
+		
+		
+		end_log_play: 
 		
 		# Printa tabuleiro
 		la a0, board
@@ -635,11 +707,33 @@ play:
 	bne s1, t0, player2_wins
 	la a0, log_win_player1
 	ecall
+	
+	# Atualiza contador de vitoria player 1 
+	la t0, count_player_a
+	lw t1, 0(t0)
+	addi t1, t1, 1
+	sw t1, 0(t0)
 	ret
 	
 	player2_wins: 
 	la a0, log_win_player2
 	ecall
+	
+	# Atualiza contador de vitorias player 2 / computador 
+	li t1, 1
+	beq s4, t1, machine_playing
+	
+	la t0, count_player_b
+	lw t1, 0(t0)
+	addi t1, t1, 1
+	sw t1, 0(t0)
+	ret 
+	
+	machine_playing: 
+	la t0, count_machine
+	lw t1, 0(t0)
+	addi t1, t1, 1
+	sw t1, 0(t0)	
 	ret
 
 
