@@ -2,12 +2,14 @@
 # Nome: Eduardo Fiorentin
 # Matricula: 2211100002
 # -----------------------
+
+# Jogo 4 em linha
 .data 
 	
-	# integers
-	config_num_players: 	.word 	2
+	# inteiros
+	config_num_players: 	.word 	1
 	config_board_size: 	.word 	2
-	config_difficulty: 	.word 	1
+	config_difficulty: 	.word 	2
 	count_player_a: 	.word 	0
 	count_player_b: 	.word 	0
 	count_machine: 		.word 	0
@@ -505,6 +507,7 @@ play:
 	# s2 - coluna escolhida pelo jogador
 	# s3 - linha em que a última jogada foi inserida
 	# s4 - modo de jogo (1 ou 2 players) 
+	# s5 - ultima jogada player humano 
 	# s10 - retorno da chamada de play
 	
 	la s4, config_num_players
@@ -537,30 +540,85 @@ play:
 		li t0, 1
 		beq t0, s1, chooseplayer_loop
 		
-		# Logica da escolha 
-		#li s2, 1	# coluna escolhida 
+		# Escolha do modo autonomo medio (Escolha ao redor da ultima jogada do player 1) 
+		# Tenta escolher uma das casas ao redor da utima jogada do player 5 vezes
+		# Se nenhuma for valida escolhe outra aleatoria 
 		
+		# Se for modo easy - pula para machine_random_choice
+		la t0, config_difficulty
+		lw t0, 0(t0)
+		li t1, 1
+		beq t0, t1, machine_random_choice	# Escolha do modo facil 
+		
+		# s5 - ultima coluna escolhida pelo jogador 
+		# t2 - numero de tentativas (maximo 10) 
+		li t2, 0
+		mv s5, s2
+		machine_medium_choice:
+			addi t2, t2, 1
+			li t3, 10
+			beq t2, t3, machine_random_choice 	# Se nao consegue escolher no local, escolhe outra posicao aleatoria
+			
+			invalid_local_choice: 
+			# t0 <- Random de -1 a 1
+			li a7, 42
+			li a1, 3
+			ecall 
+			
+			addi a0, a0, -1
+			add t1, a0, s5
+			
+			# Isso aqui não funciona -------------------------------------
+			li t0, 1
+			blt t0, t1, invalid_local_choice 	# Se a escolha for menor que 1 (coluna invalida)
+			
+			bgt t1, s0, invalid_local_choice 	# Se a escolha for maior que num_cols (coluna invalida)
+			# ------------------------------------------------------------
+			
+			# Tenta insercao (mesmo valida, ainda pode ser coluna cheia)
+			mv a0, t1
+			mv a1, s1
+			mv a2, s0
+			la a3, board
+			call board_insert
+			
+			# SUCESSO : jal para end_machine_random_choice para salvar a escolha 
+			li t0, 1
+			beq a0, t0, end_machine_random_choice
+			
+			# FRACASSO: jal machine_random_choice para escolher outra posicao aleatoria
+			j machine_medium_choice
+			
+		end_machine_medium_choice:
+		
+		
+		# Escolha do modo autonomo facil 
+		machine_random_choice: 
 			# Pega numero aleatorio de 0 a cols-1 
-		li a7, 42
-		mv t1, s0
-		addi t1, t1, -1
-		mv a0, t1
-		ecall
-		
+			li a7, 42
+			mv t1, s0
+			addi t1, t1, -1
+			mv a0, t1
+			ecall
+			
 			# Coloca no intervalo [1, cols]
-		addi a0, a0, 1
-		mv s2, a0
+			addi a0, a0, 1
+			mv s2, a0
+			
+			# Insercao no tabuleiro 
+			# a0 - coluna escolhida
+			# a1 - player (1 ou 2)
+			# a2 - numero de colunas
+			# a3 - endereco primeiro elemento do vetor
+			mv a0, s2
+			mv a1, s1
+			mv a2, s0
+			la a3, board
+			call board_insert
 		
-		# Insercao no tabuleiro 
-		# a0 - coluna escolhida
-		# a1 - player (1 ou 2)
-		# a2 - numero de colunas
-		# a3 - endereco primeiro elemento do vetor
-		mv a0, s2
-		mv a1, s1
-		mv a2, s0
-		la a3, board
-		call board_insert
+			beq a0, zero, machine_random_choice 	# Se a escolha foi invalida repete
+			
+		end_machine_random_choice: 
 		
 		# Atualizacao de variaveis de controle
 		mv s3, a1	# salva linha de insercao
