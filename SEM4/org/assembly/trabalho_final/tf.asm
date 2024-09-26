@@ -552,14 +552,15 @@ play:
 		
 		# s5 - ultima coluna escolhida pelo jogador 
 		# t2 - numero de tentativas (maximo 10) 
-		li t2, 0
+		# S6 - contador usado para referencia de quantidade de tentativas 
+		li s6, 0
 		mv s5, s2
 		machine_medium_choice:
-			addi t2, t2, 1
-			li t3, 10
-			beq t2, t3, machine_random_choice 	# Se nao consegue escolher no local, escolhe outra posicao aleatoria
+			addi s6, s6, 1
+			li t3, 20
+			bgt s6, t3, machine_random_choice 	# Se nao consegue escolher no local, escolhe outra posicao aleatoria
 			
-			invalid_local_choice: 
+			#invalid_local_choice: 
 			# t0 <- Random de -1 a 1
 			li a7, 42
 			li a1, 3
@@ -568,12 +569,10 @@ play:
 			addi a0, a0, -1
 			add t1, a0, s5
 			
-			# Isso aqui não funciona -------------------------------------
+			# Verificacao se a escolha aleatoria eh valida
 			li t0, 1
-			blt t0, t1, invalid_local_choice 	# Se a escolha for menor que 1 (coluna invalida)
-			
-			bgt t1, s0, invalid_local_choice 	# Se a escolha for maior que num_cols (coluna invalida)
-			# ------------------------------------------------------------
+			blt t1, t0, machine_medium_choice 	# Se a escolha for menor que 1 (coluna invalida)
+			bgt t1, s0, machine_medium_choice 	# Se a escolha for maior que num_cols (coluna invalida)
 			
 			# Tenta insercao (mesmo valida, ainda pode ser coluna cheia)
 			mv a0, t1
@@ -598,7 +597,7 @@ play:
 			li a7, 42
 			mv t1, s0
 			addi t1, t1, -1
-			mv a0, t1
+			mv a1, t1
 			ecall
 			
 			# Coloca no intervalo [1, cols]
