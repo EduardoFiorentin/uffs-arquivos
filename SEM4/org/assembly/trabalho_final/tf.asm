@@ -7,9 +7,9 @@
 .data 
 	
 	# inteiros
-	config_num_players: 	.word 	2
+	config_num_players: 	.word 	1
 	config_board_size: 	.word 	2
-	config_difficulty: 	.word 	2
+	config_difficulty: 	.word 	1
 	count_player_a: 	.word 	0
 	count_player_b: 	.word 	0
 	count_machine: 		.word 	0
@@ -56,9 +56,6 @@
 		
 	debug: 			.asciz  "Debug\n" 
 .text 
-
-# Registradores salvos
-# s0 - numero de colunas do modo de jogo atual 
 
 
 main: 
@@ -598,7 +595,7 @@ play:
 			# Pega numero aleatorio de 0 a cols-1 
 			li a7, 42
 			mv t1, s0
-			addi t1, t1, -1
+			#addi t1, t1, -1
 			mv a1, t1
 			ecall
 			
@@ -814,29 +811,6 @@ play:
 # 		       2 -> empate 
 win_check: 
 	
-	# Verificacao de empate - se o tabuleiro for completo e ninguem fechar 4 em linha
-	# t0 - iterador (1 ate num_cols)
-	# t2 - endereco no vetor 
-	# t3 - elemento carregado 
-	li t0, 1
-	mv t2, a3	# Endereco primeiro elemento 
-	
-	# Verifica se houve empate (primeira linha preenchida)
-	tie_loop: 
-		# carrega elemento
-		lw t3, 0(t2)
-		
-		# Se for igual a zero - end_loop
-		beq t3, zero, end_tie_loop
-		
-		# Se chegar ao fim da primeira linha e nao tem zero - tie 
-		beq t0, a2, wincheck_tie
-		
-		addi t0, t0, 1
-		addi t2, t2, 4
-		
-		j tie_loop
-	end_tie_loop:
 	
 	
 	
@@ -1051,6 +1025,33 @@ win_check:
 		j main_diagonal_check
 		
 	end_main_diagonal_check: 
+	
+	
+	# Verificacao de empate - se o tabuleiro for completo e ninguem fechar 4 em linha
+	# t0 - iterador (1 ate num_cols)
+	# t2 - endereco no vetor 
+	# t3 - elemento carregado 
+	li t0, 1
+	mv t2, a3	# Endereco primeiro elemento 
+	
+	# Verifica se houve empate (primeira linha preenchida)
+	tie_loop: 
+		# carrega elemento
+		lw t3, 0(t2)
+		
+		# Se for igual a zero - end_loop
+		beq t3, zero, end_tie_loop
+		
+		# Se chegar ao fim da primeira linha e nao tem zero - tie 
+		beq t0, a2, wincheck_tie
+		
+		addi t0, t0, 1
+		addi t2, t2, 4
+		
+		j tie_loop
+	end_tie_loop:
+	
+	
 	
 	continue: 
 		li a0, 0
