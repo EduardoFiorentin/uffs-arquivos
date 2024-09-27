@@ -7,7 +7,7 @@
 .data 
 	
 	# inteiros
-	config_num_players: 	.word 	1
+	config_num_players: 	.word 	2
 	config_board_size: 	.word 	2
 	config_difficulty: 	.word 	2
 	count_player_a: 	.word 	0
@@ -508,6 +508,8 @@ play:
 	# s3 - linha em que a última jogada foi inserida
 	# s4 - modo de jogo (1 ou 2 players) 
 	# s5 - ultima jogada player humano 
+	# S6 - contador usado para referencia de quantidade de tentativas 
+	# s7 - guarda resultado ao final do jogo 
 	# s10 - retorno da chamada de play
 	
 	la s4, config_num_players
@@ -719,7 +721,7 @@ play:
 		#li a1, 0
 		# a0 <- 0 <- continuar jogo
 		# 	1 <- player atual venceu
-		
+		# 	2 <- empate 
 		
 		bne a0, zero, end_gameloop
 		
@@ -735,6 +737,13 @@ play:
 		j gameloop
 		
 	end_gameloop: 
+	
+	# Altera valor do player atual para zero caso seja um empate
+	li t1, 2
+	bne a0, t1, not_tie
+		li s1, 0
+	not_tie: 
+	
 	
 	li a7, 4
 	la a0, log_endgame
@@ -805,6 +814,32 @@ play:
 # 		       2 -> empate 
 win_check: 
 	
+	# Verificacao de empate - se o tabuleiro for completo e ninguem fechar 4 em linha
+	# t0 - iterador (1 ate num_cols)
+	# t2 - endereco no vetor 
+	# t3 - elemento carregado 
+	li t0, 1
+	mv t2, a3	# Endereco primeiro elemento 
+	
+	# Verifica se houve empate (primeira linha preenchida)
+	tie_loop: 
+		# carrega elemento
+		lw t3, 0(t2)
+		
+		# Se for igual a zero - end_loop
+		beq t3, zero, end_tie_loop
+		
+		# Se chegar ao fim da primeira linha e nao tem zero - tie 
+		beq t0, a2, wincheck_tie
+		
+		addi t0, t0, 1
+		addi t2, t2, 4
+		
+		j tie_loop
+	end_tie_loop:
+	
+	
+	
 	mv t0, a2
 	
 	# linha constante 
@@ -824,6 +859,8 @@ win_check:
 	# compara com o player jogando e add + 4
 	# vai ate t2 == a2
 	
+	#j end_horizontal_check_loop
+				
 	li t3, 4
 	li t4, 0
 	horizontal_check_loop:
@@ -1023,6 +1060,9 @@ win_check:
 		li a0, 1
 		ret 
 	
+	wincheck_tie: 
+		li a0, 2
+		ret
 	
 	
 	
