@@ -1,0 +1,21 @@
+.info_title {
+    width: 100px;
+    background-color: lightblue;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.info_item-title-1 {
+    padding: 10px;
+    width: 70px;
+}
+
+.info_item {
+    padding: 8px 0;
+    background-color: lightblue;
+    color: rgb(41, 41, 41)
+}
+
+.info_name {
+    font-weight: bold;
+}
