@@ -26,7 +26,7 @@
 	log_config_menu: 	.asciz  "Configuracoes\n\t[1] - Numero de jogadores\n\t[2] - Tamanho do tabuleiro\n\t[3] - Dificuldade\n\t[4] - Zerar contadores\n\t[5] - Ver configuracoes e contadores\n\t[6] - Voltar ao menu"
 	log_num_players: 	.asciz 	"Jogadores:\n\t[1] - 1 jogador\n\t[2] - 2 jogadores\n"
 	log_board_size: 	.asciz 	"Tamanho do tabuleiro\n\t[1] - 7x6\n\t[2] - 9x6\n"
-	log_difficulty: 	.asciz 	"Dificuldade:\n\t[1] - Facil\n\t[2] - Dificil\n"
+	log_difficulty: 	.asciz 	"Dificuldade:\n\t[1] - Facil\n\t[2] - Medio\n"
 	
 	log_show_configs: 	.asciz 	"Configurações:\n"
 	log_show_num_players:	.asciz 	"Numero de jogadores: \t"
@@ -39,7 +39,7 @@
 	log_board_9x6: 		.asciz	"9x6\n"
 	log_board_7x6: 		.asciz	"7x6\n"
 	log_dif_easy: 		.asciz	"Facil\n"
-	log_dif_hard: 		.asciz	"Dificil\n"
+	log_dif_hard: 		.asciz	"Medio\n"
 	
 	log_play_empty: 	.asciz	"-"
 	log_play_player1: 	.asciz	"&"
@@ -50,11 +50,14 @@
 	log_win_player2: 	.asciz	"Jogador 2 venceu\n"
 	log_tie: 		.asciz	"Empate\n"
 	
-	log_time_player1: 	.asciz "\nJogada do player 1\n"
-	log_time_player2: 	.asciz "\nJogada do player 2\n" 
-	log_time_machine:  	.asciz "\nJogada do bot AC3000\n"
-		
-	debug: 			.asciz  "Debug\n" 
+	log_time_player1: 	.asciz "\nJogada do Player 1\n"
+	log_time_player2: 	.asciz "\nJogada do Player 2\n" 
+	log_time_machine:  	.asciz "\nJogada do Bot\n"
+	
+	log_board_7: 		.asciz "\n1 2 3 4 5 6 7\n"
+	log_board_9: 		.asciz "\n1 2 3 4 5 6 7 8 9\n"
+			
+	
 .text 
 
 
@@ -87,8 +90,6 @@ get_user_option_main_menu:
 	li a7, 5
 	ecall 
 	
-	
-# log functions 
 
 # Função print do menu principal 
 # Não recebe paramentros 
@@ -101,10 +102,10 @@ render_main_menu:
 	ret
 	
 	
-# Função que pega input inteiro de um usuário	
+# Função de input de inteiro de usuario
 # Permite valores de 1 ao passado em a0
 # Parametro: 	a0 - máximo permitido (valor incluso)
-# Retorno:	a0 - valor digitado pelo usuário
+# Retorno:	a0 - valor valido digitado pelo usuário
 get_user_option_range: 
 	# Valor limite fica salvo em t0
 	mv t0, a0 	# Valor máximo (incluso) 
@@ -140,10 +141,6 @@ get_user_option_range:
 configurations: 
 
 	mv s11, ra
-	
-	li a7, 4
-	la a0, debug
-	ecall 
 	
 	
 	config_range: 
@@ -489,7 +486,8 @@ board_print:
 	
 
 # Loop de jogo 
-# 
+# Sem parametros 
+# Sem retorno
 play: 
 	
 	mv s10, ra
@@ -498,7 +496,7 @@ play:
 	la a0, board	# carrega end prim elemento tabuleiro
 	call board_begin
 	
-	# configuracao flags de controle 
+	# configuracao de registradores salvos  
 	# s1 - jogador atual 
 	# s0 - numero de colunas 
 	# s2 - coluna escolhida pelo jogador
@@ -529,8 +527,27 @@ play:
 	mv s0, a1
 
 	
-	gameloop: 
+	# Printa o tabuleiro inicial com numeros das colunas ---------------
+	li a7, 4	
+	li a0, 9
+	beq s0, a0, print_header_9_2
+	la a0, log_board_7
+	ecall 
+	j end_print_header_2
+	print_header_9_2: 
+	la a0, log_board_9
+	ecall 
+	end_print_header_2: 
 	
+	# Printa tabuleiro
+	la a0, board
+	mv a1, s0
+	call board_print
+		
+	# ---------------------------------------------
+	
+	
+	gameloop: 
 		# Se nao eh o modo de jogo player x maquina (1)
 		li t0, 2
 		beq s4, t0, chooseplayer_loop
@@ -540,7 +557,7 @@ play:
 		beq t0, s1, chooseplayer_loop
 		
 		# Escolha do modo autonomo medio (Escolha ao redor da ultima jogada do player 1) 
-		# Tenta escolher uma das casas ao redor da utima jogada do player 5 vezes
+		# Tenta escolher uma das casas ao redor da utima jogada do player
 		# Se nenhuma for valida escolhe outra aleatoria 
 		
 		# Se for modo easy - pula para machine_random_choice
@@ -558,8 +575,7 @@ play:
 			addi s6, s6, 1
 			li t3, 20
 			bgt s6, t3, machine_random_choice 	# Se nao consegue escolher no local, escolhe outra posicao aleatoria
-			
-			#invalid_local_choice: 
+			 
 			# t0 <- Random de -1 a 1
 			li a7, 42
 			li a1, 3
@@ -629,6 +645,8 @@ play:
 		# escolha: [1 -> 6] && primeiro elemento da coluna vazio 
 		chooseplayer_loop: 
 			
+			# Printa tabuleiro para escolha 
+			
 			mv a0, s0
 			# Funcao ja garante valores de 1 a t1
 			# a0 <- opcao escolhida
@@ -637,10 +655,6 @@ play:
 			
 			
 			# Tentar insercao no tabuleiro 
-			# a0 - coluna escolhida
-			# a1 - player (1 ou 2)
-			# a2 - numero de colunas
-			# a3 - endereco primeiro elemento do vetor
 			mv a0, s2
 			mv a1, s1
 			mv a2, s0
@@ -648,21 +662,11 @@ play:
 			call board_insert
 			# a0 <- 0 (jogada invalida) ou 1 (jogada valida)]
 			# a1 <- linha em que a inserção ocorreu (caso ocorreu) 
-			beq a0, zero, insertion_not_accur
 			mv s3, a1
-			
-			# Remover -------------------------
-			li t6, 7
-			beq s0, t6, insertion_not_accur
-			#addi s3, s3, 1
-			insertion_not_accur:
-			# Remover -------------------------
-			
 			
 			bne a0, zero, end_chooseplayer_loop
 			
 			# Print de jogada invalida
-			
 			li a7, 4
 			la a0, log_invalid_input
 			ecall
@@ -671,11 +675,8 @@ play:
 			
 		end_chooseplayer_loop: 
 		
-		#mv s3, a1	# Salva em qual linha ocorreu a insercao
-		
-		# Printa o rotulo do tabuleiro
+		# Printa o rotulo do tabuleiro -------------------------------
 		li a7, 4
-		
 		li t0, 2
 		beq s1, t0, player2_log_play
 		la a0, log_time_player1
@@ -692,16 +693,25 @@ play:
 		machine_log_play:
 		la a0, log_time_machine
 		ecall
-		
-		
 		end_log_play: 
+		
+		li a0, 9
+		beq s0, a0, print_header_9
+		la a0, log_board_7
+		ecall 
+		j end_print_header
+		print_header_9: 
+		la a0, log_board_9
+		ecall 
+		end_print_header: 
 		
 		# Printa tabuleiro
 		la a0, board
 		mv a1, s0
 		call board_print
 		
-		
+		# ---------------------------------------------
+
 		
 		# Verifica vitória 
 		# a0 <- coluna jogada 
@@ -715,11 +725,11 @@ play:
 		la a3, board
 		mv a4, s1
 		call win_check
-		#li a1, 0
 		# a0 <- 0 <- continuar jogo
 		# 	1 <- player atual venceu
 		# 	2 <- empate 
 		
+		# Se foi vitoria ou empate - sai do loop 
 		bne a0, zero, end_gameloop
 		
 		# alterna jogador 
@@ -731,9 +741,18 @@ play:
 			li s1, 2
 		player_selected:
 		
+		
+				
+		
+		
 		j gameloop
 		
 	end_gameloop: 
+	
+	# Printa tabuleiro
+	la a0, board
+	mv a1, s0
+	call board_print
 	
 	# Altera valor do player atual para zero caso seja um empate
 	li t1, 2
@@ -810,14 +829,7 @@ play:
 # 		       0 -> jogador nao ganhou
 # 		       2 -> empate 
 win_check: 
-	
-	
-	
-	
 	mv t0, a2
-	
-	# linha constante 
-	# coluna - 0 a t0
 	
 	# pega primeiro elemento da linha (a2 * L) - L - linha da jogada (a1) 
 	# t1 <- endereco primeiro elemento da linha jogada 
@@ -832,8 +844,6 @@ win_check:
 	
 	# compara com o player jogando e add + 4
 	# vai ate t2 == a2
-	
-	#j end_horizontal_check_loop
 				
 	li t3, 4
 	li t4, 0
@@ -892,8 +902,8 @@ win_check:
 		
 		vertical_check_loop_current_play_not_player: 
 		li t4, 0
-		# Incrementos do loop 
 		
+		# Incrementos do loop 
 		vertical_check_loop_next: 
 		
 		addi t2, t2, -1
@@ -1077,15 +1087,10 @@ win_check:
 #	              - 0 -> Jogada inválida
 # 		:  a1 - linha em que a jogada foi inserida
 board_insert: 
-	
-	# Variaveis: 
-	# t0
-
 	# Logica: 
 	# k - coluna escolhida pelo player 
 	# L - linha atual 
-	# Acesso a coluna escolhida(valor da primeira linha): 	K - 1
-	# Acesso por linha (K - 1) + ()
+	# Acesso a coluna es
 	
 	# verifica se jogada eh invalida 
 	mv t0, a0
@@ -1107,14 +1112,6 @@ board_insert:
 	
 	insertion_loop:
 		# Acesso da coluna escolhida na linha L : K + (7|9 * L) - (num_cols - 1)
-		#mv t1, a0 		# Pega coluna escolhida (K)
-		#mul t2, t0, a2
-		#mul t2, a2, a2		# t2 <= K * 7|9
-		#addi t3, a2, -1		# t3 <= num_cols - 1
-		
-		#add t1, t1, t2
-		#add t1, t1, t3
-		
 		# Formula: (K - 1) + 7|9*L
 		addi t1, a0, -1		# K - 1
 		mul t2, a2, t0		# 7\9 * L
@@ -1147,4 +1144,5 @@ board_insert:
 end_program: 
 	li a7, 10
 	ecall
+
 
