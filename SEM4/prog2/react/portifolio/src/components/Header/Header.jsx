@@ -1,7 +1,7 @@
 import "./Header.css"
 import image from "../../assets/img/header_image.jpg"
 
-export default function Header() {
+export default function Header({email}) {
     return (
         <header className="header">
         <div className="header_img-container">
@@ -10,6 +10,7 @@ export default function Header() {
         <div className="header_text">
             <h1 className="header_title">Eduardo Fiorentin</h1>
             <p className="header_function">Desenvolvedor Front-End</p>
+            <p className="header_email">{email}</p>
         </div>
     </header>
     )

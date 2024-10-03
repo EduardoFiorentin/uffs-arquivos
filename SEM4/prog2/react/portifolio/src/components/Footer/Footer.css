@@ -1,4 +1,12 @@
 .footer {
     height: 20px;
     background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer_email {
+    color: white;
+    font-size: .7rem;
 }

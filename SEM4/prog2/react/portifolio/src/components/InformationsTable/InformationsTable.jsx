@@ -1,6 +1,6 @@
 import "./InformationsTable.css"
 
-export default function InformationsTable() {
+export default function InformationsTable({email}) {
     return (
         <table className="table">
             <thead>    
@@ -20,7 +20,7 @@ export default function InformationsTable() {
                 </tr>
                 <tr className="info_items">
                     <td className="info_item info_name">Email</td>
-                    <td className="info_item">eduardoviniciusfiorentin@gmail.com</td>
+                    <td className="info_item">{email}</td>
                 </tr>
                 <tr className="info_items">
                     <td className="info_item info_name">Celular</td>

@@ -1,7 +1,9 @@
-import "./Footer.css    "
+import "./Footer.css"
 
-export default function Footer() {
+export default function Footer({email}) {
     return (
-        <footer className="footer"></footer>
+        <footer className="footer">
+            <p className="footer_email">email: {email}</p>
+        </footer>
     )
 }

@@ -31,3 +31,9 @@
 .header_function {
     text-align: center;
 }
+.header_email {
+    text-align: center;
+    font-weight: bold;
+    font-size: .6rem;
+    color: gray;
+}

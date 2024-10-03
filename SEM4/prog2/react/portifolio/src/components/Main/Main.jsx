@@ -1,14 +1,14 @@
 import InformationsTable from "../InformationsTable/InformationsTable"
 import "./Main.css"
 
-export default function Main() {
+export default function Main({email}) {
     return (
         <main className="main">
             <section className="information">
                 <h2 className="information-title title_item">Informações</h2>
                 <div className="title-line"></div>
                 
-                <InformationsTable/>
+                <InformationsTable email={email}/>
 
             </section>
 
@@ -17,6 +17,7 @@ export default function Main() {
                 <div className="title-line"></div>
 
                 <p className="information-item item">Graduação em <span style={{fontWeight: "bold"}}>Ciência da Computação</span> - 2022 a 2026</p>
+                <p className="information-item item">Email: {email}</p>
                 
             </section>
 

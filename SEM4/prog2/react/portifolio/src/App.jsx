@@ -4,11 +4,13 @@ import Main from "./components/Main/Main";
 
 export default function App() {
 
+  const email = "eduardofiorentin336@gmail.com"
+
   return (
     <>
-      <Header/>
-      <Main/>  
-      <Footer/>
+      <Header email={email}/>
+      <Main email={email}/>  
+      <Footer email={email}/>
     </>
   )
 }

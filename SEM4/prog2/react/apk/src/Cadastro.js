@@ -6,6 +6,7 @@ export default function Cadastro() {
 
     return (
         <form>
+            <h2>Valor: {name}</h2>
             <input type="text" value={name} onChange={value => {
                 setName(value.target.value)
             }} className="input"></input>
