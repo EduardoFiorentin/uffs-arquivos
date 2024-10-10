@@ -1,0 +1,10 @@
+1°- pegar implementação do trabalho 1
+
+2°- adaptar a implementação para um digrafo com listas de adjascencia 
+    mudar remove e insere para representação em apenas um sentido 
+
+3°- alterar a implementação do passo 2 fazendo com que as arestas possuam pesos 
+    ex: usar o list<pair<int, int>> lista_adj_ -> list<pair<proximo_nodo, peso>>
+
+4°- adicionar um método que implementa o algoritmo de dijkstra
+    A fila de prioridade tem indice e prioridade   - indice 0 começa com prio 0, os outros com prio INFINITO
