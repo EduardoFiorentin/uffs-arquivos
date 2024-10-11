@@ -1,0 +1,11 @@
+{
+  "name": "primeiro_back",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Eduardo Fiorentin",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.1"
+  },
+  "type": "module"
+}
