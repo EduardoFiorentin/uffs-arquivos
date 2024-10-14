@@ -1,0 +1,10 @@
+Instância         Valor ótimo
+----------------- -----------
+hamming6-2.clq    32
+johnson8-4-4.clq  14
+johnson16-2-4.clq 8
+keller4.clq       11
+c-fat200-5.clq    58
+san200_0.7_1.clq  30
+hamming8-4.clq    16
+san400_0.9_1.clq  100
