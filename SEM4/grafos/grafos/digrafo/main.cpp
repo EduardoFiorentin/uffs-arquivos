@@ -99,23 +99,23 @@ int main() {
    
     grafo.imprime_grafo(); 
 
-    vector<int> pai(grafo.get_num_vertices());
-    vector<int> dp(grafo.get_num_vertices());
+    int pai[5];
+    int dp[5];
 
+
+    cout << sizeof(dp) << " " << sizeof(int) << " " << grafo.get_num_vertices()<< endl;
+    
     grafo.dijkstra(0, pai, dp);
 
     cout << "\nVetor pai: ";
-    for (auto elem: pai) {
-        cout << elem << " ";
+    for (int i = 0; i < sizeof(pai)/sizeof(int); i++) {
+        cout << pai[i] << " ";
     }
     
     cout << "\nVetor dp: ";
-    for (auto elem: dp) {
-        cout << elem << " ";
+    for (int i = 0; i < sizeof(dp)/sizeof(int); i++) {
+        cout << dp[i] << " ";
     }
-
-
-
 
     return 0;
 }

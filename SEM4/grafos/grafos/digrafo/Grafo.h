@@ -34,7 +34,7 @@ public:
     int num_arestas_subgrafo_induzido(std::vector<int> &vertices, Grafo &graph); 
     void imprime_complemento(); 
 
-    void dijkstra(int s, std::vector<int> &pai, std::vector<int> &dp); 
+    void dijkstra(int s, int pai[], int dp[]); 
 
 private: 
     int num_arestas_;
