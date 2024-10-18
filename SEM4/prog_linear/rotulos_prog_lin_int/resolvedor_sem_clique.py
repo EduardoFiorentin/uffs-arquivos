@@ -6,7 +6,7 @@ def main():
     modelo = Model("Problema do Conjunto Independente Maximo - Instancia de Exemplo")
 
     path = 'instancias_conjunto_independente_maximo\\'
-    nome = '4_keller4.clq'
+    nome = '8_san400_0.9_1.clq'
     arq = open(path + nome)
 
     num_vertices = 0
