@@ -11,4 +11,4 @@ router.post("/", (req, res) => {
     res.status(200).send("Lido...")
 })
 
-// module.exports = router
+export { router }

@@ -5,7 +5,12 @@
   "author": "Eduardo Fiorentin",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.21.1"
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "pg-promise": "^11.10.1"
+  },
+  "scripts": {
+    
   },
   "type": "module"
 }
