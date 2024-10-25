@@ -25,7 +25,7 @@ def gera_cliques(G: dict):
                 if remover:
                     break
         
-        if len(Q) > 1 and Q not in cliques:
+        if len(Q) > 2 and Q not in cliques:
             cliques.append(Q)
     
     return cliques
@@ -36,7 +36,7 @@ def main():
     modelo = Model("Problema do Conjunto Independente Máximo com Restrições de Clique")
 
     path = 'instancias_conjunto_independente_maximo\\'
-    nome = '8_san400_0.9_1.clq'
+    nome = '6_san200_0.7_1.clq'
     arq = open(path + nome)
 
     num_vertices = 0

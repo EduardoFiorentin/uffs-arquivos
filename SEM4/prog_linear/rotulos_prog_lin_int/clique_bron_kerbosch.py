@@ -22,9 +22,9 @@ def encontrar_cliques(adjacencia, num_vertices):
 def main():
     modelo = Model("Problema do Conjunto Independente Maximo com Restricoes de Cliques")
 
-    path = 'instancias_conjunto_independente_maximo\\'
-    nome = '4_keller4.clq'
-    arq = open(path + nome)
+    path = 'instancias_conjunto_independente_maximo/7_hamming8-4.clq'
+    nome = ''
+    arq = open(path)
 
     num_vertices = 0
     adjacencia = {}
@@ -80,6 +80,7 @@ def main():
         soma += modelo.getVal(var)
 
     print(f"Solução ótima: {soma}")
+    print(f"Num Cliques: {len(cliques)}")
 
 if __name__ == "__main__":
     main()
