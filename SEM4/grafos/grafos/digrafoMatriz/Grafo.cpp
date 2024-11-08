@@ -108,17 +108,17 @@ int Grafo::grauEntrada(int vertice) {
 
 bool Grafo::caminho(int v, int w, vector<int> &marcado) {
     if (v == w) {
-    //printf("%d-", v);
-    return true;
-}
-marcado[v] = 1;
-for (int u = 0; u < num_vertices_; u++)
-    if (matriz_adj_[v][u] != 0)
-        if (marcado[u] == 0)
-            if (caminho(u, w, marcado)) {
-                return true;
-}
-return false;
+        //printf("%d-", v);
+        return true;
+    }
+    marcado[v] = 1;
+    for (int u = 0; u < num_vertices_; u++)
+        if (matriz_adj_[v][u] != 0)
+            if (marcado[u] == 0)
+                if (caminho(u, w, marcado)) {
+                    return true;
+    }
+    return false;
 }
 
 
@@ -158,17 +158,17 @@ bool Grafo::ehFortementeConexo() {
 
 bool Grafo::caminho2(int v, int w, vector<int> &marcado) {
     if (v == w) {
-    //printf("%d-", v);
-    return true;
-}
-marcado[v] = 1;
-for (int u = 0; u < num_vertices_; u++)
-    if (matriz_adj_[v][u] != 0 || matriz_adj_[u][v] != 0)
-        if (marcado[u] == 0)
-            if (caminho2(u, w, marcado)) {
-                //printf("%d-", v);
-                return true;
-}
+        //printf("%d-", v);
+        return true;
+    }
+    marcado[v] = 1;
+    for (int u = 0; u < num_vertices_; u++)
+        if (matriz_adj_[v][u] != 0 || matriz_adj_[u][v] != 0)
+            if (marcado[u] == 0)
+                if (caminho2(u, w, marcado)) {
+                    //printf("%d-", v);
+                    return true;
+    }
 return false;
 }
 

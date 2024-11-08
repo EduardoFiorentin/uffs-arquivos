@@ -1,0 +1,153 @@
+                //armazenar componentes
+                //cria uma nova lista para cada componente
+                comp_fort_conex.push_back(std::list<int>());
+                
+                //percorre o vetor marcado para verificar quais vértices foram marcados e adiciona eles na lista da primeira componente
+                
+                for (int i = 0; i < num_vertices_; i++) {
+                    if (marcado[i] == 1) {
+                        comp_fort_conex[comp].push_back(i);
+                        marcado[i] = 2;
+                }
+                       
+
+            }
+            comp++;  
+        }
+    }
+
+    printf("Componentes: \n");
+
+    for (int i = 0; i < comp; i++) {
+        cout << i << ": ";
+        for (int j : comp_fort_conex[i]) {
+            
+            cout << "-> " << j;            
+        }
+        cout << "\n";
+    } 
+}
+
+
+
+    printf("Marcado \n");
+    for (int i = 0; i < num_vertices_; i++) {
+        printf("%d \n", marcado[i]);
+    }
+
+    printf("Finalizado \n");
+    for (int i = 0; i < num_vertices_; i++) {
+        printf("%d \n", finalizacao[i]);
+    }
+}
+
+/*
+void Digrafo::compFortConex(){
+
+    vector<int> marcado(num_vertices_);
+    vector<int> finalizacao(num_vertices_);
+    int tempo = 0;
+    int v;
+    int comp = 0;
+
+    std::vector<std::list<int>> comp_fort_conex;
+
+    // enquanto ainda houverem vértices não visitados, aplica busca em profundidade e registra tempo de finalização
+    while (verificaVerticesVisitados(marcado)) {
+
+        printf("Vértice a ser visitado: \n");
+
+        for (int i = 0; i < num_vertices_; i++) {
+            if (marcado[i] == 0) {
+
+                printf("%d \n", i);               
+                v = i;
+                busca_prof(v, marcado, finalizacao, tempo);  
+                
+            }
+        }
+    }
+
+    // inverte arestas do grafo
+    Digrafo transposto = digrafo_transposto();
+
+    // reseta o vetor marcado
+    fill(marcado.begin(), marcado.end(), 0);
+   
+    while (verificaVerticesVisitados(marcado)) {
+    
+        v = indiceTempoFinalizacao(finalizacao);
+        transposto.busca_prof(v, marcado, finalizacao, tempo); 
+         
+        //armazenar componentes
+        //cria uma nova lista para cada componente
+        comp_fort_conex.push_back(std::list<int>());
+                
+        //percorre o vetor marcado para verificar quais vértices foram marcados e adiciona eles na lista da primeira componente
+                
+        for (int i = 0; i < num_vertices_; i++) {
+            if (marcado[i] == 1) {
+                comp_fort_conex[comp].push_back(i);
+                marcado[i] = 2;
+                }
+                       
+
+            }
+            comp++;  
+        }
+    
+
+        printf("Componentes: \n");
+
+        for (int i = 0; i < comp; i++) {
+            cout << i << ": ";
+            for (int j : comp_fort_conex[i]) {
+                
+                cout << "-> " << j;            
+            }
+            cout << "\n";
+        }
+}
+
+*/
+
+
+    
+       
+       /* v = indiceTempoFinalizacao(finalizacao);          
+           
+        busca_prof(v, marcado, finalizacao, tempo);
+
+        int componente = 0;
+        cout << componente << ": ";
+
+        for (int i = 0; i < num_vertices_; i++) {
+            if (marcado[i] == 1) {
+                cout << i << " ";
+                marcado[i] = 2;
+                finalizacao[i] = 2;
+                }
+            }
+                componente++;
+            }
+         }*/
+    
+
+
+
+    
+// 1. Faça i = 0
+// 2. Enquanto houver vértices não visitados no digrafo G:
+  
+
+// 3. Realize uma busca em profundidade no digrafo G começando por um vértice não
+// visitado; quando um vértice v e seus vizinhos de saída tiverem sido visitados, faça fin(v)
+// = i e i = i + 1
+// 4. Construa o digrafo G’ dado pelo digrafo G com as direções das arestas de G invertidas
+// 5. Enquanto houver vértices não visitados no digrafo G’:
+// 6. Realize uma busca em profundidade no digrafo G’ começando por um vértice não
+// visitado v para o qual fin(v) seja máximo
+
+
+
+// grau de saída de cada componente fortemente conexa
