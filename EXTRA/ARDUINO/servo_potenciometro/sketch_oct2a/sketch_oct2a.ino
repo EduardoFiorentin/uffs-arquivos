@@ -1,28 +1,41 @@
-#include <Servo.h>
+#include <SPI.h>
+#include <MFRC522.h>
 
-int value, mapped_value;
-Servo servo;
+#define RST_PIN 9
+#define SS_PIN 10
 
+String uid;
+
+MFRC522 rfid(SS_PIN, RST_PIN);
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
-  servo.attach(6);
-  servo.write(0);
+  SPI.begin();
+  rfid.PCD_Init();
+  Serial.println("Aproxime uma tag do leitor...");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial())
+    return;
 
-  // Controle de valor de entrada 
-  value = analogRead(A0);
-  mapped_value = map(value, 0, 1023, 0, 180);
+  uid = "";
+  for (byte i = 0; i < rfid.uid.size; i++) {
+    uid += String(rfid.uid.uidByte[i], HEX);
+  }
+  // Serial.print("UID da tag: ");
+  Serial.println(uid);
 
-  servo.write(mapped_value);
+  // Ações baseadas na tag
+  // if (uid == "4a5b6c7d") { // Substitua pelo UID da sua tag
+  //   Serial.println("Acesso permitido!");
+  //   digitalWrite(13, HIGH); // Exemplo: ligar um LED
+  //   delay(1000);
+  //   digitalWrite(13, LOW);
+  // } else {
+  //   Serial.println("Acesso negado!");
+  // }
 
-  Serial.print(value); 
-  Serial.print("\t");
-  Serial.print(mapped_value);
-  Serial.print("\n");
-  // delay(200); 
+  rfid.PICC_HaltA();
+  delay(2000);
 }

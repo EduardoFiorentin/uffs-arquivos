@@ -9,14 +9,17 @@ const PORT = 3000
 const pgp = pgPromise({})
 
 
-const user = "progII"
-const pass = "uffs"
+// const user = "progII"
+// const pass = "uffs"
 // const host = "host"
 // const port = "Port"
 // const db_name = "database name"
 
-const db = pgp(`postgres://${user}:${pass}@192.168.253.155:5432/progII`)
-
+// const db = pgp(`postgres://${user}:${pass}@192.168.253.155:5432/progII`)
+// 
+const usuario = "prog"; 
+const senha = "uffs";
+const db = pgp(`postgres://${usuario}:${senha}@172.20.66.230:5432/prog`);
 
 server.use(express.json())
 server.use(cors())
@@ -26,8 +29,25 @@ server.use(cors())
 
 server.get("/aluno", async (req, res) => {
     try {
-        const alunos = await db.many("SELECT * FROM aluno;")
-        res.status(200).json(alunos)
+        // const alunos = await db.many("SELECT * FROM aluno;")
+        // res.status(200).json(alunos)
+        res.status(200).json([
+            {
+                nome: "Eduardo",
+                matricula: "2211100002", 
+                curso: "Ciência da Computação"
+            },
+            {
+                nome: "B",
+                matricula: "2211100002", 
+                curso: "Ciência da Computação"
+            },
+            {
+                nome: "C",
+                matricula: "2211100002", 
+                curso: "Ciência da Computação"
+            },
+        ])
 
     } catch(err) {
         console.log(err)
