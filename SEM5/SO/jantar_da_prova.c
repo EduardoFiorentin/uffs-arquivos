@@ -91,6 +91,9 @@ void test(int id) {
         && state[right(id) != EATING])
     {
         state[id] = EATING;
+        
+        // Se os vizinhos do filosofo estiverem esperando o que está largando o garfo
+        // estes são acordados 
         sem_post(&s[id]);
     }
 }
