@@ -15,6 +15,11 @@ struct int_read read_next_int(FILE* file) {
     struct int_read num; 
     num.final = 0;
 
+    if (feof(file)) {
+        num.final = -1;
+        return num;
+    }
+
     while (!feof(file)) {
         c = getc(file);
 
@@ -22,13 +27,33 @@ struct int_read read_next_int(FILE* file) {
             str_num[pos] = c;
             pos++; 
         } 
-        if (c == ';' || c == ' ' || feof(file)) {
+        if (c == ';' || c == ' ') {
             str_num[pos] = '\0';
             num.value = atoi(str_num);
             if (c == ' ') num.final = 1;
             return num;
         }
     }
-    num.final = -1;
-    return num; 
+    num.final = 1;
+    return num;
+}
+
+
+int is_file_empty(const char *filename) {
+    FILE *file = fopen(filename, "r");
+
+    if (file == NULL) {
+        perror("Error opening file");
+        return -1;
+    }
+
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fclose(file);
+
+    if (file_size == 0) {
+        return 1;
+    } else {
+        return 0;
+    }
 }

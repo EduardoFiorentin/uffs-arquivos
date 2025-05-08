@@ -43,11 +43,20 @@ int main(int argc, char *argv[]) {
 
     struct int_read num;
     int i = 0;
+    
+    if (is_file_empty(ENTRY_FILE_NAME)) {
+        printf("Arquivo de leitura vazio.\n");  
+    }
+
+    // leitura do arquivo de entrada 
+
+
+    // leitura dos blocos de um arquivo ou arquivo de entrada
     while ((num = read_next_int(file)).final != -1) {
         buffer[i++] = num.value; 
-        if (num.final == 1) {
-            bubbleSort(buffer, M);
-            for (int j = 0; j < M; j++) {
+        if (num.final == 1 || num.final == -1 || i == M) {
+            bubbleSort(buffer, i);
+            for (int j = 0; j < i; j++) {
                 printf("%d ", buffer[j]);
             }
             printf("\n");
