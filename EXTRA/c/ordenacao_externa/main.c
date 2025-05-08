@@ -3,6 +3,7 @@
 #include "files.h"
 #include "sort.h"
 
+
 int read_M() {
     int value;
     printf("\nNumero de elementos carregados por vez: ");
@@ -23,16 +24,18 @@ FILE* open_main_file() {
 
 int main(int argc, char *argv[]) {
 
-    int M, *buffer; 
+    int M, *buffer, NUM_FILES; 
     FILE* file;
 
     // Leitura do valor de M
     // se passado como argumento, não faz a leitura do terminal
-    if (argc > 1) 
+    if (argc > 1)
         M = atoi(argv[1]);
     else
         M = read_M(); 
-
+    
+    NUM_FILES = M * 2; 
+    
     printf("Numero de M: %d\n", M);
 
     // abre o arquivo com os dados para ordenação
@@ -48,9 +51,6 @@ int main(int argc, char *argv[]) {
         printf("Arquivo de leitura vazio.\n");  
     }
 
-    // leitura do arquivo de entrada 
-
-
     // leitura dos blocos de um arquivo ou arquivo de entrada
     while ((num = read_next_int(file)).final != -1) {
         buffer[i++] = num.value; 
@@ -65,6 +65,21 @@ int main(int argc, char *argv[]) {
         
     }
 
+    FILE** files = malloc(sizeof(FILE*) * NUM_FILES);
+
+    create_new_aux_files("data/", "aux_", NUM_FILES, files); 
+
+    for (int i = 0; i < NUM_FILES; i++) {
+        fprintf(files[i], "Teste de escrita arquivo"); 
+    }
+
+    fclose(file); 
+
+    for (int i = 0; i < NUM_FILES; i++) {
+        fclose(files[i]); 
+    }
+
     free(buffer);
+    free(files); 
     return 0;
 }

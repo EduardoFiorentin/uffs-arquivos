@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 #include "files.h"
+#include <string.h>
+#include <stdlib.h>
 #endif 
 
 // Faz a leitura do proximo inteiro que aparece no arquivo
@@ -56,4 +58,25 @@ int is_file_empty(const char *filename) {
     } else {
         return 0;
     }
+}
+
+void create_new_aux_files( char* path, char* base_name, int num_files, FILE** files) {
+
+     
+
+    for (int i = 0; i < num_files; i++) {
+        // Gera a string "aux_x" -> x: 0 a num_files - 1
+        char str_num[20], base_name_local[20]; 
+        sprintf(str_num, "%d", i);
+        strcpy(base_name_local, path);
+        strcat(base_name_local, base_name);
+        strcat(base_name_local, str_num);
+        strcat(base_name_local, ".txt");
+        
+        // gerar arquivos auxiliares
+        printf("%s\n", base_name_local); 
+        FILE* aux_file = fopen(base_name_local, "w+"); 
+        files[i] = aux_file; 
+    }
+
 }
