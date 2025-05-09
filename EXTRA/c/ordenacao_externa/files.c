@@ -60,10 +60,7 @@ int is_file_empty(const char *filename) {
     }
 }
 
-void create_new_aux_files( char* path, char* base_name, int num_files, FILE** files) {
-
-     
-
+void create_aux_files( char* path, char* base_name, int num_files, FILE** files) {
     for (int i = 0; i < num_files; i++) {
         // Gera a string "aux_x" -> x: 0 a num_files - 1
         char str_num[20], base_name_local[20]; 
