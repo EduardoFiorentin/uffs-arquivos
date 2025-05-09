@@ -72,8 +72,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    
-
     // leitura arquivo inicial
     while ((num = read_next_int(file)).final != -1) {
         buffer[i++] = num.value; 
@@ -98,6 +96,22 @@ int main(int argc, char *argv[]) {
             i = 0; 
         }
         
+    }
+
+    // merge dos sets de arquivos
+    while (1) {
+
+        for (int i = 0; i < (NUM_FILES/2); i++) {
+            if (merge_status_final(aux_files_set_1[i])) break;
+        }
+        
+        merge_sets(aux_files_set_1, aux_files_set_2); 
+
+        for (int i = 0; i < (NUM_FILES/2); i++) {
+            if (merge_status_final(aux_files_set_2[i])) break;
+        }
+
+        merge_sets(aux_files_set_2, aux_files_set_1); 
     }
     
 

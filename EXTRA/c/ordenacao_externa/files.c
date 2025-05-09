@@ -77,3 +77,7 @@ void create_aux_files( char* path, char* base_name, int num_files, FILE** files)
     }
 
 }
+
+int merge_status_final() {
+    return 0; 
+} 

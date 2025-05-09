@@ -14,3 +14,4 @@ struct int_read {
 struct int_read     read_next_int(FILE* file);
 int                 is_file_empty(const char *filename); 
 void                create_aux_files( char* path,  char* base_name, int num_files, FILE** files);
+int                 merge_status_final(); 
