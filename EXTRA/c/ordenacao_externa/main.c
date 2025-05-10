@@ -36,6 +36,11 @@ int main(int argc, char *argv[]) {
     else
         M = read_M(); 
     
+    if (M < 2) {
+        printf("M Precisa ser pelo menos 2\n");
+        exit(1);
+    }
+
     NUM_FILES = M * 2; 
 
     // abre o arquivo com os dados para ordenação
@@ -113,15 +118,9 @@ int main(int argc, char *argv[]) {
     // Liberação de recursos
     fclose(file); 
 
-    // for (int i = 0; i < NUM_FILES; i++) {
-    //     fclose(aux_files[i]); 
-    // }
-    // for (int i = 0; i < (NUM_FILES/2); i++) {
-    //     fclose(aux_files_set_1[i]); 
-    // }
-    // for (int i = 0; i < (NUM_FILES/2); i++) {
-    //     fclose(aux_files_set_2[i]); 
-    // }
+    for (int i = 0; i < NUM_FILES; i++) {
+        fclose(aux_files[i].file); 
+    }
     free(buffer);
     free(aux_files);    
     free(aux_files_set_1);
