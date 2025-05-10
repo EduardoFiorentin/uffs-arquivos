@@ -58,7 +58,7 @@ struct int_read read_next_int(FILE* file) {
     return num;
 }
 
-
+// Verifica se um arquivo é vazio
 int is_file_empty(const char *filename) {
     FILE *file = fopen(filename, "r");
 
@@ -78,6 +78,8 @@ int is_file_empty(const char *filename) {
     }
 }
 
+// cria arquivos auxiliares usados nas operações de merge
+// cria os componentes e popula struct aux_file* files
 void create_aux_files( char* path, char* base_name, int num_files, struct aux_file* files) {
     for (int i = 0; i < num_files; i++) {
         // Gera o nome do arquivo
@@ -98,7 +100,7 @@ void create_aux_files( char* path, char* base_name, int num_files, struct aux_fi
 
 }
 
-// Verifica se apenas um dos arquivos do set tem valores
+// Verifica se apenas um dos arquivos do set contém valores
 int merge_status_final(struct aux_file* file_set, int M) {
     int count = 0;
     char name[MAX_LEN_NAME_AUX];
@@ -116,6 +118,9 @@ int merge_status_final(struct aux_file* file_set, int M) {
     return 0;
 } 
 
+// Realiza a operação de merge entre dois sets
+// Operação de merge é definida como a junção ordenada de blocos correspondentes 
+// do set origin e gravação no proximo arquivo do set target
 void merge_sets(struct aux_file* origin, struct aux_file* target, int M) {
 
     struct merge_aux buffer[M];
@@ -143,6 +148,7 @@ void merge_sets(struct aux_file* origin, struct aux_file* target, int M) {
         }
     }
 
+    // Faz a junção dos blocos sendo lidos até que todos os valores acabem
     while (1) {
         final = 1; 
         first = 1;
@@ -154,7 +160,7 @@ void merge_sets(struct aux_file* origin, struct aux_file* target, int M) {
 
             final = 0; 
 
-            // escreve menor numero
+            // escreve menor numero no arquivo alvo
             if (first) {
                 if (ftell(target[current_target].file) != 0) {
                     fputc(' ', target[current_target].file); 
@@ -166,10 +172,9 @@ void merge_sets(struct aux_file* origin, struct aux_file* target, int M) {
             }
             first = 0;
             
-            // lê o proximo numero do arquivo
+            // lê o proximo numero do arquivo cujo valor anterior foi escrito no arquivo target
             if (buffer[0].has_next_read) {
                 num = read_next_int(buffer[0].file); 
-                // buffer[0].value = (num.final != 0) ? num.value : INFINITY;
 
                 if (num.final == -1) {
                     buffer[0].value = INFINITY; 
@@ -215,7 +220,7 @@ void merge_sets(struct aux_file* origin, struct aux_file* target, int M) {
 
 } 
 
-
+// Retorna o tamanho do arquivo
 long get_file_size(FILE *file) {
     long originalPosition = ftell(file);
 

@@ -4,7 +4,8 @@
 #include "files.h"
 #include "sort.h"
 
-
+// Faz a leitura do valor de M 
+// caso não tenha sido passado por argumento
 int read_M() {
     int value;
     printf("Numero de elementos carregados por vez: ");
