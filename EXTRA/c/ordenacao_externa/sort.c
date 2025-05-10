@@ -1,5 +1,6 @@
 #include "sort.h"
 
+// Troca dois elementos de um vetor
 void swap(int *a, int *b) {
     int temp = *a;
     *a = *b;
@@ -23,7 +24,7 @@ void bubbleSort(int arr[], int n) {
     }
 }
 
-
+// Troca dois elementos de um vetor
 void swap_merge_aux(struct merge_aux *a, struct merge_aux *b) {
     struct merge_aux temp = *a;
     *a = *b;

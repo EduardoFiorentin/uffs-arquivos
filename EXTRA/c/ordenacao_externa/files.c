@@ -78,38 +78,45 @@ int is_file_empty(const char *filename) {
     }
 }
 
-void create_aux_files( char* path, char* base_name, int num_files, FILE** files) {
+void create_aux_files( char* path, char* base_name, int num_files, struct aux_file* files) {
     for (int i = 0; i < num_files; i++) {
-        // Gera a string "aux_x" -> x: 0 a num_files - 1
-        char str_num[20], base_name_local[20]; 
+        // Gera o nome do arquivo
+        char str_num[MAX_LEN_NAME_AUX], base_name_local[MAX_LEN_NAME_AUX]; 
         sprintf(str_num, "%d", i);
         strcpy(base_name_local, path);
         strcat(base_name_local, base_name);
         strcat(base_name_local, str_num);
         strcat(base_name_local, ".txt");
         
-        // gerar arquivos auxiliares
-        printf("%s\n", base_name_local); 
-        FILE* aux_file = fopen(base_name_local, "w+"); 
+        // gerar arquivo auxiliar
+        struct aux_file aux_file;
+        aux_file.file = fopen(base_name_local, "w+");
+        strcpy(aux_file.name, base_name_local);
+
         files[i] = aux_file; 
     }
 
 }
 
 // Verifica se apenas um dos arquivos do set tem valores
-int merge_status_final(FILE** file_set, int M) {
+int merge_status_final(struct aux_file* file_set, int M) {
     int count = 0;
+    char name[MAX_LEN_NAME_AUX];
     for (int i = 0; i < (M); i++) {
-        if (get_file_size(file_set[i]) != 0) {
+        if (get_file_size(file_set[i].file) != 0) {
             count++;
+            strcpy(name, file_set[i].name);
         }
     }
 
-    if (count == 1) return 1;
+    if (count == 1) {
+        printf("\nArquivo com resultado: %s\n", name);
+        return 1;
+    }
     return 0;
 } 
 
-void merge_sets(FILE** origin, FILE** target, int M) {
+void merge_sets(struct aux_file* origin, struct aux_file* target, int M) {
 
     struct merge_aux buffer[M];
     struct int_read num; 
@@ -117,7 +124,7 @@ void merge_sets(FILE** origin, FILE** target, int M) {
 
     // inicia as variáveis necessárias e carrega os primeiros valores no buffer 
     for (int i = 0; i < M; i++) {
-        buffer[i].file = origin[i];
+        buffer[i].file = origin[i].file;
         fseek(buffer[i].file, 0, SEEK_SET);
         num = read_next_int(buffer[i].file); 
 
@@ -136,10 +143,6 @@ void merge_sets(FILE** origin, FILE** target, int M) {
         }
     }
 
-    for (int i = 0; i < M; i++) {
-        printf("\nInicio - %d %d %p", buffer[i].value, buffer[i].has_next_read, buffer[i].file);
-    }   
-
     while (1) {
         final = 1; 
         first = 1;
@@ -153,13 +156,13 @@ void merge_sets(FILE** origin, FILE** target, int M) {
 
             // escreve menor numero
             if (first) {
-                if (ftell(target[current_target]) != 0) {
-                    fputc(' ', target[current_target]); 
+                if (ftell(target[current_target].file) != 0) {
+                    fputc(' ', target[current_target].file); 
                 } 
-                fprintf(target[current_target], "%d", buffer[0].value);
+                fprintf(target[current_target].file, "%d", buffer[0].value);
             } 
             else  {
-                fprintf(target[current_target], ";%d", buffer[0].value); 
+                fprintf(target[current_target].file, ";%d", buffer[0].value); 
             }
             first = 0;
             
@@ -192,8 +195,6 @@ void merge_sets(FILE** origin, FILE** target, int M) {
         current_target = (current_target + 1) % M;
         if (final) break; 
 
-        printf("\n\nRecalculo\n\n");
-
         for (int i = 0; i < M; i++) {
             num = read_next_int(buffer[i].file);
             if (num.final == -1) {
@@ -212,10 +213,6 @@ void merge_sets(FILE** origin, FILE** target, int M) {
         }
     }
 
-
-    for (int i = 0; i < M; i++) {
-        printf("\n%d %p", buffer[i].value, buffer[i].file);
-    }
 } 
 
 
@@ -232,9 +229,9 @@ long get_file_size(FILE *file) {
 }
 
 // limpa todos os arquivos do set
-void clear_files_of_set(FILE** file_set, int M) {
+void clear_files_of_set(struct aux_file* file_set, int M) {
     for (int i = 0; i < (M); i++) {
-        clear_file(file_set[i]);
+        clear_file(file_set[i].file);
     }
 }
 

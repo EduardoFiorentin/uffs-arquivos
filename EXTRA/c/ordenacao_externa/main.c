@@ -7,11 +7,12 @@
 
 int read_M() {
     int value;
-    printf("\nNumero de elementos carregados por vez: ");
+    printf("Numero de elementos carregados por vez: ");
     scanf("%d", &value);
     return value; 
 }
 
+// Abre o arquivo dados.txt com os dados a serem ordenados
 FILE* open_main_file() {
     FILE* file = fopen(ENTRY_FILE_NAME, "r");
 
@@ -36,8 +37,6 @@ int main(int argc, char *argv[]) {
         M = read_M(); 
     
     NUM_FILES = M * 2; 
-    
-    printf("Numero de M: %d\n", M);
 
     // abre o arquivo com os dados para ordenação
     file = open_main_file();
@@ -54,45 +53,46 @@ int main(int argc, char *argv[]) {
 
 
     // Cria dois vetores com arquivos para merge
+    struct aux_file* aux_files = malloc(sizeof(struct aux_file) * NUM_FILES);
+    struct aux_file* aux_files_set_1 = malloc(sizeof(struct aux_file) * M);
+    struct aux_file* aux_files_set_2 = malloc(sizeof(struct aux_file) * M);
 
-    FILE** aux_files = malloc(sizeof(FILE*) * NUM_FILES);
-    FILE** aux_files_set_1 = malloc(sizeof(FILE*) * M);
-    FILE** aux_files_set_2 = malloc(sizeof(FILE*) * M);
-
+    // cria arquivos auxiliares para o merge
     create_aux_files("data/", "aux_", NUM_FILES, aux_files); 
 
     for (int i = 0; i < NUM_FILES; i++) {
         if (i < NUM_FILES/2) {
-            printf("a");
-            aux_files_set_1[i] = aux_files[i];
+            aux_files_set_1[i].file = aux_files[i].file;
+            strcpy(aux_files_set_1[i].name, aux_files[i].name);
+            
         }
         else {
-            printf("b");
-            aux_files_set_2[i - (NUM_FILES/2)] = aux_files[i];
+            aux_files_set_2[i - (NUM_FILES/2)].file = aux_files[i].file;
+            strcpy(aux_files_set_2[i - (NUM_FILES/2)].name, aux_files[i].name);
         }
     }
 
-    // leitura arquivo inicial
+
+    // faz a leitura inicial do dados.txt, separando em blocos de M inteiros no
+    // primeiro set de arquivos auxiliares 
     while ((num = read_next_int(file)).final != -1) {
         buffer[i++] = num.value; 
         if (num.final == 1 || num.final == -1 || i == M) {
             
             bubbleSort(buffer, i);
             
-            if (ftell(aux_files_set_1[current_set_file]) != 0) {
-                fputc(' ', aux_files_set_1[current_set_file]); 
+            if (ftell(aux_files_set_1[current_set_file].file) != 0) {
+                fputc(' ', aux_files_set_1[current_set_file].file); 
             } 
             
             // Jogar dados para o arquivo auxiliar
             for (int j = 0; j < i; j++) {
-                // printf("%d ", buffer[j]);
-                if (j != i-1) fprintf(aux_files_set_1[current_set_file], "%d;", buffer[j]);
-                else fprintf(aux_files_set_1[current_set_file], "%d", buffer[j]);
+                if (j != i-1) fprintf(aux_files_set_1[current_set_file].file, "%d;", buffer[j]);
+                else fprintf(aux_files_set_1[current_set_file].file, "%d", buffer[j]);
             }
 
             // incrementa o current_set_file circularmente, voltando para o zero ao chegar no limite
             current_set_file = (current_set_file + 1) % (NUM_FILES/2);
-            // printf("\n");
             i = 0; 
         }
         
@@ -100,7 +100,6 @@ int main(int argc, char *argv[]) {
 
     // merge dos sets de arquivos
     while (1) {
-        
         if (merge_status_final(aux_files_set_1, M)) break;
         clear_files_of_set(aux_files_set_2, M);
         merge_sets(aux_files_set_1, aux_files_set_2, M); 
