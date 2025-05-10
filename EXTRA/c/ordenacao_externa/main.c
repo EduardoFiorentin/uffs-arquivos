@@ -85,14 +85,14 @@ int main(int argc, char *argv[]) {
             
             // Jogar dados para o arquivo auxiliar
             for (int j = 0; j < i; j++) {
-                printf("%d ", buffer[j]);
+                // printf("%d ", buffer[j]);
                 if (j != i-1) fprintf(aux_files_set_1[current_set_file], "%d;", buffer[j]);
                 else fprintf(aux_files_set_1[current_set_file], "%d", buffer[j]);
             }
 
             // incrementa o current_set_file circularmente, voltando para o zero ao chegar no limite
             current_set_file = (current_set_file + 1) % (NUM_FILES/2);
-            printf("\n");
+            // printf("\n");
             i = 0; 
         }
         
@@ -100,18 +100,14 @@ int main(int argc, char *argv[]) {
 
     // merge dos sets de arquivos
     while (1) {
-
-        for (int i = 0; i < (NUM_FILES/2); i++) {
-            if (merge_status_final(aux_files_set_1[i])) break;
-        }
         
-        merge_sets(aux_files_set_1, aux_files_set_2); 
+        if (merge_status_final(aux_files_set_1, M)) break;
+        clear_files_of_set(aux_files_set_2, M);
+        merge_sets(aux_files_set_1, aux_files_set_2, M); 
 
-        for (int i = 0; i < (NUM_FILES/2); i++) {
-            if (merge_status_final(aux_files_set_2[i])) break;
-        }
-
-        merge_sets(aux_files_set_2, aux_files_set_1); 
+        if (merge_status_final(aux_files_set_2, M)) break;
+        clear_files_of_set(aux_files_set_1, M);
+        merge_sets(aux_files_set_2, aux_files_set_1, M); 
     }
     
 
